@@ -20,6 +20,10 @@ class Painter {
 		this.id = id;
 	}
 	
+	setCoordinates(coords) {
+		this.coords = coords;
+	}
+	
 	draw() {
 		var can = document.getElementById(this.id);
 		var cx = can.getContext("2d");
@@ -32,8 +36,7 @@ class Painter {
 			if(o instanceof Point) {
 				cx.beginPath();
 				cx.strokeStyle = o.color;
-				var q = coords.transform({x: o.x, y: o.y});
-				console.log(q.x + " " + q.y + " " + o.size);
+				var q = coords.transform(o);
 				cx.arc(q.x, q.y, o.size, 0, 2 * Math.PI);
 				cx.fillStyle = o.color;
 				cx.fill();
@@ -51,6 +54,28 @@ class Painter {
 			if(o instanceof Capacitor) {
 				cx.beginPath();
 				cx.strokeStyle = o.color;
+				
+				var l = 2 * o.plateThickness + o.plateGap;
+				var qbeg = coords.transform(o.rbeg);
+				var qend = coords.transform(o.rend);
+				var Dx = qend.x - qbeg.x;
+				var Dy = qend.y - qbeg.y;
+				var L = Math.sqrt(Dx * Dx + Dy * Dy);
+				
+				var c = 0.5 * (L - l) / L;
+				
+				var q1 = {};
+				q1.x = qbeg.x + Dx * c;
+				q1.y = qbeg.y + Dy * c;
+				var q2 = {};
+				q2.x = qend.x - Dx * c;
+				q2.y = qend.y - Dy * c;
+				
+				cx.moveTo(qbeg.x, qbeg.y);
+				cx.lineTo(q1.x, q1.y);
+				cx.moveTo(qend.x, qend.y);
+				cx.lineTo(q2.x, q2.y);
+				
 				/*
 				cx.fillStyle = o.color;
 				cx.fill();
