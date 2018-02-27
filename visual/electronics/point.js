@@ -18,7 +18,7 @@ class Point {
 		this.x = 0;
 		this.y = 0;
 		this.color = int2rgb(0, 0, 0);
-		this.size = 2;
+		this.size = 1.5;
 		this.r = new Vect3();
 		
 		if(arguments.length == 2) {

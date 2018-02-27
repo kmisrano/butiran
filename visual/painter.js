@@ -39,6 +39,15 @@ class Painter {
 				cx.fill();
 				cx.stroke();
 			}
+			if(o instanceof Connector) {
+				cx.beginPath();
+				cx.strokeStyle = o.color;
+				var qbeg = coords.transform(o.rbeg);
+				cx.moveTo(qbeg.x, qbeg.y);
+				var qend = coords.transform(o.rend);
+				cx.lineTo(qend.x, qend.y);
+				cx.stroke();
+			}
 		}
 	}
 }
