@@ -54,6 +54,7 @@ class Painter {
 			if(o instanceof Capacitor) {
 				cx.beginPath();
 				cx.strokeStyle = o.color;
+				cx.fillStyle = o.color;
 				
 				var l = 2 * o.plateThickness + o.plateGap;
 				var qbeg = coords.transform(o.rbeg);
@@ -76,10 +77,49 @@ class Painter {
 				cx.moveTo(qend.x, qend.y);
 				cx.lineTo(q2.x, q2.y);
 				
-				/*
-				cx.fillStyle = o.color;
+				//-------------------------------------
+				// This part is still false
+				//-------------------------------------
+				
+				var q1u = {};
+				q1u.x = q1.x;
+				q1u.y = q1.y - 0.5 * o.size;
+				var q1d = {};
+				q1d.x = q1.x;
+				q1d.y = q1.y + 0.5 * o.size;
+				var q11u = {};
+				q11u.x = q1u.x + o.plateThickness;
+				q11u.y = q1u.y;
+				var q11d = {};
+				q11d.x = q1d.x + o.plateThickness;
+				q11d.y = q1d.y;
+				cx.moveTo(q1u.x, q1u.y);
+				cx.lineTo(q11u.x, q11u.y);
+				cx.lineTo(q11d.x, q11d.y);
+				cx.lineTo(q1d.x, q1d.y);
+				cx.closePath();
+				
+				var q2u = {};
+				q2u.x = q2.x;
+				q2u.y = q2.y - 0.5 * o.size;
+				var q2d = {};
+				q2d.x = q2.x;
+				q2d.y = q2.y + 0.5 * o.size;
+				var q22u = {};
+				q22u.x = q2u.x - o.plateThickness;
+				q22u.y = q2u.y;
+				var q22d = {};
+				q22d.x = q2d.x - o.plateThickness;
+				q22d.y = q2d.y;
+				cx.moveTo(q2u.x, q2u.y);
+				cx.lineTo(q22u.x, q22u.y);
+				cx.lineTo(q22d.x, q22d.y);
+				cx.lineTo(q2d.x, q2d.y);
+				cx.closePath();
+				
+				//-------------------------------------
+				
 				cx.fill();
-				*/
 				cx.stroke();
 			}
 		}
