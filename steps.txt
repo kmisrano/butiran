@@ -5,9 +5,12 @@ git init
 git config --global user.email "dudung@gmail.com"
 git config --global user.name "Sparisoma Viridi"
 git add steps.txt
+git commit -a -m "Add steps.txt"
+git commit -a -m "Modify steps.txt"
 git remote -v
 git push origin master
 exit
 
 
 # Next time
+git pull origin master
