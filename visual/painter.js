@@ -29,13 +29,13 @@ class Painter {
 		
 		for(var i = 0; i < N; i++) {
 			var o = objs[i];
-			if(o instanceof Point2) {
+			if(o instanceof Point) {
 				cx.beginPath();
-				cx.strokeStyle = o.c;
+				cx.strokeStyle = o.color;
 				var q = coords.transform({x: o.x, y: o.y});
-				console.log(q.x + " " + q.y + " " + o.s);
-				cx.arc(q.x, q.y, o.s, 0, 2 * Math.PI);
-				cx.fillStyle = o.c;
+				console.log(q.x + " " + q.y + " " + o.size);
+				cx.arc(q.x, q.y, o.size, 0, 2 * Math.PI);
+				cx.fillStyle = o.color;
 				cx.fill();
 				cx.stroke();
 			}
