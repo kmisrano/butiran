@@ -48,6 +48,15 @@ class Painter {
 				cx.lineTo(qend.x, qend.y);
 				cx.stroke();
 			}
+			if(o instanceof Capacitor) {
+				cx.beginPath();
+				cx.strokeStyle = o.color;
+				/*
+				cx.fillStyle = o.color;
+				cx.fill();
+				*/
+				cx.stroke();
+			}
 		}
 	}
 }
