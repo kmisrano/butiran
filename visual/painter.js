@@ -82,13 +82,7 @@ class Painter {
 				cx.lineTo(q1.x, q1.y);
 				cx.moveTo(qend.x, qend.y);
 				cx.lineTo(q2.x, q2.y);
-				
-				// 
-				
-				//-------------------------------------
-				// This part is still false
-				//-------------------------------------
-				
+								
 				var q1u = {};
 				q1u.x = q1.x - 0.5 * o.size * sinq;
 				q1u.y = q1.y + 0.5 * o.size * cosq;
@@ -124,8 +118,6 @@ class Painter {
 				cx.lineTo(q22d.x, q22d.y);
 				cx.lineTo(q2d.x, q2d.y);
 				cx.closePath();
-				
-				//-------------------------------------
 				
 				cx.fill();
 				cx.stroke();
