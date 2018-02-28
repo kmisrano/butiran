@@ -68,7 +68,6 @@ class Painter {
 				
 				var cosq = Dx / L;
 				var sinq = Dy / L;
-				console.log(cosq + " " + sinq);
 				var l = 0.5 * (L - w);
 				
 				var q1 = {};
