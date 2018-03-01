@@ -9,6 +9,9 @@
 	20180228
 	Modify this library but still false ~ 0533.
 	Fix the bug at 1026.
+	20180301
+	Fix bug for coords --> this.coords in lines 42, 51, 53,
+	63, and 64.
 */
 
 // Define class of Painter
@@ -39,7 +42,7 @@ class Painter {
 			if(o instanceof Point) {
 				cx.beginPath();
 				cx.strokeStyle = o.color;
-				var q = coords.transform(o);
+				var q = this.coords.transform(o);
 				cx.arc(q.x, q.y, o.size, 0, 2 * Math.PI);
 				cx.fillStyle = o.color;
 				cx.fill();
@@ -48,9 +51,9 @@ class Painter {
 			if(o instanceof Connector) {
 				cx.beginPath();
 				cx.strokeStyle = o.color;
-				var qbeg = coords.transform(o.rbeg);
+				var qbeg = this.coords.transform(o.rbeg);
 				cx.moveTo(qbeg.x, qbeg.y);
-				var qend = coords.transform(o.rend);
+				var qend = this.coords.transform(o.rend);
 				cx.lineTo(qend.x, qend.y);
 				cx.stroke();
 			}
@@ -60,8 +63,8 @@ class Painter {
 				cx.fillStyle = o.color;
 				
 				var w = 2 * o.plateThickness + o.plateGap;
-				var qbeg = coords.transform(o.rbeg);
-				var qend = coords.transform(o.rend);
+				var qbeg = this.coords.transform(o.rbeg);
+				var qend = this.coords.transform(o.rend);
 				var Dx = qend.x - qbeg.x;
 				var Dy = qend.y - qbeg.y;
 				var L = Math.sqrt(Dx * Dx + Dy * Dy);
