@@ -42,9 +42,13 @@
 	/blob/master/www/lib/require.js [20180301].
 */
 
-
 /*
 // [4] -- not workl
+
+// for implementation of [4]
+// <script src="../lib/require.js"></script>
+// <script src="../butiran.js"></script>
+
 requirejs.config({
 	baseUrl: "lib",
 	paths: {
@@ -147,7 +151,7 @@ loadScripts(scripts, 0);
 */
 
 /*
-// [2] -- not work
+// [2] -- actually work but not so modular
 function loadScript(url, callback) {
 	var head = document.getElementsByTagName("head")[0];
 	var script = document.createElement("script");
@@ -162,19 +166,32 @@ function loadScript(url, callback) {
 }
 */
 
-
 /*
 // [1] -- not work
-function loadScript(url, callback) {
-	var head = document.getElementsByTagName("head")[0];
-	var script = document.createElement("script");
+function include(file) {
+	var script = document.createElement ("script");
+	script.src = file;
 	script.type = "text/javascript";
-	script.src = url;
-	script.async = false;
+	script.defer = true;
 	
-	script.onreadystatechange = callback;
-	script.onload = callback;
-	
-	head.appendChild(script);
+	var head = document.getElementsByTagName("head");
+	head.item(0).appendChild(script);
 }
+
+// Include some JS
+include("../grains/vect3.js");
+include("../grains/particle.js");
+include("../grains/sphere.js");
+include("../grains/grid4.js");
+include("../grains/field.js");
+include("../grains/force.js");
+include("../grains/point2.js");
+include("../color/rgb.js");
+include("../canvas/graphics.js");
+include("../data/dataxy.js");
+include("../canvas/transform.js");
+include("../canvas/xychart.js");
+include("../test/test.js");
+include("../canvas/chart2.js");
+include("../canvas/xyseries.js");
 */
