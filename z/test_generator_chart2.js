@@ -22,7 +22,7 @@ function test_generator_chart2() {
 	
 	// Create textarea
 	var ta = document.createElement("textarea");
-	ta.style.height = "200px";
+	ta.style.height = "170px";
 	ta.style.width = "200px";
 	
 	// Create canvas
