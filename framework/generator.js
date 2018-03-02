@@ -65,8 +65,7 @@ class Generator {
 		if(this.type == "random int") {
 			var min = this.min;
 			var max = this.max;
-			var val = Math.random() * (max - min) + min;
-			val = Math.round(val);
+			var val = randInt(min, max);
 		}
 		if(this.type == "polynomial") {
 			val = this.polyf.value(this.tick);

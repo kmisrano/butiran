@@ -8,6 +8,11 @@
 	Create this test function.
 */
 
+// 20180302.1609 !ok
+function test_timer_chart2() {
+	
+}
+
 // 20180302.1520 ok
 function test_timer() {
 	var timer = new Timer(run, 100);
