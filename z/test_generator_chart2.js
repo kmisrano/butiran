@@ -89,7 +89,7 @@ function test_generator_chart2() {
 			res.setPolynomial(coefs);
 			ta.value = function() {
 				var Nc = coefs.length;
-				for(var i = 0; i < Nc; i++)
+				for(var i = 0; i < Nc; i++) {
 			}
 		}
 		if(id == "Random") {
