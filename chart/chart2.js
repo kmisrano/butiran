@@ -8,6 +8,8 @@
 	Create this object (semi-again), create Chart2 class.
 	2018022
 	Improve yesterday code.
+	20180302
+	Set initial view of Chart2.
 */
 
 // Define class of Chart2
@@ -32,7 +34,8 @@ class Chart2 {
 				max: 1
 			},
 			Ntics: 10,
-			tics: 0.2,
+			tics: 0.1,
+			mantissa: 1,
 			color: "#000"
 		};
 		
@@ -51,8 +54,9 @@ class Chart2 {
 				min: 0,
 				max: 1
 			},
-			Ntics: 6,
+			Ntics: 5,
 			tics: 0.2,
+			mantissa: 1,
 			color: "#000"
 		};
 		
@@ -68,21 +72,57 @@ class Chart2 {
 		// Define tics size
 		this.ticsSize = 10;
 		
-		// Background color
-		this.background = "#eee";
+		// Colors
+		var can = document.getElementById(this.canvasId);
+		this.background = "#fff";
+		if(can.style.background != undefined) {
+			this.background = can.style.background
+		}
+		this.gridLineColor = "#e5e5e5";
 		
 		// Data series
 		this.series = [];
+		
+		// Initialize empty Chart2
+		this.init();
+	}
+	
+	init() {
+		this.drawBothAxis();
+		this.drawGrid();
+	}
+	
+	clear() {
+		var can = document.getElementById(this.canvasId);
+		var w = can.width;
+		var h = can.height;
+		var cx = can.getContext("2d");
+		cx.fillStyle = this.background;
+		cx.fillRect(0, 0, w, h);
 	}
 	
 	addSeries(newSeries) {
-		this.series.push(newSeries);
+		var ns = newSeries;
+		this.series.push(ns);
+		this.setXRange({min: ns.xmin, max: ns.xmax});
+		this.setYRange({min: ns.ymin, max: ns.ymax});
+		this.clear();
+		this.init();
 	}
 	
 	setBackground(bgColor) {
 		this.background = bgColor;
 		var can = document.getElementById(this.canvasId);
 		can.style.background = this.background;
+	}
+	
+	setGridLineColor(glc) {
+		this.gridColor = glc;
+	}
+	
+	setMantissa(mx, my) {
+		this.xAxis.mantissa = mx;
+		this.yAxis.mantissa = my;
 	}
 	
 	setMargin(margin) {
@@ -145,7 +185,7 @@ class Chart2 {
 		cx.strokeStyle = this.xAxis.color;
 		cx.beginPath();
 		for(var i = 0; i <= N; i++) {
-			var x = x0 + i * tics;
+			var x = (x0 + i * tics).toFixed(this.xAxis.mantissa);
 			var p = {x: x, y: 0};
 			var q = this.transform(p);
 			var xx = q.x;
@@ -170,7 +210,7 @@ class Chart2 {
 		cx.strokeStyle = this.xAxis.color;
 		cx.beginPath();
 		for(var i = 0; i <= N; i++) {
-			var y = y0 + i * tics;
+			var y = (y0 + i * tics).toFixed(this.yAxis.mantissa);
 			var p = {x: 0, y: y};
 			var q = this.transform(p);
 			var yy = q.y;
@@ -182,7 +222,7 @@ class Chart2 {
 			cx.font = "normal 12px Times";
 			cx.textAlign = "right"
 			cx.fillText(
-				y.toFixed(3),
+				y,
 				xx1 - 0.5 * this.ticsSize,
 				yy + 0.4 * this.ticsSize
 			);
@@ -202,7 +242,7 @@ class Chart2 {
 		var Nx = this.xAxis.Ntics;
 		var Ny = this.yAxis.Ntics;
 		
-		cx.strokeStyle = "#dedede";
+		cx.strokeStyle = this.gridLineColor;
 		cx.beginPath();
 		for(var j = 0; j < Ny; j++) {
 			for(var i = 0; i < Nx; i++) {
