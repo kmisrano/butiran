@@ -8,7 +8,7 @@
 	Create this test function.
 */
 
-// 20180302.0741 !ok
+// 20180302.1434 ok
 function test_generator_chart2() {
 	// Create left div
 	var divL = document.createElement("div");
@@ -22,6 +22,7 @@ function test_generator_chart2() {
 	
 	// Create textarea
 	var ta = document.createElement("textarea");
+	ta.style.height = "200px";
 	ta.style.width = "200px";
 	
 	// Create canvas
@@ -72,9 +73,22 @@ function test_generator_chart2() {
 		var res;
 		var N = 11;
 		if(id == "Series") {
-			var series = [0, 1, 0, 1, 2, 1, 0, 1, 0, 1];
+			var series = [0, 1, 0, 1, 2, 1, 0, 1, 0, 1, 0];
 			res = new Generator("water");
 			res.setSeries(series);
+			ta.value = xyToString();
+			
+			function xyToString() {
+				var xyStr = "";
+				for(var i = 0; i < N; i++) {
+					xyStr += i + "\t";
+					xyStr += series[i];
+					if(i < N - 1) {
+						xyStr += "\n";
+					}
+				}
+				return xyStr;
+			}
 		}
 		if(id == "Polynomial") {
 			var coefs = [
@@ -87,15 +101,25 @@ function test_generator_chart2() {
 			];
 			res = new Generator("water");
 			res.setPolynomial(coefs);
-			ta.value = function() {
+			ta.value = coefToString();
+			
+			function coefToString() {
 				var Nc = coefs.length;
+				var coefStr = "";
 				for(var i = 0; i < Nc; i++) {
+					coefStr += "c" + i + "\t";
+					coefStr += coefs[i];
+					if(i < Nc - 1) {
+						coefStr += "\n";
+					}
 				}
+				return coefStr;
 			}
 		}
 		if(id == "Random") {
 			res = new Generator("water");
 			res.setRandomInt(0, 2);
+			ta.value = "min\t0\nmax\t2";
 		}
 		if(res != undefined) {
 			var x = [];
