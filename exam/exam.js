@@ -35,6 +35,7 @@ function selectProblem() {
 // 20180304.0004 !ok
 function examDrawCircle() {
 	var div = document.getElementById("scriptResult");
+	div.innerHTML = "&nbsp;";
 	var can = document.createElement("canvas");
 	div.appendChild(can);
 	var cx = can.getContext("2d");
