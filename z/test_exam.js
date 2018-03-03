@@ -42,4 +42,8 @@ function test_exam() {
 	opt = document.createElement("option");
 	opt.text = "Root formula";
 	sel.options.add(opt);
+	
+	opt = document.createElement("option");
+	opt.text = "Draw circle";
+	sel.options.add(opt);
 }

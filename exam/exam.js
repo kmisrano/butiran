@@ -25,8 +25,26 @@ function selectProblem() {
 		case "Root formula":
 			examMathJaxRootFormula();
 			break;
+		case "Draw circle":
+			examDrawCircle();
+			break;
 		default:
 	}
+}
+
+// 20180304.0004 !ok
+function examDrawCircle() {
+	var div = document.getElementById("scriptResult");
+	var can = document.createElement("canvas");
+	div.appendChild(can);
+	var cx = can.getContext("2d");
+	cx.fillStyle = "#aaf";
+	cx.strokeStyle = "#f00";
+	cx.lineWidth = 3;
+	cx.beginPath();
+	cx.arc(50, 50, 40, 0, 2 * Math.PI);
+	cx.fill();
+	cx.stroke();
 }
 
 // 20180303.2347 ok
