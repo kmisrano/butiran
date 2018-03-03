@@ -19,6 +19,9 @@ function selectProblem() {
 		case "Hello world":
 			examHelloWorld();
 			break;
+		case "Letter configuration":
+			examLetterConfiguration();
+			break;
 		case "Display series":
 			examDisplaySeries();
 			break;
@@ -28,11 +31,68 @@ function selectProblem() {
 		case "Draw circle":
 			examDrawCircle();
 			break;
+		case "Color bar":
+			examColorBar();
+			break;
+		case "Button click":
+			examButtonClick();
+			break;
 		default:
 	}
 }
 
-// 20180304.0004 !ok
+// 20180304.0553 !ok
+function examButtonClick() {
+	var div = document.getElementById("scriptResult");
+	div.innerHTML = "&nbsp;";
+	var btn = document.createElement("button");
+	btn.innerHTML = "Never clicked";
+	btn.addEventListener("click", buttonClick);
+	div.appendChild(btn);
+	var clicked = 0;
+	
+	function buttonClick() {
+		clicked++;
+		var target = window.event.target;
+		if(clicked == 1) {
+			target.innerHTML = "Clicked once";
+		} else if(clicked == 2) {
+			target.innerHTML = "Clicked twice";
+		} else {
+			target.innerHTML = "Clicked " + clicked + " times";
+		}
+	}
+}
+
+// 20180304.0545 ok
+function examColorBar() {
+	var div = document.getElementById("scriptResult");
+	div.innerHTML = "&nbsp;";
+	N = 16;
+	for(var i = 0; i < N; i++) {
+		var sp = document.createElement("span");
+		var x = i * 16 - 1;
+		var color = int2rgb(255, 255 - x, 255 -x );
+		sp.style.background = color;
+		sp.innerHTML = "&nbsp;&nbsp;&nbsp;&nbsp;\
+		&nbsp;&nbsp;&nbsp;&nbsp;";
+		div.appendChild(sp);
+	}
+}
+
+// 20180304.0530 ok
+function examLetterConfiguration() {
+	var div = document.getElementById("scriptResult");
+	var str = "Computation";
+	var N = str.length;
+	var str2 = "";
+	for(var i = 0; i < N; i++) {
+		str2 += str.substring(0, i + 1) + "<br/>";
+	}
+	div.innerHTML = str2;
+}
+
+// 20180304.0004 ok
 function examDrawCircle() {
 	var div = document.getElementById("scriptResult");
 	div.innerHTML = "&nbsp;";

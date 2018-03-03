@@ -6,6 +6,8 @@
 	
 	20180303
 	Start this test functions.
+	20180404
+	Modify adding options to select.
 */
 
 function test_exam() {
@@ -36,6 +38,10 @@ function test_exam() {
 	sel.options.add(opt);
 	
 	opt = document.createElement("option");
+	opt.text = "Letter configuration";
+	sel.options.add(opt);
+	
+	opt = document.createElement("option");
 	opt.text = "Display series";
 	sel.options.add(opt);
 	
@@ -45,5 +51,13 @@ function test_exam() {
 	
 	opt = document.createElement("option");
 	opt.text = "Draw circle";
+	sel.options.add(opt);
+	
+	opt = document.createElement("option");
+	opt.text = "Color bar";
+	sel.options.add(opt);
+	
+	opt = document.createElement("option");
+	opt.text = "Button click";
 	sel.options.add(opt);
 }
