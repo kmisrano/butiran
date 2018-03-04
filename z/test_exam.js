@@ -60,4 +60,16 @@ function test_exam() {
 	opt = document.createElement("option");
 	opt.text = "Button click";
 	sel.options.add(opt);
+	
+	opt = document.createElement("option");
+	opt.text = "Progress bar";
+	sel.options.add(opt);
+	
+	opt = document.createElement("option");
+	opt.text = "Simple statistics";
+	sel.options.add(opt);
+	
+	opt = document.createElement("option");
+	opt.text = "Table";
+	sel.options.add(opt);
 }

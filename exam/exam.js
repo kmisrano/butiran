@@ -8,7 +8,7 @@
 	Start this library.
 */
 
-// 20180303.2347 ok
+// 20180304.0937 ok
 function selectProblem() {
 	var target = window.event.target;
 	var value = target.value;
@@ -37,11 +37,73 @@ function selectProblem() {
 		case "Button click":
 			examButtonClick();
 			break;
+		case "Progress bar":
+			examProgressBar();
+			break;
+		case "Simple statistics":
+			examSimpleStatistics();
+			break;
+		case "Table":
+			examTable();
+			break;
 		default:
 	}
 }
 
-// 20180304.0553 !ok
+// 20180304.0948 !ok
+function examTable() {
+	var div = document.getElementById("scriptResult");
+	div.innerHTML = "Table";	
+}
+
+// 20180304.0929 ok
+function examSimpleStatistics() {
+	var div = document.getElementById("scriptResult");
+	div.innerHTML = "&nbsp;";
+	var min = 2;
+	var max = 10;
+	var N = 20;
+	var x = randIntN(min, max, N);
+	var xsum = 0;
+	for(var i = 0; i < N; i++) {
+		xsum += x[i];
+	}
+	var xavg = xsum / N;
+	var str = "xmin = " + min + "<br/>";
+	str += "xmax = " + max + "<br/>";
+	str += "xsum = " + xsum + "<br/>";
+	str += "x = [" + x + "]<br/>";
+	str += "N = " + N + "<br/>";
+	str += "xavg = " + xavg;
+	div.innerHTML = str;
+}
+
+// 20180304.0617 ok
+function examProgressBar() {
+	var div = document.getElementById("scriptResult");
+	div.innerHTML = "&nbsp;";
+	var i = 0;
+	var di = 5;
+	var iend = 100;
+	var sel = window.event.target;
+	sel.disabled = true;
+	
+	var tid = setInterval(progressBar, 100);
+	
+	function progressBar() {
+		if(i >= iend) {
+			i = iend;
+			clearInterval(tid);
+			sel.disabled = false;
+		}
+		var N = Math.round(i / di);
+		var s = "=".repeat(N) + " " + i + " %";
+		div.innerHTML = s;
+		i += di;
+	}
+}
+
+// 20180304.0553 ok
 function examButtonClick() {
 	var div = document.getElementById("scriptResult");
 	div.innerHTML = "&nbsp;";
