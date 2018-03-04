@@ -10,13 +10,36 @@
 	Modify adding options to select.
 */
 
+// 20180304.1700 ok
 function test_exam() {
+	// Create select element
 	var sel = document.createElement("select");
 	sel.addEventListener("change", selectProblem)
 	sel.style.fontFamily = "Arial";
 	sel.style.fontSize = "13px";
-	document.body.appendChild(sel);
+	var menu = [
+		["Select problem", examClear],
+		["Hello world", examHelloWorld],
+		["Letter configuration", examLetterConfiguration],
+		["Display series", examDisplaySeries],
+		["Root formula", examMathJaxRootFormula],
+		["Draw circle", examDrawCircle],
+		["Color bar", examColorBar],
+		["Button click", examButtonClick],
+		["Progress bar", examProgressBar],
+		["Simple statistics", examSimpleStatistics],
+		["Table", examTable]
+	];
 	
+	// Add menu using option element
+	var N = menu.length;
+	for(var i = 0; i < N; i++) {
+		var opt = document.createElement("option");
+		opt.text = menu[i][0];
+		sel.options.add(opt);
+	}
+	
+	// Create div element for displaying output
 	var div = document.createElement("div");
 	div.id = "scriptResult";
 	div.innerHTML = "&nbsp;"
@@ -25,51 +48,13 @@ function test_exam() {
 	div.style.padding = "10px";
 	div.style.fontFamily = "Arial";
 	div.style.fontSize = "12px";
+	
+	// Set document layout
+	document.body.appendChild(sel);
 	document.body.appendChild(div);
 	
-	var opt;
-	
-	opt = document.createElement("option");
-	opt.text = "Select problems";
-	sel.options.add(opt);
-	
-	opt = document.createElement("option");
-	opt.text = "Hello world";
-	sel.options.add(opt);
-	
-	opt = document.createElement("option");
-	opt.text = "Letter configuration";
-	sel.options.add(opt);
-	
-	opt = document.createElement("option");
-	opt.text = "Display series";
-	sel.options.add(opt);
-	
-	opt = document.createElement("option");
-	opt.text = "Root formula";
-	sel.options.add(opt);
-	
-	opt = document.createElement("option");
-	opt.text = "Draw circle";
-	sel.options.add(opt);
-	
-	opt = document.createElement("option");
-	opt.text = "Color bar";
-	sel.options.add(opt);
-	
-	opt = document.createElement("option");
-	opt.text = "Button click";
-	sel.options.add(opt);
-	
-	opt = document.createElement("option");
-	opt.text = "Progress bar";
-	sel.options.add(opt);
-	
-	opt = document.createElement("option");
-	opt.text = "Simple statistics";
-	sel.options.add(opt);
-	
-	opt = document.createElement("option");
-	opt.text = "Table";
-	sel.options.add(opt);
+	// Execute script related to selected problem
+	function selectProblem() {
+		executeScript(window.event.target, menu)
+	}
 }

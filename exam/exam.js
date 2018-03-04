@@ -8,10 +8,17 @@
 	Start this library.
 */
 
-// 20180304.0937 ok
-function selectProblem() {
+// 20180304.1658 ok
+function executeScript(target, menu) {
 	var target = window.event.target;
 	var value = target.value;
+	var idx = target.selectedIndex;
+	var script = menu[idx][1];
+	script();
+}
+
+// 20180304.0937 ok
+function executeFunctionByValue(value) {
 	switch(value) {
 		case "Select problems":
 			examClear();
@@ -50,10 +57,47 @@ function selectProblem() {
 	}
 }
 
-// 20180304.0948 !ok
+// 20180304.1608 ok
 function examTable() {
 	var div = document.getElementById("scriptResult");
-	div.innerHTML = "Table";	
+	div.innerHTML = "";
+	var data = [
+		["t", "v", "x"],
+		[0, 0, 0],
+		[1, 2, 1],
+		[2, 4, 4],
+		[3, 6, 9],
+		[4, 8, 16],
+		[5, 10, 25]
+	];
+	var tab = document.createElement("table");
+	tab.style.background = "#fee";
+	var ROW = data.length;
+	for(var j = 0; j < ROW; j++) {
+		var row = document.createElement("tr");
+		if(j == 0) {
+			row.style.background = "#fde";
+			row.style.fontWeight = "bold";
+			row.style.fontStyle = "italic";
+			row.style.fontFamily = "Times";
+			row.style.color = "red";
+		} else {
+			row.style.background = "#ffe";
+		}
+		var dataRow = data[j];
+		var COL = dataRow.length;
+		for(var i = 0; i < COL; i++) {
+			var dataCol = dataRow[i];
+			var col = document.createElement("td");
+			col.style.border = "1px solid #fde";
+			col.style.width = "80px";
+			col.style.textAlign = "center";
+			col.innerHTML = dataCol;
+			row.appendChild(col);
+		}
+		tab.appendChild(row);
+	}
+	div.appendChild(tab);
 }
 
 // 20180304.0929 ok
@@ -108,7 +152,8 @@ function examButtonClick() {
 	var div = document.getElementById("scriptResult");
 	div.innerHTML = "&nbsp;";
 	var btn = document.createElement("button");
-	btn.innerHTML = "Never clicked";
+	btn.style.width = "120px";
+	btn.innerHTML = "Not yet clicked";
 	btn.addEventListener("click", buttonClick);
 	div.appendChild(btn);
 	var clicked = 0;
