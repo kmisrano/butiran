@@ -13,10 +13,10 @@
 // 20180304.1700 ok
 function test_exam() {
 	// Create select element
-	var sel = document.createElement("select");
-	sel.addEventListener("change", selectProblem)
-	sel.style.fontFamily = "Arial";
-	sel.style.fontSize = "13px";
+	var esel = document.createElement("select");
+	esel.addEventListener("change", selectProblem)
+	esel.style.fontFamily = "Arial";
+	esel.style.fontSize = "13px";
 	var menu = [
 		["Select problem", examClear],
 		["Hello world", examHelloWorld],
@@ -36,22 +36,40 @@ function test_exam() {
 	for(var i = 0; i < N; i++) {
 		var opt = document.createElement("option");
 		opt.text = menu[i][0];
-		sel.options.add(opt);
+		esel.options.add(opt);
 	}
 	
+	// Create information
+	var etxt = document.createElement("div");
+	etxt.innerHTML = "Open browser console with Ctrl + Shift + J (in Google Chrome)"
+	etxt.style.color = "#f8f8f8";
+	etxt.style.float = "right";
+	etxt.style.fontSize = "13px";
+	etxt.style.fontFamily = "Arial";
+	
+	// Create div element for top part
+	var etop = document.createElement("div");
+	//etop.style.border = "1px solid #888";
+	etop.style.background = "#bbb";
+	etop.style.height = "20px";
+	etop.style.padding = "6px";
+	
 	// Create div element for displaying output
-	var div = document.createElement("div");
-	div.id = "scriptResult";
-	div.innerHTML = "&nbsp;"
-	div.style.border = "1px solid #888";
-	div.style.background = "#f8f8f8";
-	div.style.padding = "10px";
-	div.style.fontFamily = "Arial";
-	div.style.fontSize = "12px";
+	var eout = document.createElement("div");
+	eout.id = "scriptResult";
+	eout.innerHTML = "&nbsp;"
+	eout.style.border = "1px solid #bbb";
+	eout.style.background = "#f8f8f8";
+	eout.style.padding = "10px";
+	eout.style.fontFamily = "Arial";
+	eout.style.fontSize = "12px";
+	eout.style.height = "200px";
 	
 	// Set document layout
-	document.body.appendChild(sel);
-	document.body.appendChild(div);
+	document.body.appendChild(etop);
+		etop.appendChild(esel);
+		etop.appendChild(etxt);
+	document.body.appendChild(eout);
 	
 	// Execute script related to selected problem
 	function selectProblem() {

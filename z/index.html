@@ -4,31 +4,10 @@
 <title>z</title>
 
 <!-- MathJax --->
-<script type="text/javascript" async
-src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML">
-</script>
-<script type="text/x-mathjax-config">
-	MathJax.Hub.Config({
-		TeX: { equationNumbers: { autoNumber: "AMS" } }
-	});
-</script>
-<script type="text/x-mathjax-config">
-	MathJax.Hub.Config({
-		tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
-	});
-</script>
-<script>
-		function updateMath(id, TeX) {
-		// Set innerHTML
-		document.getElementById(id).innerHTML = TeX;
+<script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<script type="text/x-mathjax-config" src="../config/mathjax.js"></script>
 
-		// Reprocess the element
-		MathJax.Hub.Queue(["Typeset", MathJax.Hub, id])
-	}
-</script>
-<!-- MathJax --->
-
-<!--
+<!-- Butiran --->
 <script src="../grains/grid4.js"></script>
 <script src="../grains/particle.js"></script>
 <script src="../grains/sphere.js"></script>
@@ -37,7 +16,6 @@ src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-
 <script src="../chart/xyseries.js"></script>
 <script src="../color/rgb.js"></script>
 <script src="../math/polynomial.js"></script>
-<script src="../math/random.js"></script>
 <script src="../visual/coordinates.js"></script>
 <script src="../math/integration.js"></script>
 <script src="../visual/painter.js"></script>
@@ -48,23 +26,23 @@ src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-
 <script src="../framework/industry.js"></script>
 <script src="../framework/resource.js"></script>
 <script src="../timer/timer.js"></script>
+<script src="../color/rgb.js"></script>
+<script src="../math/random.js"></script>
+<script src="../mathjax/update.js"></script>
+<script src="../exam/exam.js"></script>
+<script src="test_exam.js"></script>
 <script src="test_capacitors.js"></script>
 <script src="test_generator.js"></script>
 <script src="test_generator_chart2.js"></script>
 <script src="test_timer.js"></script>
 <script src="test_random.js"></script>
 <script src="test_integration.js"></script>
--->
-
-<script src="../exam/exam.js"></script>
-<script src="test_exam.js"></script>
 </head>
 <body>
-<!--div id="note">
-Open browser console if nothing happens (use Ctrl + Shift + J in Google Chrome to open the console).
-</div-->
+
 <script>
 test_exam();
 </script>
+
 </body>
 </html>
