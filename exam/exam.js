@@ -6,6 +6,8 @@
 	
 	20180303
 	Start this library.
+	20180304
+	Continue improving this library.
 */
 
 // 20180304.1658 ok
@@ -17,12 +19,103 @@ function executeScript(target, menu) {
 	script();
 }
 
-// 20180304.2010 !ok
-function examTextareaMatrix() {
-	var div = document.getElementById("scriptResult");
-	div.innerHTML = "";
+// 20180304.2142 ok
+function examChartXY() {
+	var eout = document.getElementById("scriptResult");
+	eout.innerHTML = "";
 	
-	var ta = document.createElement("textarea");
+	var ecan = document.createElement("canvas");
+	ecan.width = "300";
+	ecan.height = "200";
+	ecan.style.width = "300px";
+	ecan.style.height = "200px";
+	ecan.id = "drawingArea"
+	ecan.style.background = "#f8f8f8";
+		
+	eout.appendChild(ecan);
+	
+	var x = [0, 1, 2, 3, 4, 5, 6, 7, 8];
+	var y = [-7, 0, 5, 8, 9, 8, 5, 0, -7];
+	var series = new XYSeries("series1", x, y);
+	var chart = new Chart2("drawingArea");
+	chart.yAxis.Ntics = 4;
+	chart.xAxis.Ntics = 8;
+	chart.addSeries(series);
+	chart.drawSeries("series1");
+}
+
+// 20180304.2107 ok
+function examTextareaMatrix() {
+	var eout = document.getElementById("scriptResult");
+	eout.innerHTML = "";
+	
+	var elef = document.createElement("div");
+	elef.style.width = "125px";
+	elef.style.float = "left";
+	
+	var erig = document.createElement("div");
+	erig.style.float = "left";
+	erig.style.padding = "4px 50px 4px 50px";
+	erig.id = "mathjax-matrix"
+	
+	var etxa = document.createElement("textarea");
+	etxa.style.width = "120px";
+	etxa.style.height = "120px";
+	etxa.style.overflowY = "scroll"
+	etxa.value = "1 2 3 4\n"
+	+ "0 4 0 4\n"
+	+ "1 3 9 7\n"
+	+ "6 4 5 8";
+	
+	var ebtn = document.createElement("button");
+	ebtn.innerHTML = "MathJax matrix";
+	ebtn.style.width = "125px";
+	ebtn.addEventListener("click", btnClick);
+	
+	eout.appendChild(elef);
+		elef.appendChild(etxa);
+		elef.appendChild(ebtn);
+	eout.appendChild(erig);
+	
+	function btnClick() {
+		var content = etxa.value;
+		var lines = content.split("\n");
+		var M = [];
+		for(var j = 0; j < lines.length; j++) {
+			var words = lines[j].split(" ");
+			var row = [];
+			for(var i = 0; i < words.length; i++) {
+				var Mel = words[i];
+				row.push(Mel);
+			}
+			M.push(row);
+		}
+		
+		var ROW = M.length;
+		
+		var latex = "\\begin{equation}\n"
+			+ "M = \\left[\n"
+			+ "\\begin{array}\n";
+		var COL = M[0].length;
+		latex += "{" + "c".repeat(COL) + "}\n";
+		for(var j = 0; j < ROW; j++) {
+			var arow = M[j];
+			var COL = arow.length;
+			for(var i = 0; i < COL; i++) {
+				latex += M[j][i];
+				if(i < COL - 1) {
+					latex += " & ";
+				} else {
+					latex += " \\\\\n";
+				}
+			}
+		}
+		latex += "\\end{array}\n"
+			+ "\\right]\n"
+			+ "\\end{equation}";
+		
+		updateMath("mathjax-matrix", latex)
+	}
 }
 
 // 20180304.1608 ok

@@ -29,7 +29,8 @@ function test_exam() {
 		["Progress bar", examProgressBar],
 		["Simple statistics", examSimpleStatistics],
 		["Table", examTable],
-		["Textarea matrix", examTextareaMatrix]
+		["Textarea matrix", examTextareaMatrix],
+		["Chart xy", examChartXY]
 	];
 	
 	// Add menu using option element
