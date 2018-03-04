@@ -17,44 +17,12 @@ function executeScript(target, menu) {
 	script();
 }
 
-// 20180304.0937 ok
-function executeFunctionByValue(value) {
-	switch(value) {
-		case "Select problems":
-			examClear();
-			break;
-		case "Hello world":
-			examHelloWorld();
-			break;
-		case "Letter configuration":
-			examLetterConfiguration();
-			break;
-		case "Display series":
-			examDisplaySeries();
-			break;
-		case "Root formula":
-			examMathJaxRootFormula();
-			break;
-		case "Draw circle":
-			examDrawCircle();
-			break;
-		case "Color bar":
-			examColorBar();
-			break;
-		case "Button click":
-			examButtonClick();
-			break;
-		case "Progress bar":
-			examProgressBar();
-			break;
-		case "Simple statistics":
-			examSimpleStatistics();
-			break;
-		case "Table":
-			examTable();
-			break;
-		default:
-	}
+// 20180304.2010 !ok
+function examTextareaMatrix() {
+	var div = document.getElementById("scriptResult");
+	div.innerHTML = "";
+	
+	var ta = document.createElement("textarea");
 }
 
 // 20180304.1608 ok
@@ -246,4 +214,44 @@ function examClear() {
 function examHelloWorld() {
 	var div = document.getElementById("scriptResult");
 	div.innerHTML = "Hello, World!";
+}
+
+// 20180304.0937 ok
+function executeFunctionByValue(value) {
+	switch(value) {
+		case "Select problems":
+			examClear();
+			break;
+		case "Hello world":
+			examHelloWorld();
+			break;
+		case "Letter configuration":
+			examLetterConfiguration();
+			break;
+		case "Display series":
+			examDisplaySeries();
+			break;
+		case "Root formula":
+			examMathJaxRootFormula();
+			break;
+		case "Draw circle":
+			examDrawCircle();
+			break;
+		case "Color bar":
+			examColorBar();
+			break;
+		case "Button click":
+			examButtonClick();
+			break;
+		case "Progress bar":
+			examProgressBar();
+			break;
+		case "Simple statistics":
+			examSimpleStatistics();
+			break;
+		case "Table":
+			examTable();
+			break;
+		default:
+	}
 }
