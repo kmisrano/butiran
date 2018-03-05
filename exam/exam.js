@@ -23,6 +23,7 @@ function executeScript(target, menu) {
 function examThreeGrains() {
 	var eout = document.getElementById("scriptResult");
 	eout.innerHTML = "";
+	var sel = window.event.target;
 	
 	// Execute a test function
 	test_define_rectangle();
@@ -260,10 +261,12 @@ function examThreeGrains() {
 		b1.addEventListener("click", function() {
 			if(b1.innerHTML == "Start") {
 				b1.innerHTML = "Stop";
+				sel.disabled = true;
 				iter = setInterval(simulate, 5);
 			} else {
 				b1.innerHTML = "Start";
 				clearInterval(iter);
+				sel.disabled = false;
 			}
 		});
 				
