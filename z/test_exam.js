@@ -32,7 +32,8 @@ function test_exam() {
 		["Textarea matrix", examTextareaMatrix],
 		["Chart xy", examChartXY],
 		["Toggle button", examToggleButton],
-		["Random line", examRandomLine],
+		["Random lines", examRandomLines],
+		["Three grains", examThreeGrains],
 	];
 	
 	// Add menu using option element

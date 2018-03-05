@@ -19,8 +19,337 @@ function executeScript(target, menu) {
 	script();
 }
 
+// 20180306.0514 ok
+function examThreeGrains() {
+	var eout = document.getElementById("scriptResult");
+	eout.innerHTML = "";
+	
+	// Execute a test function
+	test_define_rectangle();
+
+	// 20180213.0751-1512 ok
+	function test_define_rectangle() {
+		// Define a box coordinates
+		/*
+				z
+				|
+				
+				H           G
+				 .---------.
+				/         /|
+		 E /       F / |
+			.---------.  |
+			|  .      |  .
+			| D       | / C
+			|         |/
+			.---------.    -- x
+		 A           B
+		*/
+		var s = 1;
+		var rA = new Vect3(0, 0, 0);
+		var rB = new Vect3(s, 0, 0);
+		var rC = new Vect3(s, s, 0);
+		var rD = new Vect3(0, s, 0);
+		var rE = new Vect3(0, 0, s);
+		var rF = new Vect3(s, 0, s);
+		var rG = new Vect3(s, s, s);
+		var rH = new Vect3(0, s, s);
+		
+		// Define box sides
+		var surf = new Grid4();
+		var sides = [];
+		surf = new Grid4(rE, rF, rB, rA);
+		sides.push(surf);
+		surf = new Grid4(rF, rG, rC, rB);
+		sides.push(surf);
+		surf = new Grid4(rG, rH, rD, rC);
+		sides.push(surf);
+		surf = new Grid4(rH, rE, rA, rD);
+		sides.push(surf);
+		surf = new Grid4(rE, rH, rG, rF);
+		sides.push(surf);
+		
+		// Defina spherical particles
+		var p = new Sphere();
+		var pars = [];
+		p = new Sphere();
+		p.m = 4;
+		p.d = 0.2;
+		p.r = new Vect3(0.25, 0.25, 0.25);
+		p.v = new Vect3(0.1, 0.05, 0);
+		pars.push(p);
+		p = new Sphere();
+		p.m = 6;
+		p.d = 0.3;
+		p.r = new Vect3(0.25, 0.5, 0.25);
+		p.v = new Vect3(0.0, 0.05, 0);
+		pars.push(p);
+		p = new Sphere();
+		p.m = 2;
+		p.d = 0.1;
+		p.r = new Vect3(0.8, 0.8, 0.25);
+		p.v = new Vect3(-0.02, 0.05, 0);
+		pars.push(p);
+		
+		// Define world coordinate
+		var xmin = -0.1;
+		var ymin = -0.1;
+		var xmax = 1.1;
+		var ymax = 1.1;
+		
+		// Define canvas size
+		var canvasWidth = 150;
+		var canvasHeight = 150;
+		
+		// Define canvas coordinate
+		var XMIN = 0;
+		var YMIN = canvasHeight;
+		var XMAX = canvasWidth;
+		var YMAX = 0;
+		
+		// Create a canvas
+		var c = document.createElement("canvas");
+		c.id = "drawingboard";
+		c.width = canvasWidth;
+		c.height = canvasHeight;
+		c.style.border = "1px solid #ccc";
+		
+		// Create some divs
+		var d;
+		d	= document.createElement("div");
+		d.id = "ekin";
+		document.body.appendChild(d);
+		d	= document.createElement("div");
+		d.id = "hidtext";
+		document.body.appendChild(d);
+		
+		// Draw a circle
+		function drawSphere(id, s, color) {
+			var cx = document.getElementById(id).getContext("2d");
+			cx.strokeStyle = color;
+			cx.beginPath();
+			var rr = transform({x: s.r.x, y: s.r.y});
+			var rr2 = transform({x: s.r.x + s.d, y: s.r.y});
+			var DD = rr2.x - rr.x;
+			cx.arc(rr.x, rr.y, 0.5 * DD, 0, 2 * Math.PI);
+			cx.stroke();
+		}
+		
+		// Draw sides of rectangle
+		function drawRectangles(id, surfs, color) {
+			var cx = document.getElementById(id).getContext("2d");
+			cx.strokeStyle = color;
+			var N = surfs.length;
+			for(var i = 0; i < N; i++) {
+				var M = surfs[i].p.length;
+				cx.beginPath();
+				for(var j = 0; j < M; j++) {
+					var s = surfs[i];
+					var rr = transform({x: s.p[j].x, y: s.p[j].y});
+					if(j == 0) {
+						cx.moveTo(rr.x, rr.y);
+					} else {
+						cx.lineTo(rr.x, rr.y);
+					}
+				}
+				cx.stroke();
+			}
+		}
+		
+		// Clear canvas with color
+		function clearCanvas() {
+			var id = arguments[0];
+			var el = document.getElementById(id);
+			var color = arguments[1];
+			var cx = el.getContext("2d");
+			cx.fillStyle = color;
+			cx.fillRect(0, 0, c.width, c.height);
+		}
+		
+		// Transform (x, y) to (X, Y)
+		function transform(r) {
+			var X = (r.x - xmin) / (xmax - xmin) * (XMAX - XMIN);
+			X += XMIN;
+			var Y = (r.y - ymin) / (ymax - ymin) * (YMAX - YMIN);
+			Y += YMIN;
+			return {x: X, y: Y};
+		}
+		
+		// Collide particle and a rectangle surface
+		function collide(p, surf) {
+			// Declare force variable
+			var F = new Vect3();
+			
+			// Define constants
+			var kN = 100;
+			var gN = 0.2;
+			
+			if(arguments[1] instanceof Grid4) {
+				// Get colliding objects
+				var p = arguments[0];
+				var surf = arguments[1];
+				
+				// Calculate normal vector
+				var r10 = Vect3.sub(surf.p[1], surf.p[0]);
+				var r21 = Vect3.sub(surf.p[2], surf.p[1]);
+				var n = Vect3.cross(r10, r21);
+				
+				// Calculate distance from surface
+				var r = p.r;
+				var dr = Vect3.sub(r, surf.p[0]);
+				var h = Math.abs(Vect3.dot(dr, n));
+				
+				// Calculate overlap
+				var xi = Math.max(0, 0.5 * p.d - h);
+				var xidot = Vect3.dot(p.v, n);
+				
+				// Calculate force
+				var f = (xi > 0) ? kN * xi - gN * xidot : 0;
+				F = Vect3.mul(f, n);
+			} else {
+				// Get colliding objects
+				var p0 = arguments[0];
+				var p1 = arguments[1];
+				
+				// Calculate overlap
+				var r10 = Vect3.sub(p1.r, p0.r);
+				var l10 = r10.len();
+				var n = r10.unit();
+				var v10 = Vect3.sub(p1.v, p0.v);
+				var xi = Math.max(0, 0.5 * (p1.d + p0.d) - l10);
+				var xidot = Vect3.dot(v10, n);
+				
+				// Calculate force
+				var f = (xi > 0) ? kN * xi - gN * xidot : 0;
+				var m0 = p0.m;
+				var m1 = p1.m;
+				var mu = (m1 * m0) / (m0 + m1);
+				f /= mu;
+				F = Vect3.mul(f, n);
+			}
+			
+			// Return force value
+			return F;
+		}
+		
+		var TBEG = new Date().getTime()
+		console.log("BEG: " + TBEG);
+		var tbeg = 0;
+		var tend = 1000;
+		var dt = 5E-2;
+		var t = tbeg;
+		var NT = 100;
+		var iT = 0;
+		var NT2 = 10;
+		var iT2 = 0;
+		
+		// 20180222.2117
+		var div = document.createElement("div");
+		div.style.textAlign = "center";
+		var b1 = document.createElement("button");
+		b1.innerHTML = "Start";
+		div.append(c);
+		div.appendChild(b1);
+		eout.append(div);
+		var ekin = document.createElement("div");
+		ekin.id = "ekin";
+		eout.append(ekin);
+		
+		var iter;
+		
+		b1.addEventListener("click", function() {
+			if(b1.innerHTML == "Start") {
+				b1.innerHTML = "Stop";
+				iter = setInterval(simulate, 5);
+			} else {
+				b1.innerHTML = "Start";
+				clearInterval(iter);
+			}
+		});
+				
+		function calculate() {
+			var M = pars.length;
+			
+			for(var j = 0; j < M; j++) {
+				var p = pars[j];
+				
+				// Calculate force with wall
+				var SF = new Vect3();
+				var N = sides.length;
+				for(var i = 0; i < N; i++) {
+					var F = collide(p, sides[i]);
+					SF = Vect3.add(SF, F);
+				}
+				
+				// Calculate force with other particles
+				for(var i = 0; i < M; i++) {
+					if(i != j) {
+						var F = collide(pars[i], pars[j]);
+						SF = Vect3.add(SF, F);
+					}
+				}
+				
+				// Calculate acceleration
+				p.a = Vect3.div(SF, p.m);
+				
+				// Perform Euler numerical integration
+				p.v = Vect3.add(p.v, Vect3.mul(p.a, dt));
+				p.r = Vect3.add(p.r, Vect3.mul(p.v, dt));
+			}
+			
+			// Increase time
+			t += dt;
+			
+			// Stop simulation
+			if(t > tend) {
+				clearInterval(iter);
+				var TEND = new Date().getTime();
+				console.log("END: " + TEND);
+				var TDUR = TEND - TBEG;
+				console.log("DUR: " + TDUR);
+			}
+		}
+		
+		function simulate() {
+			calculate();
+			
+			iT++;
+			iT2++;
+			
+			if(iT2 >= NT2) {
+				// Clear and draw
+				clearCanvas("drawingboard", "#fff");
+				drawRectangles("drawingboard", sides, "#f00");
+				var M = pars.length;
+				for(var j = 0; j < M; j++) {
+					drawSphere("drawingboard", pars[j], "#00f");
+				}
+				iT2 = 0;
+			}
+			if(iT >= NT) {
+				// Calculate total kenetic energy
+				var K = 0;
+				var M = pars.length;
+				for(var j = 0; j < M; j++) {
+					var v = pars[j].v.len();
+					var m = pars[j].m;
+					K += (0.5 * m * v * v);
+				var sK = K.toExponential(2)
+				}
+				var aa = sK.split("e")[0];
+				var bb = sK.split("e")[1];
+				var textEkin = "<i>K</i> = " + aa
+					+ " &times; 10<sup>" + bb + "</sup> J";
+				ekin.innerHTML = textEkin;
+				
+				iT = 0;
+			}
+		}
+	}
+}
+
 // 20180305.2023 ok
-function examRandomLine() {
+function examRandomLines() {
 	var eout = document.getElementById("scriptResult");
 	eout.innerHTML = "";
 	
