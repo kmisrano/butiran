@@ -253,7 +253,7 @@ function examThreeGrains() {
 		eout.append(div);
 		var ekin = document.createElement("div");
 		ekin.id = "ekin";
-		eout.append(ekin);
+		div.append(ekin);
 		
 		var iter;
 		
