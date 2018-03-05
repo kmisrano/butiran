@@ -10,7 +10,7 @@
 	Modify adding options to select.
 */
 
-// 20180304.1700 ok
+// 20180305.1949 ok
 function test_exam() {
 	// Create select element
 	var esel = document.createElement("select");
@@ -30,7 +30,9 @@ function test_exam() {
 		["Simple statistics", examSimpleStatistics],
 		["Table", examTable],
 		["Textarea matrix", examTextareaMatrix],
-		["Chart xy", examChartXY]
+		["Chart xy", examChartXY],
+		["Toggle button", examToggleButton],
+		["Random line", examRandomLine],
 	];
 	
 	// Add menu using option element

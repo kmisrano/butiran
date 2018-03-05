@@ -19,6 +19,100 @@ function executeScript(target, menu) {
 	script();
 }
 
+// 20180305.2023 ok
+function examRandomLine() {
+	var eout = document.getElementById("scriptResult");
+	eout.innerHTML = "";
+	
+	var w = 200;
+	var h = 200;
+	
+	var can = createCanvasWithId("drawingArea", w, h);
+	eout.appendChild(can);
+	var cx = can.getContext("2d");
+	
+	var i = 0;
+	var di = 1;
+	var iend = 1000;
+	var sel = window.event.target;
+	sel.disabled = true;
+	
+	var tid = setInterval(randomLine, 10);
+	
+	var x = w / 2;
+	var y = h / 2;
+	
+	function randomLine() {
+		if(i >= iend) {
+			i = iend;
+			clearInterval(tid);
+			sel.disabled = false;
+		}
+		
+		var theta = randInt(-180, 180);
+		var dr = 10;
+		var dx = dr * Math.cos(theta * Math.PI / 180);
+		var dy = dr * Math.sin(theta * Math.PI / 180);
+		
+		var j = (i / iend) * 255;
+		cx.strokeStyle = int2rgb(255 - j, 0, j);
+		cx.beginPath();
+		cx.moveTo(x, y);
+		x += dx;
+		if(x > w || x < 0) x -= dx;
+		y += dy;
+		if(y > h || y < 0) y -= dy;
+		cx.lineTo(x, y);
+		cx.stroke();
+		
+		i += di;
+	}
+		
+	function createCanvasWithId(id, w, h) {
+		var can = document.createElement("canvas");
+		can.width = w;
+		can.height = h;
+		can.style.width = w + "px";
+		can.style.height = h + "px";
+		can.style.border = "1px solid #bbb";
+		can.id = id;
+		return can;
+	}
+}
+
+
+// 20180305.1948 ok
+function examToggleButton() {
+	var eout = document.getElementById("scriptResult");
+	eout.innerHTML = "";
+	
+	var div = document.createElement("div");
+	div.style.width = "40px";
+	div.style.height = "40px";
+	div.style.border = "1px solid #000";
+	div.style.background = "#eee";
+	
+	var btn = document.createElement("button");
+	btn.innerHTML = "Off";
+	btn.style.width = "42px";
+	btn.style.height = "20px";
+	btn.addEventListener("click", switchOnOff);
+	
+	eout.appendChild(div);
+	eout.appendChild(btn);
+	
+	function switchOnOff() {
+		var btn = window.event.target;
+		if(btn.innerHTML == "Off") {
+			btn.innerHTML = "On";
+			div.style.background = "#faa";
+		} else {
+			btn.innerHTML = "Off";
+			div.style.background = "#eee";
+		}
+	}
+}
+
 // 20180304.2142 ok
 function examChartXY() {
 	var eout = document.getElementById("scriptResult");
