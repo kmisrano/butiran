@@ -34,6 +34,7 @@ function test_exam() {
 		["Toggle button", examToggleButton],
 		["Random lines", examRandomLines],
 		["Three grains", examThreeGrains],
+		["Date and clock", examDateAndClock],
 	];
 	
 	// Add menu using option element

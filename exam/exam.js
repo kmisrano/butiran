@@ -19,6 +19,93 @@ function executeScript(target, menu) {
 	script();
 }
 
+// 20180306.1301 !ok
+function examDateAndClock() {
+	var eout = document.getElementById("scriptResult");
+	eout.innerHTML = "";
+	var sel = window.event.target;
+	
+	var w = 150;
+	var h = 150;
+	var bgcolor = "#fee";
+	
+	var ecan = document.createElement("canvas");
+	ecan.width = w;
+	ecan.height = h;
+	ecan.style.width = w + "px";
+	ecan.style.height = h + "px";
+	ecan.style.background = bgcolor;
+	
+	var ebtn = document.createElement("button");
+	ebtn.innerHTML = "Start";
+	ebtn.style.width = "150px";
+	ebtn.addEventListener("click", toggleClock);
+	
+	var etop = document.createElement("div");
+	etop.style.width = "150px";
+	
+	eout.appendChild(etop);
+		etop.appendChild(ecan);
+		etop.appendChild(ebtn);
+	
+	var tim;
+	
+	function toggleClock() {
+		var btn = window.event.target;
+		if(btn.innerHTML == "Start") {
+			sel.disabled = true;
+			btn.innerHTML = "Stop";
+			tim = setInterval(animateClock, 500);
+		} else {
+			sel.disabled = false;
+			btn.innerHTML = "Start";
+			clearInterval(tim);
+		}
+	}
+	
+	function animateClock() {
+		eraseClock();
+		drawClock();
+	}
+	
+	function eraseClock() {
+		var cx = ecan.getContext("2d");
+		cx.beginPath();
+		cx.fillStyle = bgcolor;
+		cx.rect(0, 0, w, h);
+		cx.fill();
+	}
+	
+	function drawClockBackground() {
+	}
+	
+	function drawClockNeedle(deg, len) {
+	}
+	
+	function drawClock() {
+		var date = new Date();
+		var sec = date.getSeconds();
+		var min = date.getMinutes();
+		var hou = date.getHours();
+		var day = date.getDate();
+		var mon = 1 + date.getMonth();
+		var yea = date.getFullYear();
+		
+		drawClockBackground();
+		
+		var houLen = 0;
+		var minLen = 0;
+		var secLen = 0;
+		var houDeg = 0;
+		var minDeg = 0;
+		var secDeg = 0;
+		
+		drawClockNeedle(houDeg, houLen);
+		drawClockNeedle(minDeg, minLen);
+		drawClockNeedle(secDeg, secLen);
+	}
+}
+
 // 20180306.0514 ok
 function examThreeGrains() {
 	var eout = document.getElementById("scriptResult");
