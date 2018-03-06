@@ -19,7 +19,7 @@ function executeScript(target, menu) {
 	script();
 }
 
-// 20180306.1731 !ok
+// 20180306.1814 ok
 function examDateAndClock() {
 	var eout = document.getElementById("scriptResult");
 	eout.innerHTML = "";
@@ -136,7 +136,6 @@ function examDateAndClock() {
 		cx.font = "11px serif";
 		cx.textAlign = "center";
 		cx.fillText(str, xo, yo);
-		console.log(str);
 	}
 	
 	function drawClock() {
