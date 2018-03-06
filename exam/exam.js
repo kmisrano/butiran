@@ -19,7 +19,7 @@ function executeScript(target, menu) {
 	script();
 }
 
-// 20180306.1301 !ok
+// 20180306.1731 !ok
 function examDateAndClock() {
 	var eout = document.getElementById("scriptResult");
 	eout.innerHTML = "";
@@ -48,14 +48,19 @@ function examDateAndClock() {
 		etop.appendChild(ecan);
 		etop.appendChild(ebtn);
 	
+	drawClock();
+	toggleClock(ebtn);
 	var tim;
 	
-	function toggleClock() {
+	function toggleClock(el) {
 		var btn = window.event.target;
+		if(btn == sel) {
+			btn = el;
+		}
 		if(btn.innerHTML == "Start") {
 			sel.disabled = true;
 			btn.innerHTML = "Stop";
-			tim = setInterval(animateClock, 500);
+			tim = setInterval(animateClock, 1000);
 		} else {
 			sel.disabled = false;
 			btn.innerHTML = "Start";
@@ -76,10 +81,62 @@ function examDateAndClock() {
 		cx.fill();
 	}
 	
-	function drawClockBackground() {
+	function drawClockBackground(col, bgcol) {
+		var xc = 0.5 * w;
+		var yc = 0.5 * h;
+		var R = 0.5 * Math.min(h, w) - 2;
+		
+		var cx = ecan.getContext("2d");
+		cx.strokeStyle = col;
+		cx.fillStyle = bgcol;
+		cx.beginPath();
+		cx.arc(xc, yc, R, 0, 2 * Math.PI);
+		cx.fill();
+		cx.stroke();
+		
+		var N = 12;
+		var dth = 360 / N;
+		for(var i = 0; i < N; i++) {
+			var th = i * dth - 90;
+			var xi = xc + 0.9 * R * Math.cos(th / 180 * Math.PI);
+			var yi = yc + 0.9 * R * Math.sin(th / 180 * Math.PI);
+			var xo = xc + 1.0 * R * Math.cos(th / 180 * Math.PI);
+			var yo = yc + 1.0 * R * Math.sin(th / 180 * Math.PI);
+			cx.strokeStyle = col;
+			cx.beginPath();
+			cx.moveTo(xi, yi);
+			cx.lineTo(xo, yo);
+			cx.stroke();
+		}
 	}
 	
-	function drawClockNeedle(deg, len) {
+	function drawClockNeedle(deg, len, lc, lw) {
+		var xo = 0.5 * w;
+		var yo = 0.5 * h;
+		var xn = xo + len * Math.cos(deg / 180 * Math.PI);
+		var yn = yo + len * Math.sin(deg / 180 * Math.PI);
+		
+		var cx = ecan.getContext("2d");
+		cx.save();
+		cx.lineWidth = lw;
+		cx.strokeStyle = lc;
+		cx.beginPath();
+		cx.moveTo(xo, yo);
+		cx.lineTo(xn, yn);
+		cx.stroke();
+		cx.restore();
+	}
+	
+	function drawDate(str) {
+		var xo = 0.5 * w;
+		var yo = 0.87 * h;
+		
+		var cx = ecan.getContext("2d");
+		cx.fillStyle = "#000";
+		cx.font = "11px serif";
+		cx.textAlign = "center";
+		cx.fillText(str, xo, yo);
+		console.log(str);
 	}
 	
 	function drawClock() {
@@ -91,18 +148,32 @@ function examDateAndClock() {
 		var mon = 1 + date.getMonth();
 		var yea = date.getFullYear();
 		
-		drawClockBackground();
+		drawClockBackground("#000", "#dfd");
 		
-		var houLen = 0;
-		var minLen = 0;
-		var secLen = 0;
-		var houDeg = 0;
-		var minDeg = 0;
-		var secDeg = 0;
+		var smon = (mon < 10) ? "0" + mon : mon;
+		var sday = (day < 10) ? "0" + day : day;
+		drawDate(yea + "-" + smon + "-" + sday);
 		
-		drawClockNeedle(houDeg, houLen);
-		drawClockNeedle(minDeg, minLen);
-		drawClockNeedle(secDeg, secLen);
+		var lenMax = 0.5 * Math.min(h, w);
+		var houLen = 0.5 * lenMax;
+		var minLen = 0.6 * lenMax;
+		var secLen = 0.8 * lenMax;
+		
+		var secDeg = sec / 60 * 360 - 90;
+		var minDeg = (min + sec / 60) / 60 * 360 - 90;
+		var houDeg = (hou + min / 60) / 12 * 360 - 90;
+		
+		var houCol = "#f00";
+		var minCol = "#080";
+		var secCol = "#00f";
+		
+		var houLw = "6";
+		var minLw = "3";
+		var secLw = "1";
+		
+		drawClockNeedle(houDeg, houLen, houCol, houLw);
+		drawClockNeedle(minDeg, minLen, minCol, minLw);
+		drawClockNeedle(secDeg, secLen, secCol, secLw);
 	}
 }
 
