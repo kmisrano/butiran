@@ -58,16 +58,86 @@ yang akan memberikan
 Untuk kasus pelat tipis yang merupakan sistem dua dimensi $u$ dapat dimisalkan berbentuk separabel
 
 \begin{equation}
-u(x, y) = X(x) Y(y)
+u = T(x, y) = X(x) Y(y)
 \label{eq:u-separable}
 \end{equation}
 
 sehingga memungkan untuk memecahkan Persamaan (\ref{eq:laplace}) dengan menggunakan metode separasi variabel
 
 \begin{equation}
-\nabla^2 u = Y \frac{d^2X}{dx^2} + X \frac{d^2Y}{dy^2}.
+\nabla^2 T = Y \frac{d^2X}{dx^2} + X \frac{d^2Y}{dy^2}.
 \label{eq:thin-plate-separation-variable}
 \end{equation}
+
+Solusi yang dapat diperoleh adalah
+
+\begin{equation}
+T = XY = \left\{
+	\begin{array}{c}
+	e^{ky} \\
+	e^{-ky} \\
+	\end{array}
+\right\}\left\{
+	\begin{array}{c}
+	\sin kx \\
+	\cos kx \\
+	\end{array}	
+\right\}.
+\label{eq:thin-plate-solution-candidate}
+\end{equation}
+
+Dengan syarat batas
+
+\begin{equation}
+T(0, y) = T(L, y) = T(x, \infty) = 0
+\label{eq:thin-plate-solution-boundary-condition-1}
+\end{equation}
+
+dan
+
+\begin{equation}
+T(x, 0) = T_0
+\label{eq:thin-plate-solution-boundary-condition-2}
+\end{equation}
+
+dapat diperoleh bahwa
+
+\begin{equation}
+T = e^{-n\pi y/L} \sin \frac{n\pi x}{L},
+\label{eq:thin-plate-solution-single}
+\end{equation}
+
+yang belum memenuhi Persamaan (\ref{eq:thin-plate-solution-boundary-condition-2}). Akan tetapi representasi deret dari Persamaan (\ref{eq:thin-plate-solution-single}) dalam bentuk
+
+\begin{equation}
+T = \sum_{n = 1}^{\infty}
+b_n e^{-n\pi y/L} \sin \frac{n\pi x}{L},
+\label{eq:thin-plate-solution-series}
+\end{equation}
+
+dapat memenuhinya. Dengan menyamakan Persamaan (\ref{eq:thin-plate-solution-series}) dengan Persamaan (\ref{eq:thin-plate-solution-boundary-condition-2}) dapat diperoleh bahwa
+
+\begin{equation}
+\sum_{n = 1}^{\infty}
+b_n \sin \frac{n\pi x}{L} = T_0.
+\label{eq:thin-plate-solution-series-boundary-condition}
+\end{equation}
+
+Dengan menggunakan deret Fourier sinus dapat diperoleh bahwa
+
+\begin{equation}
+b_n = \frac{2}{L} \int_0^L f(x) \sin \frac{n\pi x}{L} =
+\left\{
+\begin{array}{cc}
+\frac{400}{n\pi}, & n \ \ {\rm ganjil}, \\
+0, & n \ \ {\rm genap}.
+\end{array}
+\right.
+\label{eq:thin-plate-solution-series-bn}
+\end{equation}
+
+<h2>Referensi</h2>
+Boas ML 2006, "Mathematical Methods in the Physical Sciences", John Wiley & Sons, Inc., 3rd edn., pp. 621-628.
 
 
 	*/}.toString().slice(14, -3);
