@@ -8,16 +8,9 @@
 	Start this library.
 	20180304
 	Continue improving this library.
+	20180311
+	Move executeScript to demo.js for broader use.
 */
-
-// 20180304.1658 ok
-function executeScript(target, menu) {
-	var target = window.event.target;
-	var value = target.value;
-	var idx = target.selectedIndex;
-	var script = menu[idx][1];
-	script();
-}
 
 // 20180306.1814 ok
 function examDateAndClock() {

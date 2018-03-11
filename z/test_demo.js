@@ -8,10 +8,12 @@
 	Start this test functions.
 	20180404
 	Modify adding options to select.
+	20180311
+	Rename test_exam to test_demo for broader use.
 */
 
-// 20180305.1949 ok
-function test_exam() {
+// 20180305.1949 ok --> 20180311.1904 !ok
+function test_demo() {
 	// Create select element
 	var esel = document.createElement("select");
 	esel.addEventListener("change", selectProblem)
