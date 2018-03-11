@@ -24,6 +24,8 @@
 	Create from [2] and not work well.
 	There could be another candidates, e.g. as in [3],
 	which does not work either.
+	20180312
+	Try suggestion from Sachin Singh.
 	
 	References
 	1. Michael Sharman, "Include JS file", 7 Des 2006,
@@ -40,7 +42,11 @@
 	4. jrburke, "require.js", GitHub, 21 Aug 2017
 	URL https://github.com/volojs/create-template
 	/blob/master/www/lib/require.js [20180301].
+	5. Sachin Singh, URL https://stackoverflow.com/a/49222731
+	/9475509 [20180312]
 */
+
+// [5] still not work
 
 /*
 // [4] -- not workl
@@ -69,6 +75,8 @@ requirejs(["../../framework/industry.js"]);
 requirejs(["../../framework/resource.js"]);
 requirejs(["../../framework/generator.js"]);
 */
+
+
 
 /*
 // [3] -- not work
