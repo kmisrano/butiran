@@ -13,7 +13,7 @@
 	modify style of menuSeparator item.
 */
 
-// 20180305.1949 ok --> 20180311.1923 !ok
+// 20180305.1949 ok --> 20180311.2130 !ok
 function test_demo() {
 	// Create select element
 	var esel = document.createElement("select");
@@ -79,15 +79,18 @@ function test_demo() {
 	eout.style.border = "1px solid #bbb";
 	eout.style.background = "#f8f8f8";
 	eout.style.padding = "10px";
-	eout.style.fontFamily = "Arial";
-	eout.style.fontSize = "12px";
-	eout.style.height = "200px";
+	eout.style.fontFamily = "Times";
+	eout.style.fontSize = "16px";
 	
 	// Set document layout
 	document.body.appendChild(etop);
 		etop.appendChild(esel);
 		etop.appendChild(etxt);
 	document.body.appendChild(eout);
+	
+	// Set selected only for developing only
+	esel.selectedIndex = N - 1;
+	//executeScript(esel, menu)
 	
 	// Execute script related to selected problem
 	function selectProblem() {
