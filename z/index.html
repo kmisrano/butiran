@@ -8,7 +8,24 @@
 
 <!-- MathJax --->
 <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
-<script type="text/x-mathjax-config" src="https://raw.githack.com/dudung/butiran/master/config/mathjax.js"></script>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+	// Set equation number
+	TeX: {
+		equationNumbers: {
+			autoNumber: "AMS" 
+			}
+	},
+	
+	// Set inline math tags
+	tex2jax: {
+		inlineMath: [
+			['$','$'],
+			['\\(','\\)']
+		]
+	}
+});
+</script>
 
 <!-- Butiran --->
 <script src="https://raw.githack.com/dudung/butiran/master/grains/grid4.js"></script>
@@ -32,6 +49,7 @@
 <script src="https://raw.githack.com/dudung/butiran/master/timer/timer.js"></script>
 <script src="https://raw.githack.com/dudung/butiran/master/mathjax/update.js"></script>
 <script src="../demo/demo.js"></script>
+<script src="../demo/mjlaplaceplate.js"></script>
 <script src="https://raw.githack.com/dudung/butiran/master/demo/exam.js"></script>
 <script src="https://raw.githack.com/dudung/butiran/master/z/test_capacitors.js"></script>
 <script src="https://raw.githack.com/dudung/butiran/master/z/test_generator.js"></script>
@@ -49,5 +67,12 @@
 test_demo();
 </script>
 
+\begin{equation}
+f_n(x) = A_n \sin\left( \frac{n\pi}{L} x \right),
+\tag{1.1}
+\label{eq:fx-sin}
+\end{equation}
+
+$x^2$
 </body>
 </html>

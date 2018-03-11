@@ -9,10 +9,11 @@
 	20180404
 	Modify adding options to select.
 	20180311
-	Rename test_exam to test_demo for broader use.
+	Rename test_exam to test_demo for broader use and
+	modify style of menuSeparator item.
 */
 
-// 20180305.1949 ok --> 20180311.1904 !ok
+// 20180305.1949 ok --> 20180311.1923 !ok
 function test_demo() {
 	// Create select element
 	var esel = document.createElement("select");
@@ -20,7 +21,8 @@ function test_demo() {
 	esel.style.fontFamily = "Arial";
 	esel.style.fontSize = "13px";
 	var menu = [
-		["Select problem", examClear],
+		["Select menu", examClear],
+		["# JS Demo", menuSeparator],
 		["Hello world", examHelloWorld],
 		["Letter configuration", examLetterConfiguration],
 		["Display series", examDisplaySeries],
@@ -37,6 +39,8 @@ function test_demo() {
 		["Random lines", examRandomLines],
 		["Three grains", examThreeGrains],
 		["Date and clock", examDateAndClock],
+		["# Topics", menuSeparator],
+		["Plate temperature", theoryPlateTemperature],
 	];
 	
 	// Add menu using option element
@@ -45,6 +49,12 @@ function test_demo() {
 		var opt = document.createElement("option");
 		opt.text = menu[i][0];
 		esel.options.add(opt);
+		if(menu[i][1] == menuSeparator) {
+			esel.options[i].disabled = true;
+			esel.options[i].style.background = "black";
+			esel.options[i].style.color = "white";
+			esel.options[i].style.textIndent = "10px";
+		}
 	}
 	
 	// Create information

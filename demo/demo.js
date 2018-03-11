@@ -17,3 +17,9 @@ function executeScript(target, menu) {
 	var script = menu[idx][1];
 	script();
 }
+
+// 20180311.2015 ok
+function menuSeparator() {
+	// Do nothing
+	//console.log(window.event.target);
+}
