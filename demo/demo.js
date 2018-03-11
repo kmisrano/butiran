@@ -11,7 +11,7 @@
 
 // 20180304.1658 ok
 function executeScript(target, menu) {
-	var target = window.event.target;
+	var target = target;
 	var value = target.value;
 	var idx = target.selectedIndex;
 	var script = menu[idx][1];

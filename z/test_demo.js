@@ -17,7 +17,7 @@
 function test_demo() {
 	// Create select element
 	var esel = document.createElement("select");
-	esel.addEventListener("change", selectProblem)
+	esel.addEventListener("change", selectMenu)
 	esel.style.fontFamily = "Arial";
 	esel.style.fontSize = "13px";
 	var menu = [
@@ -88,12 +88,27 @@ function test_demo() {
 		etop.appendChild(etxt);
 	document.body.appendChild(eout);
 	
-	// Set selected only for developing only
-	esel.selectedIndex = N - 1;
-	//executeScript(esel, menu)
+	// Set this only in developing stage -- 20180311.2250 ok
+	chooseLastMenu();
 	
-	// Execute script related to selected problem
-	function selectProblem() {
+	// Execute script related to selected menu
+	function selectMenu() {
 		executeScript(window.event.target, menu)
+	}
+	
+	// Force to choose last menu
+	function chooseLastMenu() {
+		esel.selectedIndex = N - 1;
+		var wait = setInterval(waitMathJax, 500);
+		
+		function waitMathJax() {
+			var mj = typeof MathJax;
+			if(mj === "undefined") {
+				
+			} else {
+				clearInterval(wait);
+				executeScript(esel, menu);
+			}
+		}
 	}
 }
