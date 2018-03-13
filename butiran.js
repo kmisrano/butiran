@@ -26,6 +26,9 @@
 	which does not work either.
 	20180312
 	Try suggestion from Sachin Singh.
+	20180313
+	It works if require is called in the same html file with
+	main function. Try anotherway around.
 	
 	References
 	1. Michael Sharman, "Include JS file", 7 Des 2006,
@@ -44,6 +47,56 @@
 	/blob/master/www/lib/require.js [20180301].
 	5. Sachin Singh, URL https://stackoverflow.com/a/49222731
 	/9475509 [20180312]
+*/
+
+/* // still not work -- 20180313.1815
+// Set base url
+var baseurl = "https://rawgit.com/dudung/butiran/master/";
+
+// Set to false when not download whole scripts
+var local = true;
+if(local) {
+	baseurl = "";
+}
+
+// Define libraries of butiran.js
+var libs = [
+baseurl + "chart/chart2.js",
+baseurl + "chart/xyseries.js",
+baseurl + "color/rgb.js",
+baseurl + "demo/demo.js",
+baseurl + "demo/exam.js",
+baseurl + "demo/mjlaplaceplate.js",
+baseurl + "framework/generator.js",
+baseurl + "framework/industry.js",
+baseurl + "framework/resource.js",
+baseurl + "grains/grid4.js",
+baseurl + "grains/particle.js",
+baseurl + "grains/sphere.js",
+baseurl + "grains/vect3.js",
+baseurl + "math/integration.js",
+baseurl + "math/polynomial.js",
+baseurl + "math/random.js",
+baseurl + "mathjax/update.js",
+baseurl + "timer/timer.js",
+baseurl + "visual/electronics/capacitors.js",
+baseurl + "visual/electronics/connectors.js",
+baseurl + "visual/electronics/point.js",
+baseurl + "visual/coordinates.js",
+baseurl + "visual/painter.js",
+baseurl + "z/test_capacitors.js",
+baseurl + "z/test_demo.js",
+baseurl + "z/test_generator.js",
+baseurl + "z/test_generator_chart2.js",
+baseurl + "z/test_integration.js",
+baseurl + "z/test_random.js",
+baseurl + "z/test_timer.js",
+];
+require(libs, main2);
+
+function main2() {
+}
+
 */
 
 // [5] still not work
