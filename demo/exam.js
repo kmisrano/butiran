@@ -674,6 +674,7 @@ function examTextareaMatrix() {
 			+ "\\begin{array}\n";
 		var COL = M[0].length;
 		latex += "{" + "c".repeat(COL) + "}\n";
+		latex += "\\nonumber\n";
 		for(var j = 0; j < ROW; j++) {
 			var arow = M[j];
 			var COL = arow.length;
