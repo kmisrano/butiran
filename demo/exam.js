@@ -620,7 +620,7 @@ function examChartXY() {
 	chart.drawSeries("series1");
 }
 
-// 20180304.2107 ok
+// 20180304.2107 ok --> remove equation number 20180313.1202
 function examTextareaMatrix() {
 	var eout = document.getElementById("scriptResult");
 	eout.innerHTML = "";
