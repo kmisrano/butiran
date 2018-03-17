@@ -31,6 +31,8 @@ function demoSimpleInstrument() {
 		b.addEventListener("mousedown", playSound);
 		b.addEventListener("mouseup", stopSound);
 		b.addEventListener("mouseout", stopSound);
+		b.addEventListener("touchstart", playSound);
+		b.addEventListener("touchend", stopSound);
 	}
 	
 	function playSound() {
@@ -50,7 +52,7 @@ function demoToggleSound() {
 	var eout = document.getElementById("scriptResult");
 	eout.innerHTML = "";
 	
-	var sineWave = new Pizzicato.Sound({ 
+	var sineWave = new Pizzicato.Sound({
     source: 'wave', 
     options: {
         frequency: 880
@@ -60,7 +62,7 @@ function demoToggleSound() {
 	var btn = document.createElement("button");
 	btn.innerHTML = "Play";
 	eout.appendChild(btn);
-	btn.addEventListener("mousedown", btnClick);
+	btn.addEventListener("click", btnClick);
 	
 	function btnClick() {
 		var t = event.target;
