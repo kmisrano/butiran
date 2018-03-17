@@ -11,6 +11,8 @@
 	20180311
 	Rename test_exam to test_demo for broader use and
 	modify style of menuSeparator item.
+	20180317
+	Try sound using pizzicato.js library.
 */
 
 // 20180305.1949 ok --> 20180311.2130 !ok
@@ -41,6 +43,8 @@ function test_demo() {
 		["Date and clock", examDateAndClock],
 		["# Topics", menuSeparator],
 		["Plate temperature", theoryPlateTemperature],
+		["Toggle sound", demoToggleSound],
+		["Simple instrument", demoSimpleInstrument],
 	];
 	
 	// Add menu using option element
