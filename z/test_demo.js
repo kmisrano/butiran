@@ -45,6 +45,7 @@ function test_demo() {
 		["Plate temperature", theoryPlateTemperature],
 		["Toggle sound", demoToggleSound],
 		["Simple instrument", demoSimpleInstrument],
+		["Sound beat", demoSoundBeat],
 	];
 	
 	// Add menu using option element
