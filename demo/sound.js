@@ -10,28 +10,28 @@
 
 // 20180317.1404 ok
 function demoSimpleInstrument() {
-	var baseFrequency = 440;
+	var eout = document.getElementById("scriptResult");
+	eout.innerHTML = "";
+	
+	var baseFrequency = 880;
 	var sineWave = new Pizzicato.Sound({ 
-    source: 'wave', 
+    source: "wave",
     options: {
-        frequency: baseFrequency
+        //frequency: baseFrequency
     }
 	});
 	
-	var baseFrequency = 440;
 	var ratio = [1/1, 9/8, 5/4, 4/3, 3/2, 5/3, 15/8, 2/1];
 	var label = ["C", "D", "E", "F", "G", "A", "B", "C"];
 	for(var i = 0; i < ratio.length; i++) {
 		var b = document.createElement("button");
 		b.innerHTML = label[i];
 		b.id = i;
-		document.body.appendChild(b);
+		eout.appendChild(b);
 		b.addEventListener("mousedown", playSound);
 		b.addEventListener("mouseup", stopSound);
 		b.addEventListener("mouseout", stopSound);
 	}
-	
-	//sineWave.play();
 	
 	function playSound() {
 		var t = event.target;
@@ -47,16 +47,19 @@ function demoSimpleInstrument() {
 
 // 20180317.1323 !ok 
 function demoToggleSound() {
+	var eout = document.getElementById("scriptResult");
+	eout.innerHTML = "";
+	
 	var sineWave = new Pizzicato.Sound({ 
     source: 'wave', 
     options: {
-        frequency: 440
+        frequency: 880
     }
 	});
 	
 	var btn = document.createElement("button");
 	btn.innerHTML = "Play";
-	document.body.appendChild(btn);
+	eout.appendChild(btn);
 	btn.addEventListener("mousedown", btnClick);
 	
 	function btnClick() {
