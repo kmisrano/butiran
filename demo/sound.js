@@ -8,7 +8,7 @@
 	Start this demo file.
 */
 
-// 20180317.1325 !ok
+// 20180317.1404 ok
 function demoSimpleInstrument() {
 	var baseFrequency = 440;
 	var sineWave = new Pizzicato.Sound({ 
