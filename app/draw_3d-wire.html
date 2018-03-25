@@ -1,0 +1,325 @@
+<!doctype html>
+<html>
+<head>
+
+<!-- Three.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/\
+three.js/91/three.min.js"></script>
+
+<script src="helvetiker_regular.typeface.js">
+</script>
+</head>
+<body>
+<script>
+/*
+	Create 3D objects using Three.js library
+	
+	Sparisoma Viridi | dudung@gmail.com
+	Nadya Amalia | amalianadd@gmail.com
+	Desyana Margaretta Olenka | retta.lenka@gmail.com
+	
+	20180324
+	Create this application.
+	20180325
+	Continue improving the code.
+	Consider complete for this state and upload to GitHub.
+*/
+
+// Define animation parameters
+var ANIMATE = false;
+var objectName = "Curve";
+var curve;
+
+// Define dimension of a Canvas
+var canvasWidth = 400;
+var canvasHeight = 300;
+
+// Create and define properties of a Textarea
+var textareaWidth = 200;
+var textareaHeight = (canvasHeight - 6);
+var scroll = "overflowY";
+var txa = document.createElement("textarea");
+txa.style.width = textareaWidth + "px";
+txa.style.height = textareaHeight + "px";
+txa.style.scroll = scroll;
+
+// Create and define properties of a Div
+var div = document.createElement("div");
+div.style.width = (textareaWidth + canvasWidth + 6) + "px";
+
+// Create and set item of a Select
+var sel = document.createElement("select");
+var opt0 = document.createElement("option");
+opt0.innerHTML = "Input data";
+var opt1 = document.createElement("option");
+opt1.innerHTML = "Spiral";
+var opt2 = document.createElement("option");
+opt2.innerHTML = "Coil";
+var opt3 = document.createElement("option");
+opt3.innerHTML = "Conical spiral";
+sel.addEventListener("change", loadDefault)
+
+// Create and define properties of a Button
+var btn1 = document.createElement("button");
+btn1.innerHTML = "Draw";
+btn1.style.width = "50px";
+btn1.addEventListener("click", drawData);
+
+// Create and define properties of another Button
+var btn2 = document.createElement("button");
+btn2.innerHTML = "Start";
+btn2.style.width = "50px";
+btn2.addEventListener("click", toggleAnimation);
+
+// Define camera parameters
+var cameraRatio = canvasWidth / canvasHeight;
+var cameraNear = 1;
+var cameraFar = 1000;
+var cameraAngle = 30;
+var cTheta = 45 * Math.PI / 180;
+var cPhi = 225 * Math.PI / 180;
+var cRadius = 45;
+var cameraX = cRadius * Math.sin(cTheta) * Math.cos(cPhi);
+var cameraY = cRadius * Math.sin(cTheta) * Math.sin(cPhi);
+var cameraZ = cRadius * Math.cos(cTheta);
+
+// Define scene parameters
+var sceneBackground = 0xfafafa;
+
+// Create and set a Scene
+var scene = new THREE.Scene();
+scene.background = new THREE.Color(sceneBackground);
+
+// Create and set a PerspectiveCamera
+var camera = new THREE.PerspectiveCamera(cameraAngle, cameraRatio, cameraNear, cameraFar);
+camera.position.set(cameraX, cameraY, cameraZ);
+camera.lookAt(new THREE.Vector3(0, 10, 0));
+
+// Create and set a WebGLRenderer
+var renderer = new THREE.WebGLRenderer();
+renderer.setSize(canvasWidth, canvasHeight);
+renderer.render(scene, camera);
+
+// Arrange elements
+document.body.appendChild(div);
+	div.appendChild(txa);
+	div.appendChild(renderer.domElement);
+	div.appendChild(sel);
+		sel.appendChild(opt0);
+		sel.appendChild(opt1);
+		sel.appendChild(opt2);
+		sel.appendChild(opt3);
+	div.appendChild(btn1);
+	div.appendChild(btn2);
+
+// Define and create x, y, z axes
+var axisLength = 10;
+var pointSize = 0.2
+
+var xG = new THREE.Geometry();
+xG.vertices.push(new THREE.Vector3(0, 0, 0));
+xG.vertices.push(new THREE.Vector3(axisLength, 0, 0));
+var xM = new THREE.LineBasicMaterial({color: 0xff0000});
+var xAxis = new THREE.Line(xG, xM);
+var xS = new THREE.SphereGeometry(pointSize, 8, 8);
+var xM2 = new THREE.MeshBasicMaterial({color: 0xff0000});
+var xPoint = new THREE.Mesh(xS, xM2);
+xS.translate(axisLength, 0, 0);
+
+var yG = new THREE.Geometry();
+yG.vertices.push(new THREE.Vector3(0, 0, 0));
+yG.vertices.push(new THREE.Vector3(0, 2 * axisLength, 0));
+var yM = new THREE.LineBasicMaterial({color: 0x00ff00});
+var yAxis = new THREE.Line(yG, yM);
+var yS = new THREE.SphereGeometry(pointSize, 8, 8);
+var yM2 = new THREE.MeshBasicMaterial({color: 0x00ff00});
+var yPoint = new THREE.Mesh(yS, yM2);
+yS.translate(0, 2 * axisLength, 0);
+
+var zG = new THREE.Geometry();
+zG.vertices.push(new THREE.Vector3(0, 0, 0));
+zG.vertices.push(new THREE.Vector3(0, 0, axisLength));
+var zM = new THREE.LineBasicMaterial({color: 0x0000ff});
+var zAxis = new THREE.Line(zG, zM);
+var zS = new THREE.SphereGeometry(pointSize, 8, 8);
+var zM2 = new THREE.MeshBasicMaterial({color: 0x0000ff});
+var zPoint = new THREE.Mesh(zS, zM2);
+zS.translate(0, 0, axisLength);
+
+var axis = new THREE.Group();
+axis.add(xAxis);
+axis.add(yAxis);
+axis.add(zAxis);
+axis.add(xPoint);
+axis.add(yPoint);
+axis.add(zPoint);
+scene.add(axis);
+
+animate();
+
+// Load default data
+function loadDefault() {
+	var el = window.event.target;
+	switch(el.value) {
+		case "Input data":
+			inputData(txa);
+			break;
+		case "Spiral":
+			loadSpiral(txa);
+			break;
+		case "Coil":
+			loadCoil(txa);
+			break;
+		case "Conical spiral":
+			loadConicalSpiral(txa);
+			break;
+	}
+}
+
+// Input user data
+function inputData() {
+	var content = "# Type your data";
+	arguments[0].value = content;
+}
+
+// Generate spiral data
+function loadSpiral() {
+	var content = "# Spiral\n";
+	var N = 501;
+	var T = 5;
+	var Ro = 5;
+	var q = 0;
+	var dq = 360 / (N - 1) * T;
+	for(var i = 0; i < N; i++) {
+		R = Ro * (1 - i / (N - 1));
+		var x = R * Math.cos(q * Math.PI / 180);
+		var y = R * Math.sin(q * Math.PI / 180);
+		var z = 0;
+		q += dq;
+		content += x.toFixed(3) + "\t";
+		content += z.toFixed(3) + "\t";
+		content += y.toFixed(3) + "\n";
+	}
+	arguments[0].value = content;
+}
+
+// Load coil data
+function loadCoil() {
+	var content = "# Coil\n";
+	var N = 501;
+	var L = 20;
+	var T = 5;
+	var Ro = 5;
+	var q = 0;
+	var dq = 360 / (N - 1) * T;
+	for(var i = 0; i < N; i++) {
+		R = Ro;
+		var x = R * Math.cos(q * Math.PI / 180);
+		var y = R * Math.sin(q * Math.PI / 180);
+		var z = L * (i / N);
+		q += dq;
+		content += x.toFixed(3) + "\t";
+		content += z.toFixed(3) + "\t";
+		content += y.toFixed(3) + "\n";
+	}
+	arguments[0].value = content;
+}
+
+// Load conical spiral data
+function loadConicalSpiral() {
+	var content = "# Conical spiral\n";
+	var N = 501;
+	var L = 20;
+	var T = 5;
+	var Ro = 5;
+	var q = 0;
+	var dq = 360 / (N - 1) * T;
+	for(var i = 0; i < N; i++) {
+		R = Ro * (1 - i / (N - 1))
+		var x = R * Math.cos(q * Math.PI / 180);
+		var y = R * Math.sin(q * Math.PI / 180);
+		var z = L * (i / N);
+		q += dq;
+		content += x.toFixed(3) + "\t";
+		content += z.toFixed(3) + "\t";
+		content += y.toFixed(3) + "\n";
+	}
+	arguments[0].value = content;
+}
+
+// Read data from textarea and draw using THREE.js
+function drawData() {
+	var lines = txa.value.split("\n");
+	var N = lines.length - 1;
+	var x = [];
+	var z = [];
+	var y = [];
+	var M = 0;
+	for(var i = 1; i < N; i++) {
+		if(lines[i].length > 0) {
+			var data = lines[i].split("\t");
+			x.push(data[0]);
+			z.push(data[1]);
+			y.push(data[2]);
+			M++;
+		}
+	}
+	
+	/*
+	// Test data reading
+	for(var i = 0; i < M; i++) {
+		console.log(x[i] + "\t" + z[i] + "\t" + y[i]);
+	}
+	*/
+	
+	// Move previous object for duplication
+	var previous3DObject = scene.getObjectByName(objectName);
+	if(previous3DObject != undefined) {
+		scene.remove(previous3DObject);
+	} else {
+		//console.log(objectName + " is undefined");
+	}
+	
+	// Create 3D curve
+	var geometry = new THREE.Geometry();
+	for(var i = 0; i < M; i++) {
+		geometry.vertices.push(new THREE.Vector3(x[i], z[i], y[i]));
+	}
+	var material = new THREE.LineBasicMaterial({color: 0x000000});
+	curve = new THREE.Line(geometry, material);
+	curve.name = objectName;
+	scene.add(curve);
+	
+	animate(0);
+}
+
+// Toggle animation			
+function toggleAnimation() {
+	var el = window.event.target;
+	if(el.innerHTML == "Start") {
+		el.innerHTML = "Stop";
+		ANIMATE = true;
+	} else {
+		el.innerHTML = "Start";
+		ANIMATE = false;
+	}
+	animate();
+};
+
+// Perform animation
+function animate() {
+	if(arguments[0] == undefined) {
+		axis.rotation.y += 0.05;
+	}
+	if(curve != undefined) {
+		curve.rotation.y += 0.05;
+	}
+	renderer.render(scene, camera);
+	if(ANIMATE) {
+		requestAnimationFrame(animate);
+	}
+}
+
+</script>
+</body>
+</html>
