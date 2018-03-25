@@ -29,6 +29,7 @@ three.js/91/three.min.js"></script>
 var ANIMATE = false;
 var objectName = "Curve";
 var curve;
+var yRotation = 0;
 
 // Define dimension of a Canvas
 var canvasWidth = 400;
@@ -288,6 +289,7 @@ function drawData() {
 	var material = new THREE.LineBasicMaterial({color: 0x000000});
 	curve = new THREE.Line(geometry, material);
 	curve.name = objectName;
+	curve.rotation.y = yRotation;
 	scene.add(curve);
 	
 	animate(0);
@@ -299,20 +301,21 @@ function toggleAnimation() {
 	if(el.innerHTML == "Start") {
 		el.innerHTML = "Stop";
 		ANIMATE = true;
+		animate(0);
 	} else {
 		el.innerHTML = "Start";
 		ANIMATE = false;
 	}
-	animate();
 };
 
 // Perform animation
 function animate() {
-	if(arguments[0] == undefined) {
-		axis.rotation.y += 0.05;
-	}
-	if(curve != undefined) {
-		curve.rotation.y += 0.05;
+	if(arguments[0] != undefined && ANIMATE) {
+		yRotation += 0.05;
+		axis.rotation.y = yRotation;
+		if(curve != undefined) {
+			curve.rotation.y = yRotation;
+		}
 	}
 	renderer.render(scene, camera);
 	if(ANIMATE) {
