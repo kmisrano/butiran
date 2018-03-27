@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="ISO-8859-1">
+		<title>RBC Granular</title>
+		<script src="vect3.js"></script>
+		<script src="grain.js"></script>
+		<script src="force.js"></script>
+		<script src="mdynamics.js"></script>
+		<script src="draw2d.js"></script>
+		<script src="layout.js"></script>
+	</head>
+	<body>
+		<script>
+			/*
+			2D Simulation of Red Blood Cell
+			Sparisoma Viridi | dudung@gmail.com
+			Ismi Yasifa | yasifa.ismi@gmail.com
+			*/
+			
+			var timer1;
+			var N = 50;
+			var grains = new Array(N);
+			var R = 2;
+			var delta_teta = 2 * Math.PI / N;
+			var l1 = Math.sqrt(R*R + R*R - 2*R*R*Math.cos(delta_teta));
+			var l2 = Math.sqrt(R*R + R*R - 2*R*R*Math.cos(2*delta_teta));
+			var k1 = 3;
+			var k2 = 2;
+			
+			var it = 0;
+			var Nt = 100;
+			
+			layout();
+			initiate();
+			
+			function initiate() {
+				Mdynamics.setdt(1E-3);
+				
+				var m = 10;
+				var c = "#f00";
+				var D = 2;
+				var x0 = 0;
+				var y0 = 0;
+				
+				var teta = new Array(N);
+				for(var i = 1; i <= N; i++) {
+					teta[i] = (i-1) * delta_teta;
+					var a = 1.1 * R;
+					var b = 0.9 * R;
+					var x = x0 + (a * Math.cos(teta[i]));
+					var y = y0 + (b * Math.sin(teta[i]));
+						grains[i] = new Grain;
+						grains[i].i = i;
+						grains[i].r = new Vect3(x, y, 0);
+						var cR = 128;
+						var cG = (16 - i) * 16;
+						var cB = i * 16;
+						grains[i].m = m;
+						grains[i].c = c;
+						grains[i].D = 0.1 * D;		
+				}
+				
+				for(var iN = 1; iN <= N; iN++) {
+					plotParticle(grains[iN]);
+				}
+			}
+			
+			function run() {
+				// Prepare variabel for saving sum of forces
+				var SF = new Array(N);
+				var k;
+				var l;
+				
+				for(var iN = 1; iN <= N; iN++) {
+					SF[iN] = new Vect3;
+				}
+				
+				//Initial kinetic energy
+				var EKi = 0;
+				if(it > Nt) {
+					for(var iN = 1; iN <= N; iN++) {
+						var v = Vect3.len(grains[iN].v);
+						var m = grains[iN].m;
+						var EK = 0.5 * m * v * v;
+						EKi += EK;
+					}
+				}
+				
+				// Calculate spring force
+				for(var iN = 1; iN <= N; iN++) {
+					//console.log("Particle " + iN);
+					for(var jN = 1; jN <= N; jN++) {
+						//console.log("Particle " + jN);
+						if (iN!=jN) {
+							if (Math.abs(jN-iN)==1 || Math.abs(jN-iN)==(N-1)) {
+								var f = new Vect3;
+								k = k1;
+								l = l1;
+								f = Force.spring(grains[iN], grains[jN], k, l);
+								//console.log(f);
+								SF[iN] = Vect3.add(SF[iN], f);
+							} else if (Math.abs(jN-iN)==2 || Math.abs(jN-iN)==(N-2)) {
+								var f = new Vect3;
+								k = k2;
+								l = l2;
+								f = Force.spring(grains[iN], grains[jN], k, l);
+								//console.log(f);
+								SF[iN] = Vect3.add(SF[iN], f);
+							} 
+						}
+					}
+				//console.log(SF[iN]);
+				}
+				
+				
+				// Calculate viscous force
+				for(var iN = 1; iN <= N; iN++) {
+					var f = new Vect3(Force.visc(grains[iN]));
+					SF[iN] = Vect3.add(SF[iN], f);
+				} 			
+				
+				clearCurrentFigure();
+				for(var i = 1; i <= N; i++) {
+					plotParticle(grains[i]);
+				}
+				
+				for(var i = 1; i <= N; i++) {
+					Mdynamics.Euler(SF[i], grains[i]);
+				}
+				Mdynamics.inct();
+
+				//Final kinetic energy
+				var EKf = 0;
+				var rEK = 1; //Kinetic energy ratio
+				if(it > Nt) {
+					for(var iN = 1; iN <= N; iN++) {
+						var v = Vect3.len(grains[iN].v);
+						var m = grains[iN].m;
+						var EK = 0.5 * m * v * v;
+						EKf += EK;
+					}
+					rEK = Math.sqrt(EKi / EKf);
+				}
+				
+				it++;
+				if(it > Nt) {
+					it = 0;
+					for(var iN = 1; iN <= N; iN++) {
+						var v = Vect3.mul(grains[iN].v, rEK);
+						grains[iN].v = v;
+						//grains[iN].v = new Vect3();
+					}
+				}
+				
+				var rpm = new Vect3;
+				for(var iN = 1; iN <= N; iN++) {
+					var r = grains[iN].r;
+					rpm = Vect3.add(rpm, r);
+				}
+				rpm = Vect3.div(rpm, N);
+				
+				var Ravg = 0;
+				for(var iN = 1; iN <= N; iN++) {
+					var r = grains[iN].r;
+					Ravg += Vect3.len(Vect3.sub(r, rpm));
+				}
+				Ravg /= N; //Average radius of red blood cell
+				
+				var str = "t = " + t + " s" + " " + EKi + " " + EKf + " " + Ravg;
+				var hout = document.getElementById("hout");
+				hout.innerHTML = str;
+				
+			}
+			
+		</script>
+	</body>
+</html>
