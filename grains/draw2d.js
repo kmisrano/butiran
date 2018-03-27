@@ -94,7 +94,7 @@ function plotParticle(p) {
 	ctx.arc(xx, yy, 0.5 * DD, 0, 2 * Math.PI);
 	ctx.stroke();
 	
-	ctx.font = "24px Times New Roman"
+	ctx.font = "10px Times New Roman"
 	ctx.fillStyle = "black";
 	ctx.textAlign = "center";
 	ctx.textBaseline="middle";
@@ -119,7 +119,7 @@ function plotLiner(p) {
 	ctx.arc(xx, yy, 0.5 * DD, 0, 2 * Math.PI);
 	ctx.stroke();
 	
-	ctx.font = "24px Times New Roman"
+	ctx.font = "10px Times New Roman"
 	ctx.fillStyle = "black";
 	ctx.textAlign = "center";
 	ctx.textBaseline="middle";

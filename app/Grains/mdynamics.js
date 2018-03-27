@@ -9,7 +9,16 @@
 	There is bug in using Timer object, where it was twice
 	called, then it could not be stopped. A condition must
 	be set to avoid creating another object incidentally.
+	20180327
+	Redefine forces constants and integrate layout.
 */
+
+// Redefine some constants from force.js
+kG = 5E0;
+kR = 1E5;
+kV = 1.0;
+kE = 1.0;
+kV2 = 0.8;
 
 // Define some global constants
 dt = 0.01;
