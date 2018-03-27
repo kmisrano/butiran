@@ -2,6 +2,7 @@
 	force.js
 	Library of some types of physical force.
 	Sparisoma Viridi | dudung@gmail.com
+	Ismi Yasifa | yasifa.ismi@gmail.com
 	
 	20170214
 	Create this library and define some constants,
@@ -13,6 +14,8 @@
 	simulation.
 	20170215
 	Test the grav() and norm() in a simulation. They worked.
+	20180327
+	Add spring force.
 */
 
 // Define some constants
@@ -26,6 +29,18 @@ kG2 = new Vect3(0, -10, 0);
 // Class of Force
 function Force() {
 	
+}
+
+// Define spring force
+Force.spring = function(p1, p2, k, l) {
+	var r1 = p1.r;
+	var r2 = p2.r;
+	var r = Vect3.sub(r1, r2);
+	var rlen = Vect3.len(r);
+	var u = Vect3.uni(r);
+	var a = Vect3.mul((rlen-l),u);
+	var f = Vect3.mul(-k,a);
+	return f;
 }
 
 // Define gravitation force due to gravitation field
