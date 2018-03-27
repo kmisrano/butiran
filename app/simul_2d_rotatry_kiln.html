@@ -3,12 +3,11 @@
 	<head>
 		<meta charset="ISO-8859-1">
 		<title>Simulation of 2D Rotary Kiln</title>
-		<script src="vect3.js"></script>
-		<script src="grain.js"></script>
-		<script src="force.js"></script>
-		<script src="mdynamics.js"></script>
-		<script src="layout.js"></script>
-		<script src="draw2d.js"></script>
+		<script src="../grains/vect3old.js"></script>
+		<script src="../grains/grain.js"></script>
+		<script src="../grains/force.js"></script>
+		<script src="../grains/mdynamics.js"></script>
+		<script src="../grains/draw2d.js"></script>
 	</head>
 	<body>
 		<script>
@@ -22,9 +21,14 @@
 			Start this HTML (create liner)
 			20170703
 			Add grains
-			
+			20180327
+			Rename vect3.js to vect3old.js, integrate layout.js to
+			this file, and change value dt in this file.
 		*/
-		
+			
+			// Override value from mdynamics.js
+			dt = 0.01;
+			
 			var timer1;
 			var TTMAX = 10;
 			var liner = new Array(NL);
@@ -71,7 +75,7 @@
 						grains[i].m = mL;
 						grains[i].c = cL;
 						grains[i].D = DL;
-						console.log(grains[i].D+"\n");
+						//console.log(grains[i].D+"\n");
 					} else {						
 						grains[i].m = mG;
 						grains[i].c = cG;
@@ -92,9 +96,7 @@
 						ii++;
 					}
 				}
-						
 
-				
 				for(var iG = 0; iG < N; iG++) {
 					if(i >= NL) {
 						plotLiner(grains[iG]);
@@ -103,7 +105,6 @@
 					}
 				}
 			}
-
 			
 			function run() {
 				// Prepare variabel for saving sum of forces
@@ -135,7 +136,6 @@
 						}
 					}
 				}
-							
 				
 				var str = "t = " + t.toFixed(3) + " s";
 				var hout = document.getElementById("hout");
@@ -167,6 +167,94 @@
 					grains[iN].r.x = x;
 					grains[iN].r.y = y;
 				}	
+			}
+			
+			/*
+			layout.js
+			Define layout for simulation.
+			Sparisoma Viridi | dudung@gmail.com
+			
+			20170215
+			Start this library.
+			20180327
+			Delete this file and move to simul_2d_rotatry_kiln.html
+			*/
+			function layout() {
+				// Create left division
+				var ldiv = document.createElement("div");
+				document.body.appendChild(ldiv);
+				ldiv.style.border = "0px black solid";
+				ldiv.style.height = "402px";
+				ldiv.style.float = "left";
+				ldiv.style.width = "252px";
+				
+				// Create right division
+				var rdiv = document.createElement("div");
+				document.body.appendChild(rdiv);
+				rdiv.style.border = "0px black solid";
+				rdiv.style.height = "402px";
+				rdiv.style.float = "left";
+				
+				// Create text area for input
+				var ta = document.createElement("textarea");
+				ldiv.appendChild(ta);
+				ta.style.color = "black";
+				ta.style.background = "white";
+				ta.rows = "2";
+				ta.cols = "32";
+				//ta.style.overflowY = "scroll";
+				ta.style.display = "block";	
+				ta.id = "hout";
+				
+				var res = document.createElement("textarea");
+				//	ldiv.appendChild(res);
+				res.style.color = "black";
+				res.style.background = "white";
+				res.rows = "35";
+				res.cols = "32";
+				res.style.overflowY = "scroll";
+				res.style.display = "block";	
+				res.id = "result";
+				res.value = "";
+				
+				// Create canvas for drawing
+				var c = document.createElement("canvas");
+				rdiv.appendChild(c);
+				c.id = "canvas";
+				c.style.border = "1px solid #999";
+				c.style.background = "white";
+				c.width = "600";
+				c.height = "600";
+				//c.style.float = "left";
+				var ctx = c.getContext("2d");
+				
+				// Prepare canvas
+				setCanvasCoordinates("canvas");
+				setWorldCoordinates(-41, -41, 41, 41);
+				
+				// Create start button
+				var b1 = document.createElement("button");
+				ldiv.appendChild(b1);
+				b1.innerHTML = "Start";
+				b1.onclick = function() {
+					if(b1.innerHTML == "Start") {
+						b1.innerHTML = "Stop";
+						timer1 = setInterval(run, 1);
+					} else {
+						b1.innerHTML = "Start";
+						clearInterval(timer1);
+					}
+				}
+				
+				// Create save Button
+				var b2 = document.createElement("button");
+				ldiv.appendChild(b2);
+				b2.innerHTML = "Save";
+				b2.onclick = function() {
+					var canvas = document.getElementById("canvas");
+					var image = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
+					window.location.href = image;
+				}
 			}
 		</script>
 	</body>
