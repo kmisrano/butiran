@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="ISO-8859-1">
+		<title>Simulation of 2D Rotary Kiln</title>
+		<script src="Grains4/vect3.js"></script>
+		<script src="Grains4/grain.js"></script>
+		<script src="Grains4/force.js"></script>
+		<script src="Grains4/mdynamics.js"></script>
+		<script src="Grains4/layout.js"></script>
+		<script src="Grains4/draw2d.js"></script>
+	</head>
+	<body>
+		<script>
+		/*
+			indexLiner.html
+			Simulate 2D Rotary Kiln
+			Sparisoma Viridi | dudung@gmail.com
+			Putri Mustika Widartiningsih | putrimw.itb@gmail.com
+			
+			20170628
+			Start this HTML (create liner)
+			20170703
+			Add grains
+			
+		*/
+		
+			var timer1;
+			var TTMAX = 10;
+			var liner = new Array(NL);
+			var grains = new Array(NG);
+			var x = new Array(NL);
+			var y = new Array(NL);
+			var xx = new Array(NL);
+			var yy = new Array(NL);
+			var Theta = new Array(NL);
+			
+			var RM = 35;
+			var NL = 20;
+			var NG = 25;
+			var N = NL + NG;
+			
+			var theta = 2*Math.PI/NL;
+			var w = -0.8;
+			var x0 = -60;
+			var y0 = -60;
+			
+			layout();
+			initiate();
+			
+			function initiate() {
+				Mdynamics.setdt(1E-3);
+				
+				var mL = 1;
+				var cL = "#00f";
+				var mG = 40;
+				var cG = "#f00";
+				
+				var DL = 2 * RM * Math.sin(Math.PI / NL);
+				var DG = 6;
+				var i = 0;
+				
+				for (var ix=0; ix<N; ix++) {
+					grains[i] = new Grain;
+					grains[i].i = i+1;
+					if(i < NL) {
+						Theta[i] = i*theta + w*t;
+						x[i] = RM * Math.cos(Theta[i]);
+						y[i] = RM * Math.sin(Theta[i]);
+						grains[i].r = new Vect3(x[i],y[i],0);
+						grains[i].m = mL;
+						grains[i].c = cL;
+						grains[i].D = DL;
+						console.log(grains[i].D+"\n");
+					} else {						
+						grains[i].m = mG;
+						grains[i].c = cG;
+						grains[i].D = DG;
+					}
+					i++;
+				}
+				
+				
+				var ii = 0;
+				var Nx = Math.sqrt(NG);
+				var Ny = NG / Nx;
+				for(var iy = 0; iy < Ny; iy++) {
+					for(var ix = 0; ix < Nx; ix++) {
+						var xx = (ix - 0.4 * Nx) * 1.1 * DG;
+						var yy = (iy - 0.4 * Ny) * 1.1 * DG;
+						grains[ii + NL].r = new Vect3(xx, yy, 0);
+						ii++;
+					}
+				}
+						
+
+				
+				for(var iG = 0; iG < N; iG++) {
+					if(i >= NL) {
+						plotLiner(grains[iG]);
+					} else {
+						plotParticle(grains[iG]);
+					}
+				}
+			}
+
+			
+			function run() {
+				// Prepare variabel for saving sum of forces
+				var SF = new Array(N);
+				for(var iN = NL; iN < N; iN++) {
+					SF[iN] = new Vect3;
+				}
+				
+				// Calculate viscous force
+				for(var iN = NL; iN < N; iN++) {
+					var f = Force.visc(grains[iN]);
+					SF[iN] = Vect3.add(SF[iN], f);
+				}
+				
+				// Calculate gravitation force
+				for(var iN = NL; iN < N; iN++) {
+					var f = Force.grav2(grains[iN]);
+					SF[iN] = Vect3.add(SF[iN], f);
+				}
+
+				
+				// Calculate normal force
+				for(var iN = NL; iN < N; iN++) {
+					for(var jN = 0; jN < N; jN++) {
+						var f = new Vect3;
+						if(jN != iN) {
+							f = Force.norm(grains[iN], grains[jN]);
+							SF[iN] = Vect3.add(SF[iN], f);
+						}
+					}
+				}
+							
+				
+				var str = "t = " + t.toFixed(3) + " s";
+				var hout = document.getElementById("hout");
+				hout.innerHTML = str;
+				
+				if(TT == TTMAX) {
+					clearCurrentFigure();
+					for(var iN = 0; iN < N; iN++) {
+						plotParticle(grains[iN]);
+					}
+					TT = 0;
+				}
+				
+				for(var iN = NL; iN < N; iN++) {
+					Mdynamics.Euler(SF[iN], grains[iN]);
+				}
+				Mdynamics.inct();
+				
+				for(var iN = 0; iN < NL; iN++) {
+					var x = grains[iN].r.x;
+					var y = grains[iN].r.y;
+					theta2 = Math.atan(y / x);
+					if(y <= 0) {
+						theta2 += Math.PI;
+					}
+					theta2 = theta2 + w * dt;
+					var x = RM * Math.cos(theta2);
+					var y = RM * Math.sin(theta2);
+					grains[iN].r.x = x;
+					grains[iN].r.y = y;
+				}	
+			}
+		</script>
+	</body>
+</html>
