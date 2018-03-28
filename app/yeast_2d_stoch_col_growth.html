@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="ISO-8859-1">
+		<title>stochasticYeastColonyGrowth-2D</title>
+		<script src="../grains/vect3old.js"></script>
+		<script src="../grains/grain.js"></script>
+		<script src="../grains/force.js"></script>
+		<script src="../grains/mdynamics.js"></script>
+		<script src="../grains/drawyeast2d.js"></script>
+	</head>
+	<body>
+		<script>
+		
+			/*
+			2D Simulation of Yeast Colony Growth using Stochastic Model
+			Sparisoma Viridi | dudung@gmail.com
+			Dimas Praja Purwa Aji | dmspraja2105@gmail.com
+
+			20180303
+			Modified from Sparisoma Viridi's rotary kiln simulation app
+			Output written in timestep-number of grain particle-details of grain particle
+			(pos.x,pos.y,diameter,mother particle)
+			20180329
+			First modification to be matched with available library.
+			*/
+
+			var timer1;
+			var TTMAX = 10;
+			var liner = new Array(NL);
+			var grains = new Array(NG);
+			var x = new Array(NL);
+			var y = new Array(NL);
+			var xx = new Array(NL);
+			var yy = new Array(NL);
+			var Theta = new Array(NL);
+
+			var RM = 50;
+			var NL = 0;
+			var NG = 100;
+			var N = NL + NG;
+
+			var theta = 2*Math.PI/NL;
+			var alpha = 0;
+			var w = -2;
+			var x0 = -60;
+			var y0 = -60;
+			var DG = 7.0;
+			var rhoG = 7/22;
+			var mG = rhoG * (22/7) * 0.5 * DG * 0.5 * DG;
+
+			var step = 0;
+			var particleCheck = 0;
+			var childBirth = 1;
+			var ageCheck = 0;
+			var writeState = 1;
+			var simulationCount = 1;
+			var maxSim = 100;
+
+			layout();
+			initiate();
+
+			function initiate() {
+				Mdynamics.setdt(1E-3);
+
+				var mL = 1;
+				var cL = "#00f";
+				var rhoG = 7/22;
+				var cG = "#f00";
+
+				var DL = 2 * RM * Math.sin(Math.PI / NL);
+				var mG = rhoG * (22/7) * 0.5 * DG * 0.5 * DG;
+				var i = 0;
+				step = 0;
+				childBirth = 1;
+				for (var ix = 0; ix < N; ix++) {
+					grains[i] = new Grain;
+					grains[i].i = i+1;
+					if(i < NL) {
+						Theta[i] = i*theta + w*t;
+						x[i] = RM * Math.cos(Theta[i]);
+						y[i] = RM * Math.sin(Theta[i]);
+						grains[i].r = new Vect3(x[i],y[i],0);
+						grains[i].m = mL;
+						grains[i].c = cL;
+						grains[i].D = DL;
+						console.log(grains[i].D+"\n");
+					} else {
+						grains[i].m = mG;
+						grains[i].c = cG;
+						grains[i].D = 0.;
+						if(i == NL){
+							grains[i].D = 7.0;
+							grains[i].A = 2000;
+							grains[i].M = -1;
+						}
+					}
+					i++;
+				}
+
+				var ii = 0;
+				var xx = 0.0;
+				var vx = 0.0;
+				var yy = 0.0;
+				var vy = 0.0;
+				grains[ii + NL].r = new Vect3(xx, yy, 0);
+				grains[ii + NL].v = new Vect3(vx, vy, 0);
+				ii = ii + 1;
+				for(ii = 1; ii < N; ii++) {
+						alpha = Math.floor(Math.random() * 360);
+						xx = 0.0;
+						vx = 0.0;
+						yy = 0.0;
+						vy = 0.0;
+						grains[ii + NL].r = new Vect3(xx, yy, 0);
+						grains[ii + NL].v = new Vect3(vx, vy, 0);
+						grains[ii + NL].A = 0;
+						grains[ii + NL].M = 0;
+				}
+
+
+				for(var iG = 0; iG < N; iG++) {
+					if(iG < NL) {
+						plotLiner(grains[iG]);
+					} else {
+						plotParticle(grains[iG]);
+					}
+				}
+			}
+
+			function run() {
+				// Read input value
+				var readInput = document.getElementById("hout").value;
+				var readData = readInput.split(" = ");
+				var readN = readData[1];
+				var N = parseInt(readN);
+
+				// Preparations of particle birth
+				if(childBirth < N){
+					var birthChance = 0;
+					for(particleCheck = 0; particleCheck < childBirth; particleCheck++){
+						if(grains[particleCheck].A >= 2000){
+							if(grains[particleCheck].r.x > 0){
+								birthChance = Math.floor(Math.random() * 1000);
+							} else {
+								birthChance = Math.floor(Math.random() * 1000);
+							}
+							var xx = 0;
+							var yy = 0;
+							if(birthChance == 1){
+								grains[childBirth].A = 0;
+								grains[childBirth].M = particleCheck;
+								grains[particleCheck].k.push(childBirth);
+								if(grains[childBirth].A == 0){
+									alpha = Math.floor(Math.random() * 360);
+									xx = grains[particleCheck].r.x + (0.5 * grains[particleCheck].D * Math.cos(alpha));
+									yy = grains[particleCheck].r.y + (0.5 * grains[particleCheck].D * Math.sin(alpha));
+									grains[childBirth].r = new Vect3(xx, yy, 0);
+								}
+								childBirth++;
+							}
+						}
+					}
+				}
+
+				// Prepare variabel for saving sum of forces
+				var SF = new Array(childBirth);
+				for(var iN = NL; iN < childBirth; iN++) {
+					SF[iN] = new Vect3;
+				}
+
+				// Calculate viscous force
+				for(var iN = NL; iN < childBirth; iN++) {
+					var f = Force.visc(grains[iN]);
+					SF[iN] = Vect3.add(SF[iN], f);
+				}
+
+				/*
+				// Calculate gravitational force
+				for(var iN = NL; iN < N; iN++) {
+					var f = Force.grav2(grains[iN]);
+					SF[iN] = Vect3.add(SF[iN], f);
+				}
+				*/
+
+				// Calculate gravitational force between particle and its mother
+				for(var iN = 1; iN < childBirth; iN++) {
+					for(var jN = 0; jN < childBirth; jN++) {
+						var f = new Vect3;
+						if(jN == grains[iN].M) {
+							f = Force.grav(grains[iN], grains[jN]);
+							SF[iN] = Vect3.add(SF[iN], f);
+						}
+					}
+				}
+
+				// Calculate normal force
+				for(var iN = NL; iN < childBirth; iN++) {
+					for(var jN = 0; jN < childBirth; jN++) {
+						var f = new Vect3;
+						if(jN != iN) {
+							f = Force.norm(grains[iN], grains[jN]);
+							SF[iN] = Vect3.add(SF[iN], f);
+						}
+					}
+				}
+
+				if(TT == TTMAX) {
+					clearCurrentFigure();
+					for(var iN = 0; iN < childBirth; iN++) {
+						plotParticle(grains[iN]);
+					}
+					TT = 0;
+				}
+
+				// Write output
+				if(childBirth == N){
+					if(writeState == 1){
+						ageCheck = 0;
+					} else {
+						ageCheck = -N;
+					}
+					for(var aN = 0; aN < childBirth; aN++){
+						if(grains[aN].A > 2000){
+							ageCheck++;
+						}
+					}
+					if(ageCheck >= N){
+						writeState = 2;
+					}
+					if(writeState == 2){
+						var canvas = document.getElementById("canvas");
+						var image = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
+						window.location.href = image;
+						var text = document.getElementById("result").value;
+						var blob = new Blob([text], { type: "text/plain"});
+						var anchor = document.createElement("a");
+						function getFilename() {
+							var stepNumber = N;
+							return "n" + simulationCount + "N" + stepNumber + "randTheta";
+						}
+						var outName = getFilename() + ".txt";
+						anchor.download = outName;
+						anchor.href = window.URL.createObjectURL(blob);
+						anchor.target = "_blank";
+						anchor.style.display = "none";
+						document.body.appendChild(anchor);
+						anchor.click();
+						document.body.removeChild(anchor);
+						if(simulationCount > maxSim){
+							writeState = 0;
+						} else {
+							writeState = 1;
+				 			initiate();
+							SF[0] = new Vect3(0, 0, 0);
+							document.getElementById("result").value = "";
+							simulationCount++;
+						}
+					}
+				}
+
+				if(step % 100 == 0){
+					document.getElementById("result").value += step;
+					document.getElementById("result").value += "\t";
+					document.getElementById("result").value += childBirth;
+					document.getElementById("result").value += "\t";
+					for(var wN = 0; wN < childBirth; wN++){
+						document.getElementById("result").value += "(";
+						document.getElementById("result").value += grains[wN].r.x;
+						document.getElementById("result").value += ",";
+						document.getElementById("result").value += grains[wN].r.y;
+						document.getElementById("result").value += ",";
+						document.getElementById("result").value += grains[wN].D;
+						document.getElementById("result").value += ",";
+						document.getElementById("result").value += (grains[wN].M + 1);
+						document.getElementById("result").value += ");";
+					}
+					document.getElementById("result").value += "\n";
+					document.getElementById("result").scrollTop += 2000;
+				}
+				step++;
+
+				// Euler scheme
+				for(var iN = NL; iN < childBirth; iN++) {
+					Mdynamics.Euler(SF[iN], grains[iN]);
+					// Scheme of growth chance
+					if(iN > NL){
+						if(grains[iN].r.x > 0){
+							var chanceGrowth = Math.floor(Math.random() * 25);
+						} else {
+							var chanceGrowth = Math.floor(Math.random() * 25);
+						}
+
+						if(chanceGrowth == 1){
+							if(grains[iN].A <= 2000){
+								grains[iN].D = grains[iN].D + 0.1;
+							}
+						}
+					}
+
+					grains[iN].A++;
+
+					// Scheme of wall
+					if(grains[iN].r.x <= -60.0 + (0.5 * DG) || grains[iN].r.x >= 60 - (0.5 * DG)){
+						grains[iN].v.x = -grains[iN].v.x;
+					}
+
+					if(grains[iN].r.y <= -60.0 + (0.5 * DG) || grains[iN].r.y >= 60 - (0.5 * DG)){
+						grains[iN].v.y = -grains[iN].v.y;
+					}
+				}
+				Mdynamics.inct();
+
+			}
+
+			/*
+				layout.js
+				Define layout for simulation.
+				Sparisoma Viridi | dudung@gmail.com
+				Dimas Praja Purwa Aji | dmspraja2105@gmail.com
+
+				20170215
+				Start this library.
+				20180303
+				Can save output text into .txt file (yearmonthdate-hourminsec)
+				20180329
+				Moving file layout.js into yeast_2d_stoch_col_growth.html
+			*/
+
+			function layout() {
+				// Create left division
+				var ldiv = document.createElement("div");
+				document.body.appendChild(ldiv);
+				ldiv.style.border = "0px black solid";
+				ldiv.style.height = "402px";
+				ldiv.style.float = "left";
+				ldiv.style.width = "252px";
+
+				// Create center division
+				var cdiv = document.createElement("div");
+				document.body.appendChild(cdiv);
+				cdiv.style.border = "0px black solid";
+				cdiv.style.height = "402px";
+				cdiv.style.float = "left";
+
+				// Create right division
+				var rdiv = document.createElement("div");
+				document.body.appendChild(rdiv);
+				rdiv.style.border = "0px black solid";
+				rdiv.style.height = "402px";
+				rdiv.style.float = "right";
+				rdiv.style.width = "450px";
+
+				// Create text area for input
+				var ta = document.createElement("textarea");
+				ldiv.appendChild(ta);
+				ta.style.color = "black";
+				ta.style.background = "white";
+				ta.rows = "38";
+				ta.cols = "32";
+				ta.style.overflowY = "scroll";
+				ta.style.display = "block";
+				ta.id = "hout";
+				ta.value = "Max Number of Grains = 100";
+
+				var res = document.createElement("textarea");
+				rdiv.appendChild(res);
+				res.style.color = "black";
+				res.style.background = "white";
+				res.rows = "38";
+				res.cols = "60";
+				res.style.overflowY = "scroll";
+				res.style.display = "block";
+				res.id = "result";
+				res.value = "";
+
+				// Create canvas for drawing
+				var c = document.createElement("canvas");
+				cdiv.appendChild(c);
+				c.id = "canvas";
+				c.style.border = "1px solid #999";
+				c.style.background = "white";
+				c.width = "600";
+				c.height = "600";
+				//c.style.float = "left";
+				var ctx = c.getContext("2d");
+
+				// Prepare canvas
+				setCanvasCoordinates("canvas");
+				setWorldCoordinates(-60, -60, 60, 60);
+
+				// Create start button
+				var b1 = document.createElement("button");
+				ldiv.appendChild(b1);
+				b1.style.width = "240px";
+				b1.innerHTML = "Start";
+				b1.onclick = function() {
+					if(b1.innerHTML == "Start") {
+						b1.innerHTML = "Stop";
+						timer1 = setInterval(run, 1);
+					} else {
+						b1.innerHTML = "Start";
+						clearInterval(timer1);
+					}
+				}
+
+				// Create save Button
+				var b2 = document.createElement("button");
+				var mon = "";
+				var day = "";
+				var hour = "";
+				var min = "";
+				var sec = "";
+				rdiv.appendChild(b2);
+				b2.style.width = "436px";
+				b2.innerHTML = "Save";
+				b2.onclick = function() {
+					var canvas = document.getElementById("canvas");
+					var image = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
+					window.location.href = image;
+					var text = document.getElementById("result").value;
+			    		var blob = new Blob([text], { type: "text/plain"});
+			    		var anchor = document.createElement("a");
+					function getFormattedTime() {
+			    			var today = new Date();
+			   			var year = today.getFullYear().toString();
+			    			var monBase = today.getMonth() + 1;
+						if(monBase < 10){
+							mon = "0" + monBase.toString();
+						} else {
+							mon = monBase.toString();
+						}
+			    			var dayBase = today.getDate();
+			    			if(dayBase < 10){
+							day = "0" + dayBase.toString();
+						} else {
+							day = dayBase.toString();
+						}
+						var hourBase = today.getHours();
+			    			if(hourBase < 10){
+							hour = "0" + hourBase.toString();
+						} else {
+							hour = hourBase.toString();
+						}
+						var minBase = today.getMinutes();
+			    			if(minBase < 10){
+							min = "0" + minBase.toString();
+						} else {
+							min = minBase.toString();
+						}
+						var secBase = today.getSeconds();
+			    			if(secBase < 10){
+							sec = "0" + secBase.toString();
+						} else {
+							sec = secBase.toString();
+						}
+						return year + mon + day + "-" + hour + min + sec;
+					}
+					var filename = getFormattedTime() + ".txt";
+					anchor.download = filename;
+			 	   	anchor.href = window.URL.createObjectURL(blob);
+			 	   	anchor.target = "_blank";
+			 	   	anchor.style.display = "none"; // just to be safe!
+			 	   	document.body.appendChild(anchor);
+			 	   	anchor.click();
+			 	   	document.body.removeChild(anchor);
+				}
+			}
+
+		</script>
+	</body>
+</html>
