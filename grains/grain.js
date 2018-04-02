@@ -16,7 +16,7 @@
 
 // Class of Grain
 function Grain() {
-	if(arguments.length == 6) {
+	if(arguments.length == 9) {
 		this.i = arguments[0];
 		this.m = arguments[1];
 		this.D = arguments[2];
@@ -27,7 +27,7 @@ function Grain() {
 		this.A = arguments[7];
 		this.k = arguments[8];
 		this.M = arguments[9];
-} else if(arguments.length == 1) {
+	} else if(arguments.length == 1) {
 		this.i = arguments[0].i;
 		this.m = arguments[0].m;
 		this.D = arguments[0].D;
@@ -38,7 +38,7 @@ function Grain() {
 		this.A = arguments[0].A;
 		this.k = arguments[0].k;
 		this.M = arguments[0].M;
-} else {
+	} else {
 		this.i = 0;
 		this.m = 1.0;
 		this.D = 1.0;
@@ -51,14 +51,14 @@ function Grain() {
 		this.M = 0;
 	}
 	this.strval = function() {
-		var str = "(" 
+		var str = "("
 		str += this.i + ", ";
 		str += this.m + ", ";
 		str += this.D + ", ";
 		str += this.q + ", ";
 		str += this.c + ", ";
 		str += this.r.strval() + ", ";
-		str += this.v.strval() + ")";
+		str += this.v.strval() + ", ";
 		str += this.A + ", ";
 		str += this.k + ", ";
 		str += this.M + ")";

@@ -4,7 +4,7 @@
 	Sparisoma Viridi | dudung@gmail.com
 	Dimas Praja Purwa Aji | dmspraja2105@gmail.com
 	Ismi Yasifa | yasifa.ismi@gmail.com
-	
+
 	20170214
 	Create this library and define some constants,
 	e.g. kG, kR, kV, kE and some functions
@@ -20,11 +20,11 @@
 */
 
 // Define some constants
-kG = 5E0;
+kG = 1000E0;
 kR = 1E5;
 kV = 1.0;
 kE = 1.0;
-kV2 = 40.0;
+kV2 = 2500.0;
 kG2 = new Vect3(0, -10, 0);
 
 /*
@@ -35,7 +35,7 @@ kV2 = 2500.0;
 
 // Class of Force
 function Force() {
-	
+
 }
 
 // Define spring force
