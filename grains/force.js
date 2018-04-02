@@ -17,6 +17,8 @@
 	Test the grav() and norm() in a simulation. They worked.
 	20180327
 	Add spring force.
+	20180403
+	Add new constant but change value in HTML file.
 */
 
 // Define some constants
@@ -28,7 +30,7 @@ kV2 = 2500.0;
 kG2 = new Vect3(0, -10, 0);
 
 /*
-// Additional constants from Dimas Praja
+// Additional constants from Dimas Praja Purwa Aji
 kG = 1000E0;
 kV2 = 2500.0;
 */
