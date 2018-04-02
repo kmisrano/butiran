@@ -12,11 +12,13 @@
 	Add argument A for age of grain particles.
 	Add argument k for child of grain particles.
 	Add argument M for mother of grain particles.
+	20180403
+	Correct arguments.length 9 --> 10.
 */
 
 // Class of Grain
 function Grain() {
-	if(arguments.length == 9) {
+	if(arguments.length == 10) {
 		this.i = arguments[0];
 		this.m = arguments[1];
 		this.D = arguments[2];
