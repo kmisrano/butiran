@@ -3,7 +3,7 @@
 	Library of grain as granular particle
 	Sparisoma Viridi | dudung@gmail.com
 	Dimas Praja Purwa Aji | dmspraja2105@gmail.com
-
+	
 	20170214
 	Create this library consists of only Grain class.
 	20170216
