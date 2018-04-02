@@ -2,6 +2,7 @@
 	force.js
 	Library of some types of physical force.
 	Sparisoma Viridi | dudung@gmail.com
+	Dimas Praja Purwa Aji | dmspraja2105@gmail.com
 	Ismi Yasifa | yasifa.ismi@gmail.com
 	
 	20170214
@@ -25,6 +26,12 @@ kV = 1.0;
 kE = 1.0;
 kV2 = 40.0;
 kG2 = new Vect3(0, -10, 0);
+
+/*
+// Additional constants from Dimas Praja
+kG = 1000E0;
+kV2 = 2500.0;
+*/
 
 // Class of Force
 function Force() {
