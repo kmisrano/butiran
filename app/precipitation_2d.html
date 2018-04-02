@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Precipitation_grid_2d</title>
+<script src="../math/random.js"></script>
+<script src="../color/rgb.js"></script>
+</head>
+<body>
+<script>
+/*
+Grid based precipitation model in 2d
+Sparisoma Viridi | dudung@gmail.com
+Rita Sulistyowati | ritarahman08@gmail.com
+
+20180403
+Start this project.
+Create following functions
+	zeroArray2,
+	fillRandomSequence
+*/
+
+// Define grid dimension and number of cells
+var Nx = 100;
+var Ny = 100;
+var N = Nx * Ny;
+
+// Generate random value
+var M = zeroArray2(4, 4);
+var intMin = 0;
+var intMax = 2;
+var seq = randIntN(intMin, intMax, 16);
+fillRandomSequence(seq, M);
+
+
+// Define canvas element
+var can = document.createElement("canvas");
+can.width = Nx;
+can.height = Ny;
+can.style.background = "#eee";
+
+// Set document layout
+document.body.appendChild(can);
+
+
+// Fill sequence of random number to 2d array
+function fillRandomSequence(seq, m) {
+	var N = seq.length;
+	var rows = m.length;
+	var cols = N / rows;
+	var i = 0;
+	for(var r = 0; r < rows; r++) {
+		for(var c = 0; c < cols; c++) {
+			m[r][c] = seq[i];
+			i++;
+		}
+	}
+}
+
+// Define 2d array with value 0
+function zeroArray2(rows, cols) {
+	var zero = [];
+	for(var r = 0; r < rows; r++) {
+		var arow = [];
+		for(var c = 0; c < cols; c++) {
+			arow.push(0);
+		}
+		zero.push(arow);
+	}
+	return zero;
+}
+
+</script>
+</body>
+</html>
