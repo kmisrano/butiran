@@ -9,45 +9,223 @@
 <body>
 <script>
 /*
-Grid based precipitation model in 2d
+Grid based discrete value precipitation model in 2d
 Sparisoma Viridi | dudung@gmail.com
+Rizal Kurniadi | rijalk@fi.itb.ac.id
+Wahyu Srigutomo | wsrigutomo@gmail.com
 Rita Sulistyowati | ritarahman08@gmail.com
 
 20180403
 Start this project.
-Create following functions
-	zeroArray2,
-	fillRandomSequence
+Create following functions zeroMatrix, fillRandomSequence,
+drawMatrixOnCanvas, animate, simulate, toggleButton,
+normalizeMatrix, copyMatrix, sumOfMatrixElement, and test
+all of them.
 */
 
 // Define grid dimension and number of cells
-var Nx = 100;
 var Ny = 100;
+var Nx = 100;
 var N = Nx * Ny;
 
 // Generate random value
-var M = zeroArray2(4, 4);
+var MAT = zeroMatrix(Ny, Nx);
 var intMin = 0;
-var intMax = 2;
-var seq = randIntN(intMin, intMax, 16);
-fillRandomSequence(seq, M);
-
+var intMax = 10;
+var seq = randIntN(intMin, intMax, N);
+fillRandomSequence(seq, MAT);
 
 // Define canvas element
 var can = document.createElement("canvas");
 can.width = Nx;
 can.height = Ny;
 can.style.background = "#eee";
+can.style.width = "200px";
+can.style.height = "200px";
+
+// Define button element
+var btn = document.createElement("button");
+btn.innerHTML = "Start";
+btn.addEventListener("click", toggleButton);
+var ANIMATING = false;
+
+// Define break element
+var brk = document.createElement("br");
+
+// Define span element
+var spn = document.createElement("span");
+spn.style.fontFamily = "Courier";
+spn.style.fontSize = "12px";
+
+// Draw grid matrix in canvas
+var colorMax = 20;
+drawMatrixOnCanvas(MAT, can);
 
 // Set document layout
 document.body.appendChild(can);
+document.body.appendChild(brk);
+document.body.appendChild(btn);
+document.body.appendChild(spn);
 
+// Perform simulation
+function simulate(mat) {
+	// Get matrix dimension
+	var Ny = mat.length;
+	var Nx = mat[0].length;
+	
+	// Generate random sequence
+	var dx = randInt(-1, 1);
+	var dy = randInt(-1, 1);
+	
+	// Move content of mat[c][r]
+	var r = randInt(0, Ny - 1);
+	var c = randInt(0, Nx - 1);
+	
+	// Prepare some texts
+	var sum = sumOfMatrixElement(MAT);
+	var text = "";
+	
+	// Move some water vapor if available
+	if(mat[r][c] > 0) {
+		var val = randInt(0, mat[r][c]);
+		val = mat[r][c];
+		mat[r][c] -= val;
+		var cc = c + dx;
+		var rr = r + dy;
+		
+		// Set periodic boundary condition
+		if(cc > Nx - 1) {
+			cc = 0;
+		} else if(cc < 0) {
+			cc = Nx - 1;
+		}
+		if(rr > Ny - 1) {
+			rr = 0;
+		} else if(rr < 0) {
+			rr = Ny - 1;
+		}
+		
+		// Add val to new location
+		mat[rr][cc] += val;
+		
+		// Verbose process
+		text = " " + sum + " | " + val + " ("
+		+ r + ", " + c + ") -> " + "(" + rr + ", " + cc + ")";
+	}
+	spn.innerHTML = text;
+}
+
+// Animate
+var iter = 0;
+var iterMax = 10000;
+function animate() {
+	if(ANIMATING && iter <= iterMax) {
+		simulate(MAT);
+		drawMatrixOnCanvas(MAT, can);
+		iter++;
+		requestAnimationFrame(animate);
+	}
+}
+
+// Toggle button event
+function toggleButton() {
+	var b = event.target;
+	if(b.innerHTML == "Start") {
+		ANIMATING = true;
+		b.innerHTML = "Stop";
+	} else {
+		ANIMATING = false;
+		b.innerHTML = "Start";
+		if(iter > iterMax) {
+			iter = 0;
+		}
+	}
+	animate();
+}
+
+// Calculate sum of matrix elements
+function sumOfMatrixElement(mat) {
+	// Get matrix dimension
+	var rows = mat.length;
+	var cols = mat[0].length;
+	
+	// Sum matrix elements
+	var sum = 0;
+	for(var r = 0; r < rows; r++) {
+		for(var c = 0; c < cols; c++) {
+			sum += mat[r][c];
+		}
+	}
+	return sum;
+}
+
+// Copy matrix
+function copyMatrix(mat) {
+	// Get matrix dimension
+	var rows = mat.length;
+	var cols = mat[0].length;
+	
+	// Create new matrix
+	var newmat = [];
+	for(var r = 0; r < rows; r++) {
+		var arow = [];
+		for(var c = 0; c < cols; c++) {
+			arow.push(mat[r][c]);
+		}
+		newmat.push(arow);
+	}
+	return newmat;
+}
+
+// Normalize value of each matrix element to 1
+function normalizeMatrix(mat) {
+	// Get matrix dimension
+	var rows = mat.length;
+	var cols = mat[0].length;
+	
+	// Get maximum value
+	var max = 0;
+	for(var r = 0; r < rows; r++) {
+		for(var c = 0; c < cols; c++) {
+			max = (max < mat[r][c]) ? mat[r][c] : max;
+		}
+	}
+	
+	// Normalize all values with max
+	for(var r = 0; r < rows; r++) {
+		for(var c = 0; c < cols; c++) {
+			mat[r][c] = Math.round(1.0 * mat[r][c] / max);
+		}
+	}
+}
+
+// Draw content of 2d matrix in a canvas
+function drawMatrixOnCanvas(m, can) {
+	var ctx = can.getContext("2d");
+	var rows = m.length;
+	var cols = m[0].length;
+	
+	var mat = copyMatrix(m);
+	//normalizeMatrix(mat);
+	
+	for(var r = 0; r < rows; r++) {
+		for(var c = 0; c < cols; c++) {
+			var red = (1 - mat[r][c] / colorMax);
+			var green = (1 - mat[r][c] / colorMax);
+			var blue = 1;
+			var color = double2rgb(red, green, blue);
+			ctx.fillStyle = color;
+			ctx.fillRect(c, r, 1, 1);
+		}
+	}
+	ctx.stroke();
+}
 
 // Fill sequence of random number to 2d array
 function fillRandomSequence(seq, m) {
 	var N = seq.length;
 	var rows = m.length;
-	var cols = N / rows;
+	var cols = m[0].length;
 	var i = 0;
 	for(var r = 0; r < rows; r++) {
 		for(var c = 0; c < cols; c++) {
@@ -57,8 +235,8 @@ function fillRandomSequence(seq, m) {
 	}
 }
 
-// Define 2d array with value 0
-function zeroArray2(rows, cols) {
+// Define matrix with value 0
+function zeroMatrix(rows, cols) {
 	var zero = [];
 	for(var r = 0; r < rows; r++) {
 		var arow = [];
