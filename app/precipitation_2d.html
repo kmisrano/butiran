@@ -5,6 +5,8 @@
 <title>Precipitation_grid_2d</title>
 <script src="../math/random.js"></script>
 <script src="../color/rgb.js"></script>
+<script src="../chart/xyseries.js"></script>
+<script src="../chart/chart2.js"></script>
 </head>
 <body>
 <script>
@@ -28,12 +30,17 @@ var Ny = 100;
 var Nx = 100;
 var N = Nx * Ny;
 
-// Generate random value
+// Generate random value for vapor value in each grid
 var MAT = zeroMatrix(Ny, Nx);
 var intMin = 0;
 var intMax = 10;
 var seq = randIntN(intMin, intMax, N);
 fillRandomSequence(seq, MAT);
+
+// Set maximum vapor value in each grid
+// exceed this value the grid will drop to zero and
+// the value will be converted to precipitation
+var treshold = 15;
 
 // Define canvas element
 var can = document.createElement("canvas");
@@ -61,11 +68,37 @@ spn.style.fontSize = "12px";
 var colorMax = 20;
 drawMatrixOnCanvas(MAT, can);
 
+// Create canvas element for chart
+var can2 = document.createElement("canvas");
+can2.width = "500";
+can2.height = "200";
+can2.style.width = "500px";
+can2.style.height = "200px";
+can2.id = "drawingArea"
+can2.style.background = "#f8f8f8";
+
+var spc = document.createElement("span");
+spc.innerHTML = "&nbsp;&nbsp;&nbsp;&nbsp;";
+	
 // Set document layout
 document.body.appendChild(can);
+document.body.appendChild(spc);
+document.body.appendChild(can2);
 document.body.appendChild(brk);
 document.body.appendChild(btn);
 document.body.appendChild(spn);
+
+// Create chart using Chart2 object
+var dataX = [0];
+var dataY = [0];
+var series = new XYSeries("series1", dataX, dataY);
+var chart = new Chart2("drawingArea");
+chart.yAxis.Ntics = 4;
+chart.xAxis.Ntics = 8;
+chart.setXLabel("t");
+chart.setYLabel("N");
+chart.addSeries(series);
+chart.drawSeries("series1");
 
 // Perform simulation
 function simulate(mat) {
@@ -117,11 +150,23 @@ function simulate(mat) {
 
 // Animate
 var iter = 0;
-var iterMax = 10000;
+var iterMax = 100;
+var t = 0;
 function animate() {
-	if(ANIMATING && iter <= iterMax) {
+	if(ANIMATING) {
 		simulate(MAT);
 		drawMatrixOnCanvas(MAT, can);
+		if(iter > iterMax) {
+			var precipitation = zeroMatrixElement(MAT, treshold);	
+			dataX.push(t);
+			dataY.push(precipitation);
+			var series = new XYSeries("series1", dataX, dataY);
+			chart.series = [];
+			chart.addSeries(series);
+			chart.drawSeries("series1");
+			t++;
+			iter = 0;
+		}
 		iter++;
 		requestAnimationFrame(animate);
 	}
@@ -136,11 +181,27 @@ function toggleButton() {
 	} else {
 		ANIMATING = false;
 		b.innerHTML = "Start";
-		if(iter > iterMax) {
-			iter = 0;
-		}
 	}
 	animate();
+}
+
+// Zero matrix element which has more than a value
+function zeroMatrixElement(mat, treshold) {
+	// Get matrix dimension
+	var rows = mat.length;
+	var cols = mat[0].length;
+	
+	// Sum matrix elements
+	var precipitation = 0;
+	for(var r = 0; r < rows; r++) {
+		for(var c = 0; c < cols; c++) {
+			if(mat[r][c] > treshold) {
+				precipitation += mat[r][c];
+				mat[r][c] = 0;
+			}
+		}
+	}
+	return precipitation;
 }
 
 // Calculate sum of matrix elements
