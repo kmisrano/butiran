@@ -20,6 +20,7 @@
 			Redefine forces constants and integrate layout.
 			20180413
 			Calculate initial length between particle.
+			Calculate torque between particle.
 			*/
 
 			// Redefine some constants from force.js
@@ -35,12 +36,13 @@
 			var timer1;
 			var N = 50;
 			var grains = new Array(N);
-			var R = 3;
+			var R = 2;
 			var Rx = 1.2 * R;
 			var Ry = 0.6 * R;
 			var delta_teta = 2 * Math.PI / N;
 			var l1 = new Array(N);
 			var l2 = new Array(N);
+			var theta = new Array(N);
 			var kr = 3;
 			var kt = 1;
 			
@@ -54,6 +56,7 @@
 				Mdynamics.setdt(1E-3);
 				
 				var m = 5;
+				var I = m*R*R;
 				var c = "#f00";
 				var D = 2;
 				var x0 = 0;
@@ -71,6 +74,7 @@
 						var cG = (16 - i) * 16;
 						var cB = i * 16;
 						grains[i].m = m;
+						grains[i].I = I;
 						grains[i].c = c;
 						grains[i].D = 0.25 * D;
 				}
@@ -88,6 +92,37 @@
 					}
 				}
 				
+				//Calculate angle between particle
+				// Function for define angle between Vect3
+				ang = function(r1, r2, r3) {
+					var a = Vect3.dot(Vect3.sub(r1,r2), Vect3.sub(r1,r3));
+					var l1 = Vect3.len(Vect3.sub(r1,r2));
+					var l2 = Vect3.len(Vect3.sub(r1,r3));
+					var angle = Math.acos(a/(l1*l2));
+					return angle;
+				}
+				
+				for(var i = 1; i <= N; i++) {
+					theta[i] = new Array(N);
+					for(var j = 1; j <= N; j++) {
+						if (Math.abs(j-i)==2 || Math.abs(j-i)==N-2) {
+							if (Math.abs(j-i)==N-2) {
+								if (i==1 || j==1) {
+									theta[i][j] = ang(grains[N].r, grains[1].r, grains[N-1].r);
+								} else  if (i==2 || j==2) {
+									theta[i][j] = ang(grains[1].r, grains[2].r, grains[N].r);
+								}
+							} else {
+								if (i>j) {
+									theta[i][j] = ang(grains[i-1].r, grains[i].r, grains[j].r);
+								} else {
+									theta[i][j] = ang(grains[i+1].r, grains[i].r, grains[j].r);
+								}
+							}
+						}
+					}
+				}
+				
 				for(var iN = 1; iN <= N; iN++) {
 					plotParticle(grains[iN]);
 				}
@@ -96,6 +131,7 @@
 			function run() {
 				// Prepare variabel for saving sum of forces
 				var SF = new Array(N);
+				var ST = new Array(N);
 				var k;
 				var l;
 				
@@ -117,6 +153,7 @@
 				// Calculate spring force
 				for(var iN = 1; iN <= N; iN++) {
 					//console.log("Partikel " + iN);
+					ST[iN] = 0;
 					for(var jN = 1; jN <= N; jN++) {
 						//console.log("Partikel " + jN);
 						if (iN!=jN) {
@@ -127,14 +164,19 @@
 								f = Force.spring(grains[iN], grains[jN], k, l);
 								//console.log(f);
 								SF[iN] = Vect3.add(SF[iN], f);
-							} else if (Math.abs(jN-iN)==2 || Math.abs(jN-iN)==N-2) {
-								var f = new Vect3;
+							} else if (Math.abs(jN-iN)==2 || Math.abs(jN-iN)==N-2) {							
 								k = kt;
-								l = 0.92*l2[iN][jN];
-								f = Force.spring(grains[iN], grains[jN], k, l);
+								th = 0.92*theta[iN][jN];
+								var torq = k*(theta[iN][jN]-th);
+								ST[iN] += torq;
+								var leng = Vect3.len(Vect3.sub(grains[iN].r, grains[jN].r));
+								var f_torq = torq/leng;
+								var f_torq_y = f_torq * Math.cos(theta[iN][jN]);
+								var f_torq_x = f_torq * Math.sin(theta[iN][jN]);
+								var f = new Vect3(f_torq_x, f_torq_y, 0);
 								//console.log(f);
 								SF[iN] = Vect3.add(SF[iN], f);
-							} 
+							}
 						}
 					}
 				}
@@ -150,6 +192,13 @@
 					plotParticle(grains[i]);
 				}
 				
+				for(var i = 1; i <= N; i++) {
+					for(var j = 1; j <= N; j++) {
+						var alpha = ST[i]/grains[i].I;
+						theta[i][j] += grains[i].w*dt;
+						grains[i].w += alpha*dt;
+					}
+				}
 				for(var i = 1; i <= N; i++) {
 					Mdynamics.Euler(SF[i], grains[i]);
 				}
@@ -174,7 +223,6 @@
 					for(var iN = 1; iN <= N; iN++) {
 						var v = Vect3.mul(grains[iN].v, rEK);
 						grains[iN].v = v;
-						//grains[iN].v = new Vect3();
 					}
 				}
 				
