@@ -8,7 +8,7 @@
 	Create this object.
 */
 
-// Define class of Traffic light
+// Define class of gate
 class abmGate {
 	constructor() {
 		this.state = 0;
