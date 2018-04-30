@@ -1,5 +1,5 @@
 /*
-	switch.js
+	gate.js
 	Gate for ABM-based simulation
 	
 	Sparisoma Viridi | dudung@gmail.com
@@ -12,10 +12,7 @@
 class abmGate {
 	constructor() {
 		this.state = 0;
-		this.type = ""
-		this.angle = 0;
-		this.x = 0;
-		this.y = 0;
+		this.pos = 0;
 	}
 	
 	// Change state
