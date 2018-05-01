@@ -24,7 +24,7 @@ class abmAgent {
 			if(arg.id !== undefined) {
 				this.id = arg.id;
 			}
-			if(this.pos != undefined) {
+			if(arg.pos != undefined) {
 				this.pos = arg.pos;
 			}
 			if(arg.size != undefined) {

@@ -16,14 +16,26 @@ class abmLoop {
 		this.path = arguments[0];
 		this.gate = [];
 		this.agent = [];
-		this.pathColor = "#f00";
+		this.color = "#f00";
+		if(arguments.length == 1) {
+			var arg = arguments[0];
+			if(arg.id != undefined) {
+				this.id = arg.id;
+			}
+			if(arg.path != undefined) {
+				this.path = arg.path;
+			}
+			if(arg.color != undefined) {
+				this.color = arg.color;
+			}
+		}
 	}
 	
 	drawPathOn(canvasId) {
-		if(path != undefined) {
+		if(this.path != undefined) {
 			var canvas = document.getElementById(canvasId);
 			var ctx = canvas.getContext("2d");
-			ctx.strokeStyle = this.pathColor;
+			ctx.strokeStyle = this.color;
 			var x = this.path.x;
 			var y = this.path.y;
 			var N = Math.min(x.length, y.length);

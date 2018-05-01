@@ -32,35 +32,49 @@ canvas.height = "200";
 canvas.style.background = "#eee";
 document.body.appendChild(canvas);
 
-// Define path
-var path;
+// Create some loops
+var loops = [];
+loops.push(new abmLoop({
+	id: "loop1",
+	path: generateRectangularPath(40, 100, 60, 60, 8),
+	color: "#f00"
+}));
+loops.push(new abmLoop({
+	id: "loop2",
+	path: generateRectangularPath(100, 100, 80, 120, 8),
+	color: "#0f0"
+}));
+loops.push(new abmLoop({
+	id: "loop1",
+	path: generateCircularPath(140, 100, 50, 20),
+	color: "#00f"
+}));
 
-// Create rectangular path and create loop for it
-path = generateRectangularPath(40, 100, 60, 60, 8);
-var loop1 = new abmLoop(path);
-loop1.id = "loop1";
-loop1.pathColor = "#f00";
-loop1.drawPathOn("drawingBoard");
+// Create some agents
+var agents = [];
+agents.push(new abmAgent({id: "agent1"}));
+agents.push(new abmAgent({id: "agent2"}));
+agents.push(new abmAgent({id: "agent3"}));
 
-// Create rectangular path and create loop for it
-path = generateRectangularPath(100, 100, 80, 120, 8);
-var loop2 = new abmLoop(path);
-loop1.id = "loop2";
-loop2.pathColor = "#0f0";
-loop2.drawPathOn("drawingBoard");
+// Create some gates
+var gates = [];
+gates.push(new abmGate({
+	id: "gate1",
+	sequence: [0, 0, 0, 0, 0, 1, 1, 1, 1, 1]
+}));
+gates.push(new abmGate({
+	id: "gate2",
+	sequence: [1, 1, 1, 1, 1, 0, 0, 0, 0, 0]
+}));
+gates.push(new abmGate({
+	id: "gate3",
+	sequence: [0, 0, 0, 1, 1, 1, 1, 1, 0, 0]
+}));
 
-// Create circular path and create loop for it
-path = generateCircularPath(140, 100, 50, 20);
-var loop3 = new abmLoop(path);
-loop1.id = "loop3";
-loop3.pathColor = "#00f";
-loop3.drawPathOn("drawingBoard");
-
-// Create some agent
-var a1 = new abmAgent({id: "agent1"});
-var a2 = new abmAgent({id: "agent2"});
-var a3 = new abmAgent({id: "agent3"});
-
+// Draw all
+loops.forEach(function(loop) {
+	loop.drawPathOn("drawingBoard");
+});
 </script>
 </body>
 </html>
