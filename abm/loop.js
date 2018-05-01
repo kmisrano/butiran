@@ -7,6 +7,8 @@
 	20180501
 	Create this object.
 	Forget upload home script and recreate it in campus.
+	There is bug in drawing the loop, which is only working for
+	N = 8.
 */
 
 // Define class of gate
@@ -14,9 +16,9 @@ class abmLoop {
 	constructor() {
 		this.id = "loop1";
 		this.path = arguments[0];
-		this.gate = [];
-		this.agent = [];
 		this.color = "#f00";
+		
+		// Define constructor with one argument of types
 		if(arguments.length == 1) {
 			var arg = arguments[0];
 			if(arg.id != undefined) {
@@ -31,7 +33,8 @@ class abmLoop {
 		}
 	}
 	
-	drawPathOn(canvasId) {
+	// Draw loop
+	drawOnCanvas(canvasId) {
 		if(this.path != undefined) {
 			var canvas = document.getElementById(canvasId);
 			var ctx = canvas.getContext("2d");

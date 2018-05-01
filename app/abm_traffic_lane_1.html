@@ -24,11 +24,17 @@ Start this project.
 <body>
 <script>
 
+// Define variable for setInterval function
+var timer;
+var tbeg = 0;
+var tend = 40;
+var t = tbeg;
+
 // Define canvas
 var canvas = document.createElement("canvas");
 canvas.id = "drawingBoard";
-canvas.width = "200";
-canvas.height = "200";
+canvas.width = "400";
+canvas.height = "400";
 canvas.style.background = "#eee";
 document.body.appendChild(canvas);
 
@@ -36,45 +42,93 @@ document.body.appendChild(canvas);
 var loops = [];
 loops.push(new abmLoop({
 	id: "loop1",
-	path: generateRectangularPath(40, 100, 60, 60, 8),
-	color: "#f00"
+	path: generateRectangularPath(80, 200, 120, 240, 8),
+	color: "#888"
 }));
 loops.push(new abmLoop({
 	id: "loop2",
-	path: generateRectangularPath(100, 100, 80, 120, 8),
-	color: "#0f0"
+	path: generateSquarePath(200, 200, 160, 8),
+	color: "#888"
 }));
 loops.push(new abmLoop({
-	id: "loop1",
-	path: generateCircularPath(140, 100, 50, 20),
-	color: "#00f"
+	id: "loop3",
+	path: generateCircularPath(280, 200, 100, 20),
+	color: "#888"
 }));
 
 // Create some agents
 var agents = [];
-agents.push(new abmAgent({id: "agent1"}));
-agents.push(new abmAgent({id: "agent2"}));
-agents.push(new abmAgent({id: "agent3"}));
+agents.push(new abmAgent({id: "agent1", loop: "loop1"}));
+agents.push(new abmAgent({id: "agent2", loop: "loop2"}));
+agents.push(new abmAgent({id: "agent3", loop: "loop3"}));
+agents.push(new abmAgent({
+	id: "agent4",
+	loop: "loop3",
+	pos: 4
+}));
 
 // Create some gates
 var gates = [];
 gates.push(new abmGate({
 	id: "gate1",
-	sequence: [0, 0, 0, 0, 0, 1, 1, 1, 1, 1]
+	sequence: [0, 0, 0, 0, 0, 1, 1, 1, 1, 1],
+	loop: "loop1"
 }));
 gates.push(new abmGate({
 	id: "gate2",
-	sequence: [1, 1, 1, 1, 1, 0, 0, 0, 0, 0]
+	sequence: [1, 1, 1, 1, 1, 0, 0, 0, 0, 0],
+	loop: "loop2"
 }));
 gates.push(new abmGate({
 	id: "gate3",
-	sequence: [0, 0, 0, 1, 1, 1, 1, 1, 0, 0]
+	sequence: [0, 0, 0, 1, 1, 1, 1, 1, 0, 0],
+	loop: "loop3"
 }));
 
+// Clear drawing
+function clearAll() {
+	var ctx = canvas.getContext("2d");
+	ctx.clearRect(0, 0, canvas.width, canvas.height);
+}
+
 // Draw all
-loops.forEach(function(loop) {
-	loop.drawPathOn("drawingBoard");
-});
+function drawAll() {
+	loops.forEach(function(loop) {
+		loop.drawOnCanvas("drawingBoard");
+	});
+	gates.forEach(function(gate) {
+		gate.drawOnCanvas("drawingBoard", loops);
+	});
+	agents.forEach(function(agent) {
+		agent.drawOnCanvas("drawingBoard", loops);
+	});
+}
+
+// Update all
+function updateAll() {
+	gates.forEach(function(gate) {
+		gate.update();
+	});
+	agents.forEach(function(agent) {
+		agent.update();
+	});
+}
+
+// Start animation
+timer = setInterval(animate, 500);
+
+// Perform animation
+function animate() {
+	if(t >= tend) {
+		clearInterval(timer);
+	}
+	updateAll();
+	clearAll();
+	drawAll();
+	t++;
+}
+
+
 </script>
 </body>
 </html>
