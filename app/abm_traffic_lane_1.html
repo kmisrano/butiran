@@ -24,8 +24,17 @@ Start this project.
 <body>
 <script>
 
-var data = generateSquare(0, 0, 1, 8);
-console.log(data);
+var canvas = document.createElement("canvas");
+canvas.id = "drawingBoard";
+canvas.width = "200";
+canvas.height = "200";
+canvas.style.border = "1px solid black";
+document.body.appendChild(canvas);
+
+var path = generateRectangularPath(100, 100, 160, 10, 8);
+var loop = new abmLoop(path);
+loop.drawPathOn("drawingBoard");
+
 
 
 </script>
