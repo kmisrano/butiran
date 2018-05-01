@@ -32,4 +32,8 @@ class abmAgent {
 			}
 		}
 	}
+	
+	// Set to a loop
+	setToLoop(loopId) {
+	}
 }

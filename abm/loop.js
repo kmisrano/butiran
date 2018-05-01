@@ -12,6 +12,7 @@
 // Define class of gate
 class abmLoop {
 	constructor() {
+		this.id = "loop1";
 		this.path = arguments[0];
 		this.gate = [];
 		this.agent = [];
@@ -25,8 +26,6 @@ class abmLoop {
 			ctx.strokeStyle = this.pathColor;
 			var x = this.path.x;
 			var y = this.path.y;
-			console.log(x);
-			console.log(y);
 			var N = Math.min(x.length, y.length);
 			ctx.beginPath();
 			for(var i = 0; i < N; i++) {

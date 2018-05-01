@@ -24,18 +24,42 @@ Start this project.
 <body>
 <script>
 
+// Define canvas
 var canvas = document.createElement("canvas");
 canvas.id = "drawingBoard";
 canvas.width = "200";
 canvas.height = "200";
-canvas.style.border = "1px solid black";
+canvas.style.background = "#eee";
 document.body.appendChild(canvas);
 
-var path = generateRectangularPath(100, 100, 160, 10, 8);
-var loop = new abmLoop(path);
-loop.drawPathOn("drawingBoard");
+// Define path
+var path;
 
+// Create rectangular path and create loop for it
+path = generateRectangularPath(40, 100, 60, 60, 8);
+var loop1 = new abmLoop(path);
+loop1.id = "loop1";
+loop1.pathColor = "#f00";
+loop1.drawPathOn("drawingBoard");
 
+// Create rectangular path and create loop for it
+path = generateRectangularPath(100, 100, 80, 120, 8);
+var loop2 = new abmLoop(path);
+loop1.id = "loop2";
+loop2.pathColor = "#0f0";
+loop2.drawPathOn("drawingBoard");
+
+// Create circular path and create loop for it
+path = generateCircularPath(140, 100, 50, 20);
+var loop3 = new abmLoop(path);
+loop1.id = "loop3";
+loop3.pathColor = "#00f";
+loop3.drawPathOn("drawingBoard");
+
+// Create some agent
+var a1 = new abmAgent({id: "agent1"});
+var a2 = new abmAgent({id: "agent2"});
+var a3 = new abmAgent({id: "agent3"});
 
 </script>
 </body>
