@@ -27,7 +27,7 @@ Start this project.
 // Define variable for setInterval function
 var timer;
 var tbeg = 0;
-var tend = 40;
+var tend = 200;
 var t = tbeg;
 
 // Define canvas
@@ -42,17 +42,17 @@ document.body.appendChild(canvas);
 var loops = [];
 loops.push(new abmLoop({
 	id: "loop1",
-	path: generateRectangularPath(80, 200, 120, 240, 8),
+	path:  generateSquarePath(200, 200, 200, 64),
 	color: "#888"
 }));
 loops.push(new abmLoop({
 	id: "loop2",
-	path: generateSquarePath(200, 200, 160, 8),
+	path: generateRectangularPath(80, 200, 120, 300, 64),
 	color: "#888"
 }));
 loops.push(new abmLoop({
 	id: "loop3",
-	path: generateCircularPath(280, 200, 100, 20),
+	path: generateCircularPath(280, 200, 80, 20),
 	color: "#888"
 }));
 
@@ -63,8 +63,13 @@ agents.push(new abmAgent({id: "agent2", loop: "loop2"}));
 agents.push(new abmAgent({id: "agent3", loop: "loop3"}));
 agents.push(new abmAgent({
 	id: "agent4",
-	loop: "loop3",
+	loop: "loop1",
 	pos: 4
+}));
+agents.push(new abmAgent({
+	id: "agent5",
+	loop: "loop1",
+	pos: 5
 }));
 
 // Create some gates
@@ -115,7 +120,7 @@ function updateAll() {
 }
 
 // Start animation
-timer = setInterval(animate, 500);
+timer = setInterval(animate, 100);
 
 // Perform animation
 function animate() {
@@ -127,7 +132,6 @@ function animate() {
 	drawAll();
 	t++;
 }
-
 
 </script>
 </body>

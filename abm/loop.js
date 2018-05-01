@@ -9,6 +9,7 @@
 	Forget upload home script and recreate it in campus.
 	There is bug in drawing the loop, which is only working for
 	N = 8.
+	Bug is fixed at about 2125.
 */
 
 // Define class of gate
@@ -74,17 +75,17 @@ function generateRectangularPath(xc, yc, Sa, Sb, N) {
 			var x = 0;
 			var y = 0;
 			if(j == 0) {
-				x = xc + dSa;
-				y = yc + dSb * k;
+				x = xc + 0.5 * Sa;
+				y = yc - 0.5 * Sb + k * dSb;
 			} else if(j == 1) {
-				x = xc - dSa * k;
-				y = yc + dSb;
+				x = xc + 0.5 * Sa - k * dSa;
+				y = yc + 0.5 * Sb;
 			} else if(j == 2) {
-				x = xc - dSa;
-				y = yc - dSb * k;
+				x = xc - 0.5 * Sa;
+				y = yc + 0.5 * Sb - k * dSb;
 			} else if(j == 3) {
-				x = xc + dSa * k;
-				y = yc - dSb;
+				x = xc - 0.5 * Sa + k * dSa;
+				y = yc - 0.5 * Sb;
 			}
 			xx.push(x);
 			yy.push(y);
@@ -107,21 +108,22 @@ function generateSquarePath(xc, yc, S, N) {
 		var kbeg = 0;
 		var kend = N / 4;
 		var dS = S / kend;
+		console.log(kend);
 		for(var k = kbeg; k < kend; k++) {
 			var x = 0;
 			var y = 0;
 			if(j == 0) {
-				x = xc + dS;
-				y = yc + dS * k;
+				x = xc + 0.5 * S;
+				y = yc - 0.5 * S + k * dS;
 			} else if(j == 1) {
-				x = xc - dS * k;
-				y = yc + dS;
+				x = xc + 0.5 * S - k * dS;
+				y = yc + 0.5 * S;				
 			} else if(j == 2) {
-				x = xc - dS;
-				y = yc - dS * k;
+				x = xc - 0.5 * S;
+				y = yc + 0.5 * S - k * dS;				
 			} else if(j == 3) {
-				x = xc + dS * k;
-				y = yc - dS;
+				x = xc - 0.5 * S + k * dS;
+				y = yc - 0.5 * S;				
 			}
 			xx.push(x);
 			yy.push(y);
