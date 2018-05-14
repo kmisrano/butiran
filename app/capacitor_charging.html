@@ -19,49 +19,63 @@
 // Define objects ID
 var elements = {};
 
+// Create element and append to body
+function createElement(type, id, elements) {
+	var element = document.createElement(type)
+	element.id = id;
+	document.body.append(element);
+	elements[id] = element;
+}
+
 // Create application visual elements
 function createVisualElements(elements) {
-	// Create some div elements
-	var Ndiv = 3;
-	for(var i = 0; i < Ndiv; i++) {
-		var div = document.createElement("div");
-		div.id = "div" + i;
-		document.body.appendChild(div);
-		elements[div.id] = div;
-	}
+	createElement("div", "dvTop", elements);
 	
-	// Create some text elements
-	var Ntxt = 3;
-	for(var i = 0; i < Ntxt; i++) {
-		var txt = document.createElement("text");
-		txt.id = "text" + i;
-		document.body.appendChild(txt);
-		elements[txt.id] = txt;
-	}
+	createElement("div", "dvParam", elements);
+	createElement("text", "txParam", elements);
+	createElement("textarea", "taParam", elements);
+
+	createElement("div", "dvSource", elements);
+	createElement("text", "txSource", elements);
+	createElement("textarea", "taSource", elements);
 	
-	// Create some textarea elements
-	var Nta = 3;
-	for(var i = 0; i < Ntxt; i++) {
-		var ta = document.createElement("textarea");
-		ta.id = "textarea" + i;
-		document.body.appendChild(ta);
-		elements[ta.id] = ta;
-	}
+	createElement("div", "dvButton", elements);
+	createElement("text", "txButton", elements);
+	createElement("button", "btStart", elements);
 }
 
 // Arrange application visual elements
 function arrangeVisualElements(els) {
-	elements["text0"].innerHTML = "Parameters";
-	elements["textarea0"].style.width = "150px";
-	elements["textarea0"].style.height = "150px";
-
+	// Set layout of elements
+	elements["dvTop"].append(elements["dvParam"]);
+		elements["dvParam"].append(elements["txParam"]);
+		elements["dvParam"].append(elements["taParam"]);
+	elements["dvTop"].append(elements["dvSource"]);
+		elements["dvSource"].append(elements["txSource"]);
+		elements["dvSource"].append(elements["taSource"]);
+	elements["dvTop"].append(elements["dvButton"]);
+		elements["dvButton"].append(elements["btStart"]);
 	
-	elements["div0"].append(elements["text0"]);
-	elements["div0"].append(elements["textarea0"]);
-	elements["div1"].append(elements["text1"]);
-	elements["div1"].append(elements["textarea1"]);
-	elements["div2"].append(elements["text2"]);
-	elements["div2"].append(elements["textarea2"]);
+	// Set attributes of elements
+	elements["dvTop"].style.width = "450px";
+	elements["txParam"].innerHTML = "Parameters";
+	elements["dvParam"].style.width = "160px";
+	elements["dvParam"].style.float = "left";
+	elements["taParam"].style.width = "150px";
+	elements["taParam"].style.height = "150px";
+	elements["taParam"].style.overflowY = "scroll";
+	elements["txSource"].innerHTML = "Source";
+	elements["dvSource"].style.width = "160px";
+	elements["dvSource"].style.float = "left";
+	elements["taSource"].style.width = "150px";
+	elements["taSource"].style.height = "150px";
+	elements["taSource"].style.overflowY = "scroll";
+	elements["dvButton"].style.width = "80px";
+	elements["dvButton"].style.border = "1px solid black";
+	elements["dvButton"].style.width = "80px";
+	elements["dvButton"].style.float = "left";
+	elements["btStart"].innerHTML = "Start";
+	elements["btStart"].style.width = "70px";
 }
 
 createVisualElements(elements);
