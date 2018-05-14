@@ -6,11 +6,67 @@
 	Sparisoma Viridi | dudung@gmail.com
 	
 	20180512
-	Create this application.
+	Create this application as empty HTML file.
+	20180513
+	Start to build the layout.
 -->
 <html>
 <head>
 </head>
 <body>
+<script>
+
+// Define objects ID
+var elements = {};
+
+// Create application visual elements
+function createVisualElements(elements) {
+	// Create some div elements
+	var Ndiv = 3;
+	for(var i = 0; i < Ndiv; i++) {
+		var div = document.createElement("div");
+		div.id = "div" + i;
+		document.body.appendChild(div);
+		elements[div.id] = div;
+	}
+	
+	// Create some text elements
+	var Ntxt = 3;
+	for(var i = 0; i < Ntxt; i++) {
+		var txt = document.createElement("text");
+		txt.id = "text" + i;
+		document.body.appendChild(txt);
+		elements[txt.id] = txt;
+	}
+	
+	// Create some textarea elements
+	var Nta = 3;
+	for(var i = 0; i < Ntxt; i++) {
+		var ta = document.createElement("textarea");
+		ta.id = "textarea" + i;
+		document.body.appendChild(ta);
+		elements[ta.id] = ta;
+	}
+}
+
+// Arrange application visual elements
+function arrangeVisualElements(els) {
+	elements["text0"].innerHTML = "Parameters";
+	elements["textarea0"].style.width = "150px";
+	elements["textarea0"].style.height = "150px";
+
+	
+	elements["div0"].append(elements["text0"]);
+	elements["div0"].append(elements["textarea0"]);
+	elements["div1"].append(elements["text1"]);
+	elements["div1"].append(elements["textarea1"]);
+	elements["div2"].append(elements["text2"]);
+	elements["div2"].append(elements["textarea2"]);
+}
+
+createVisualElements(elements);
+arrangeVisualElements(elements);
+
+</script>
 </body>
 </html>
