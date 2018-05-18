@@ -7,11 +7,12 @@
 	20180301
 	Create this library and tested.
 	20180519
-	Fix unnecessary typo.
+	Fix unnecessary typo and implement node.js module.exports
+	command.
 */
 
 // Define class of Polynomial
-class Polynomial {
+module.exports = class Polynomial {
 	constructor(coefs) {
 		this.order = 0;
 		this.coefs = coefs;
