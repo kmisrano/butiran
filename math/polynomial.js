@@ -6,11 +6,13 @@
 	
 	20180301
 	Create this library and tested.
+	20180519
+	Fix unnecessary typo.
 */
 
 // Define class of Polynomial
 class Polynomial {
-	constructor (coefs) {
+	constructor(coefs) {
 		this.order = 0;
 		this.coefs = coefs;
 		this.calcOrder();
