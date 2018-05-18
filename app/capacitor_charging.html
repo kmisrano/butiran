@@ -9,6 +9,8 @@
 	Create this application as empty HTML file.
 	20180513
 	Start to build the layout.
+	20180518
+	Continue developing the application.
 -->
 <html>
 <head>
@@ -42,10 +44,12 @@ function createVisualElements(elements) {
 	createElement("div", "dvButton", elements);
 	createElement("text", "txButton", elements);
 	createElement("button", "btStart", elements);
+
+	createElement("div", "dvBottom", elements);
 }
 
 // Arrange application visual elements
-function arrangeVisualElements(els) {
+function arrangeVisualElements(elements) {
 	// Set layout of elements
 	elements["dvTop"].append(elements["dvParam"]);
 		elements["dvParam"].append(elements["txParam"]);
@@ -78,8 +82,33 @@ function arrangeVisualElements(els) {
 	elements["btStart"].style.width = "70px";
 }
 
+// Initiate some visual elements
+function initiateVisualElements(els) {
+	// Set value of resistor, capacitor
+	elements["taParam"].value = "" +
+	"TSTEP	1E-3\n" +
+	"R	2000\n" +
+	"C	1000\n" +
+	"Rmax	300";
+	
+	// Define source voltate function
+	elements["taSource"].value = "" +
+	"0	0\n" +
+	"100	1\n" +
+	"200	0\n" +
+	"100	3\n" +
+	"100	0\n" +
+	"300	2\n" +
+	"200	0\n" +
+	"300	4\n" +
+	"100	0";
+}
+
+
+
 createVisualElements(elements);
 arrangeVisualElements(elements);
+initiateVisualElements(elements);
 
 </script>
 </body>
