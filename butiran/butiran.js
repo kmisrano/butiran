@@ -11,6 +11,9 @@
 	20180519
 	Start recreating this library, now with node.js support
 	and try to use ES modules, which is still experimental.
+	20180520
+	Write how to node and webpack of butiran.js to get
+	butiran.js.min file in dest folder.
 */
 
 var Sequence = require('./lib/sequence')();
