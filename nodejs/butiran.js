@@ -1,5 +1,13 @@
+/*
+	butiran.js
+	Simulation for granular particles system
+	
+	Sparisoma Viridi | dudung@gmail.com
+	
+	20180519
+	Start recreating this library, now with node.js support.
+*/
 
-
-
-var seq = require('./lib/sequence');
-seq.test();
+// Test some class and functions
+var test = require('./lib/test');
+test.Sequence();

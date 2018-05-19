@@ -5,8 +5,7 @@
 	Sparisoma Viridi | dudung@gmail.com
 	
 	20180519
-	Create this object as part of generator in butiran and
-	make included test.
+	Create this object as part of generator in butiran.
 */
 
 // Define class of Sequence
@@ -36,16 +35,4 @@ module.exports = class Sequence {
 		}
 		return value;
 	}
-};
-
-// 20180519.1315 ok
-var Sequence = require('./sequence');
-module.exports = {
-	test: function() {
-		var seq = new Sequence();
-		var N = 20;
-		for(var i = 0; i < N; i++) {
-			console.log(seq.ping());
-		}
-	}
-};
+}
