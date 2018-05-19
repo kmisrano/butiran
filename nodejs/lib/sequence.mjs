@@ -1,15 +1,16 @@
 /*
-	sequence.js
+	sequence.mjs
 	An object for storing sequence of periodic values
 	
 	Sparisoma Viridi | dudung@gmail.com
 	
 	20180519
-	Create this object as part of generator in butiran.
+	Create this object as part of function generator
+	in butiran.
 */
 
 // Define class of Sequence
-module.exports = class Sequence {
+class Sequence {
 	
 	// Define constructor
 	constructor() {
@@ -35,4 +36,16 @@ module.exports = class Sequence {
 		}
 		return value;
 	}
+	
+	// Define test function -- 20180519.1925 ok
+	static test() {
+		var seq = new Sequence();
+		var N = 16;
+		for(var i = 0; i < N; i++) {
+			console.log(seq.ping());
+		}
+	}
 }
+
+// Export class of Sequence
+export {Sequence};
