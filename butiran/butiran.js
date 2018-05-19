@@ -4,7 +4,9 @@
 	
 	Sparisoma Viridi | dudung@gmail.com
 	
-	Execute: node --experimental-modules butiran.mjs
+	Execute:
+		node butiran.js
+		webpack butiran.js -o dist/butiran.min.js
 	
 	20180519
 	Start recreating this library, now with node.js support
