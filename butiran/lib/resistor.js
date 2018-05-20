@@ -47,14 +47,15 @@ class Resistor {
 			var dt = arguments[0];
 			var V = arguments[1];
 			var R = this.value;
-			var dV = (V - this.V);
+			//var dV = (V - this.V);
 			var dR = 0;
-			if(dV > 0) {
-				dR = (this.Rmax - R) * dt / tau;
+			if(V > 0) {
+				dR = (this.Rmax - R) * dt / this.tau;
 			} else {
-				dR = (this.Rmin - R) * dt / tau;
+				dR = (this.Rmin - R) * dt / this.tau;
 			}
 			R += dR;
+			//this.V = V;
 			this.value = R;
 		}
 		return this.value;
