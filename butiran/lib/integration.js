@@ -207,7 +207,7 @@ function integRectNEnd(func, xbeg, xend, N) {
 	return A;
 }
 
-// Export module -- 20180520.0739 !ok
+// Export module -- 20180520.0739 ok
 module.exports = {
 	integMilneError: function(func, xbeg, xend, error) {
 		return integMilneError(func, xbeg, xend, error);

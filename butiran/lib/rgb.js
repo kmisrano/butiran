@@ -6,6 +6,8 @@
 	
 	20180107
 	Create this library of functions.
+	20180520
+	Add module.export for ES module support, tested and ok.
 */
 
 // Convert integer to RGB color format
@@ -28,3 +30,13 @@ function double2rgb(r, g, b) {
 	var hexColor = int2rgb(R, G, B);
 	return hexColor;
 }
+
+// Export module
+module.exports = {
+	int2rgb: function(r, g, b) {
+		return int2rgb(r, g, b)
+	},
+	double2rgb: function(r, g, b) {
+		return double2rgb(r, g, b);
+	}
+};

@@ -19,16 +19,19 @@
 	Write how to node and webpack of butiran.js to get
 	butiran.js.min file in dest folder.
 	Add class of Polynomial to this script, test it, and ok.
-	Random function is also ok.
+	Random, Integration, RGB functions and Timer class are
+	also ok.
 */
 
 // Require classes
 var Sequence = require('./lib/sequence')();
 var Polynomial = require('./lib/polynomial')();
+var Timer = require('./lib/timer')();
 
 // Require functions
 var Random = require('./lib/random');
 var Integration = require('./lib/integration');
+var RGB = require('./lib/rgb');
 
 // Store information 
 if(typeof window !== 'undefined') {
@@ -37,4 +40,6 @@ if(typeof window !== 'undefined') {
 	window["Polynomial"] = Polynomial;
 	window["Random"] = Random;
 	window["Integration"] = Integration;
+	window["RGB"] = RGB;
+	window["Timer"] = Timer;
 }

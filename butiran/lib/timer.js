@@ -6,9 +6,14 @@
 	
 	20180302
 	Start this library.
+	20180520
+	Add module.export for ES module support.
 */
 
+// Define class of Timer
 class Timer {
+	
+	// Define constructor
 	constructor(func, period) {
 		this.func = func;
 		this.period = period;
@@ -30,3 +35,8 @@ class Timer {
 		}
 	}
 }
+
+// Export module
+module.exports = function() {
+	return Timer;
+};

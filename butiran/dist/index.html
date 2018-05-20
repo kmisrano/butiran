@@ -14,8 +14,12 @@ var rand = Random;
 console.log(rand.randInt(1, 4));
 console.log(rand.randIntN(1, 4, 10));
 
-
 var integ = Integration;
+
+
+var rgb = RGB;
+console.log(rgb.int2rgb(255, 0, 128));
+
 
 var res = integ.integTrapezError(fx, 0, 10, 1E-3);
 console.log(res);
@@ -23,6 +27,9 @@ console.log(res);
 function fx(x) {
 	return x;
 }
+
+var tim = new Timer(fx, 10);
+console.log(tim);
 
 </script>
 </body>
