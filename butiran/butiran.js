@@ -27,6 +27,7 @@
 var Sequence = require('./lib/sequence')();
 var Polynomial = require('./lib/polynomial')();
 var Timer = require('./lib/timer')();
+var Resistor = require('./lib/resistor')();
 
 // Require functions
 var Random = require('./lib/random');
@@ -42,4 +43,5 @@ if(typeof window !== 'undefined') {
 	window["Integration"] = Integration;
 	window["RGB"] = RGB;
 	window["Timer"] = Timer;
+	window["Resistor"] = Resistor;
 }

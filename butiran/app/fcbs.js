@@ -24,6 +24,7 @@
 // Require classes
 var Sequence = require('../lib/sequence')();
 var Generator = require('../lib/generator')();
+var Resistor = require('../lib/resistor')();
 
 // Execute main function in development stage
 main();
@@ -34,8 +35,10 @@ function main() {
 	// Define application name
 	var appname = "fcbs";
 	
-	// Define time step
+	// Define simulation duration
 	var dt = 0.001; // s
+	var tbeg = 0; // s
+	var tend = 10; // s
 	
 	// Define significant digit
 	var digit = -Math.floor(Math.log(dt) / Math.exp(1));
@@ -61,6 +64,17 @@ function main() {
 	// Create a signal generator with two output signals
 	var SG = new Generator(dt, [seq1, seq2], [amp1, amp2]);
 	
+	// Define properties of electronic components
+	var R = 200; // \Omega
+	var C = 0.01; // F
+	var T = R * C;
+	var Tint = 0.1; // s
+	var Rmin = 100; // \Omega
+	var Rmax = 1000; // \Omega
+	var Rint = new Resistor(Rmin);
+	console.log(Rint.ping());
+	
+	
 	var outstr = "# t\tV1\tV2\n";
 	var N = 25;
 	for(var i = 0; i < N; i++) {
@@ -79,11 +93,12 @@ function main() {
 	}
 	
 	// Write to file
+	/*
 	var fname = "data.txt";
 	const fs = require('fs');
 	fs.writeFile(fname, outstr, function(err) {
 		if(err) throw err;
 		console.log(appname + ": " + fname + " saved");
 	});
-	
+	*/
 }
