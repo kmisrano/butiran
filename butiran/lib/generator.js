@@ -3,10 +3,13 @@
 	An object for generate something
 	
 	Sparisoma Viridi | dudung@gmail.com
+	Tatang Suheri | tatangpl@yahoo.com
 	
 	20180301
 	Start this library and setRandomInt, setSeries, and
 	setPolynom are ok. setFunction is not implemented.
+	It is triggered by the need for industry framework
+	simulation.
 	20180520
 	Change from framework to butiran/lib with the same name
 	but different imlementation, and create this object for
