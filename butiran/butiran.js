@@ -14,11 +14,16 @@
 	20180520
 	Write how to node and webpack of butiran.js to get
 	butiran.js.min file in dest folder.
+	Add class of Polynomial to this script, test it, and ok.
 */
 
 var Sequence = require('./lib/sequence')();
+var Polynomial = require('./lib/polynomial')();
+var Random = require('./lib/random');
 
 if(typeof window !== 'undefined') {
 	// Store to window object -- 20180519.2358
 	window["Sequence"] = Sequence;
+	window["Polynomial"] = Polynomial;
+	window["Random"] = Random;
 }

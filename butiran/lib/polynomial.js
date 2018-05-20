@@ -9,14 +9,23 @@
 	20180519
 	Fix unnecessary typo and implement node.js module.exports
 	command.
+	20180520
+	Add comments and adjust export format as sequence.js script.
+	Modify constructor by introducing single coefs with 0 value
+	to avoid error in calculating polynomial order.
 */
 
 // Define class of Polynomial
-module.exports = class Polynomial {
+class Polynomial {
+	
+	// Define constructor
 	constructor(coefs) {
+		this.coefs = [0];
 		this.order = 0;
-		this.coefs = coefs;
-		this.calcOrder();
+		if(arguments.length > 0) {
+			this.coefs = coefs;
+			this.calcOrder();			
+		}
 	}
 	
 	// Calculate order of polynomial
@@ -49,3 +58,8 @@ module.exports = class Polynomial {
 		return f;
 	}
 }
+
+// Export module -- 20180520.0647 ok
+module.exports = function() {
+	return Polynomial;
+};

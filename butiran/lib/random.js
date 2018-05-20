@@ -6,6 +6,8 @@
 	
 	20180302
 	Create this library of functions.
+	20180520
+	Add feature for ES module support.
 */
 
 // Generate int \in [min, max]
@@ -23,3 +25,13 @@ function randIntN(min, max, N) {
 	}
 	return x;
 }
+
+// Export module -- 20180520.0724 ok
+module.exports = {
+	randInt: function(min, max) {
+		return randInt(min, max);
+	},
+	randIntN: function(min, max, N) {
+		return randIntN(min, max, N);
+	}
+};
