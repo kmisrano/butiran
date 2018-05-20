@@ -6,6 +6,9 @@
 	
 	20180303
 	Create this library of functions.
+	20180520
+	Add module.export for ES module support to about 14
+	functions.
 */
 
 // Integrate using Milne's rule until some error
@@ -203,3 +206,49 @@ function integRectNEnd(func, xbeg, xend, N) {
 	}
 	return A;
 }
+
+// Export module -- 20180520.0739 !ok
+module.exports = {
+	integMilneError: function(func, xbeg, xend, error) {
+		return integMilneError(func, xbeg, xend, error);
+	},
+	integMilneN: function(func, xbeg, xend, N) {
+		return integMilneN(func, xbeg, xend, N);
+	},
+	integBooleError: function(func, xbeg, xend, error) {
+		return integBooleError(func, xbeg, xend, error);
+	},
+	integBooleN: function(func, xbeg, xend, N) {
+		return integBooleN(func, xbeg, xend, N);
+	},
+	integSimps38Error: function(func, xbeg, xend, error) {
+		return integSimps38Error(func, xbeg, xend, error);
+	},
+	integSimps38N: function(func, xbeg, xend, N) {
+		return integSimps38N(func, xbeg, xend, N);
+	},
+	integSimpsError: function(func, xbeg, xend, error) {
+		return integSimpsError(func, xbeg, xend, error);
+	},
+	integSimpsN: function(func, xbeg, xend, N) {
+		return integSimpsN(func, xbeg, xend, N);
+	},
+	integTrapezError: function(func, xbeg, xend, error) {
+		return integTrapezError(func, xbeg, xend, error);
+	},
+	integTrapezN: function(func, xbeg, xend, N) {
+		return integTrapezN(func, xbeg, xend, N);
+	},
+	integRectError: function(func, xbeg, xend, error) {
+		return integRectError(func, xbeg, xend, error);
+	},
+	integRectNBeg: function(func, xbeg, xend, N) {
+		return integRectNBeg(func, xbeg, xend, N);
+	},
+	integRectNMid: function(func, xbeg, xend, N) {
+		return integRectNMid(func, xbeg, xend, N);
+	},
+	integRectNEnd: function(func, xbeg, xend, N) {
+		return integRectNEnd(func, xbeg, xend, N);
+	},
+};

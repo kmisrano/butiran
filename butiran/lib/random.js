@@ -7,7 +7,7 @@
 	20180302
 	Create this library of functions.
 	20180520
-	Add feature for ES module support.
+	Add module.export for ES module support.
 */
 
 // Generate int \in [min, max]

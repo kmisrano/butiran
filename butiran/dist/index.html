@@ -10,6 +10,17 @@ var poly = new Polynomial();
 var rand = Random;
 console.log(rand.randInt(1, 4));
 console.log(rand.randIntN(1, 4, 10));
+
+
+var integ = Integration;
+
+var res = integ.integTrapezError(fx, 0, 10, 1E-3);
+console.log(res);
+
+function fx(x) {
+	return x;
+}
+
 </script>
 </body>
 </html>
