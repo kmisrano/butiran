@@ -44,15 +44,15 @@ class Resistor {
 			this.pos = arguments[0];
 			this.value = this.Rmax * this.pos;
 		} else if(this.type == "time-dependent") {
-			var t = arguments[0];
+			var dt = arguments[0];
 			var V = arguments[1];
 			var R = this.value;
 			var dV = (V - this.V);
 			var dR = 0;
 			if(dV > 0) {
-				dR = (this.Rmax - R) * t / tau;
+				dR = (this.Rmax - R) * dt / tau;
 			} else {
-				dR = (this.Rmin - R) * t / tau;
+				dR = (this.Rmin - R) * dt / tau;
 			}
 			R += dR;
 			this.value = R;

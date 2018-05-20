@@ -38,20 +38,24 @@ function main() {
 	// Define simulation duration
 	var dt = 0.001; // s
 	var tbeg = 0; // s
-	var tend = 10; // s
+	var tend = 1; // s
 	
 	// Define significant digit
 	var digit = -Math.floor(Math.log(dt) / Math.exp(1));
 
 	// Define pattern for sequence as voltage source
 	var ptn1 = [
-		0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-		1, 1, 1, 1, 1, 1, 1, 1, 1, 1
-	];
+		0, 0, 0, 0, 0,
+		1, 1, 1, 1, 1,
+	]; // 10 ms
 	var ptn2 = [
-		0, 0,
-		1, 1
-	];
+		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+		0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+		1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+		1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+		1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+	]; // 100 ms
 	
 	// Define sequences
 	var seq1 = new Sequence(ptn1);
@@ -59,7 +63,7 @@ function main() {
 
 	// Define signal amplitudo
 	var amp1 = 10; // V
-	var amp2 = 15; // V
+	var amp2 = 20; // V
 	
 	// Create a signal generator with two output signals
 	var SG = new Generator(dt, [seq1, seq2], [amp1, amp2]);
@@ -71,26 +75,23 @@ function main() {
 	var Tint = 0.1; // s
 	var Rmin = 100; // \Omega
 	var Rmax = 1000; // \Omega
-	var Rint = new Resistor(Rmin);
-	console.log(Rint.ping());
+	var Rint = new Resistor(Rmin, Rmax, Tint);
 	
+	var outstr = "# t\tVs\tVR\tVC\tI\n";
 	
-	var outstr = "# t\tV1\tV2\n";
-	var N = 25;
-	for(var i = 0; i < N; i++) {
+	// Perform simulation
+	var t = tbeg;
+	while(t < tend + dt) {
 		var signal = SG.ping();
-		var M = signal.length;
-		for(var j = 0; j < M; j++) {
-			var x2d = signal[j].toFixed(digit);
-			var x = signal[j];
-			outstr += (j == 0) ? x2d : x;
-			if(j < M - 1) {
-				outstr += "\t";
-			} else {
-				outstr += "\n";				
-			}
-		}
+		var V = signal[2];
+		
+		
+		var linestr = t.toFixed(digit)+ "\t" + signal[2] + "\n";
+		//console.log(linestr);
+		outstr += linestr;
+		t += dt;
 	}
+	console.log(outstr);
 	
 	// Write to file
 	/*
