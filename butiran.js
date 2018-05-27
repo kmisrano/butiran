@@ -21,6 +21,8 @@
 	Add class of Polynomial to this script, test it, and ok.
 	Random, Integration, RGB functions and Timer class are
 	also ok.
+	20180527
+	Port Vect3, Grain from old version.
 */
 
 // Require classes
@@ -28,6 +30,8 @@ var Sequence = require('./lib/sequence')();
 var Polynomial = require('./lib/polynomial')();
 var Timer = require('./lib/timer')();
 var Resistor = require('./lib/resistor')();
+var Vect3 = require('./lib/vect3')();
+var Grain = require('./lib/grain')();
 
 // Require functions
 var Random = require('./lib/random');
@@ -44,4 +48,6 @@ if(typeof window !== 'undefined') {
 	window["RGB"] = RGB;
 	window["Timer"] = Timer;
 	window["Resistor"] = Resistor;
+	window["Vect3"] = Vect3;
+	window["Grain"] = Grain;
 }

@@ -8,32 +8,61 @@
 </head>
 <body>
 <script>
-var seq = new Sequence();
-var poly = new Polynomial();
-var rand = Random;
-console.log(rand.randInt(1, 4));
-console.log(rand.randIntN(1, 4, 10));
 
-var integ = Integration;
+test_grain();
 
-
-var rgb = RGB;
-console.log(rgb.int2rgb(255, 0, 128));
-
-
-var res = integ.integTrapezError(fx, 0, 10, 1E-3);
-console.log(res);
-
-function fx(x) {
-	return x;
+// 20180527.1607 !ok
+function test_grain() {
+	var grain = new Grain();
+	console.log(grain.strval());
 }
 
-var tim = new Timer(fx, 10);
-console.log(tim);
+// 20180527.1527 ok
+function test_vect3() {
+	var a = new Vect3();
+	console.log(a.strval());
+	var b = new Vect3(1, 2, 0);
+	console.log(b.strval());
+	a = new Vect3(1, -2, 1);
+	console.log(a.strval());
+	var c = Vect3.add(a, b);
+	console.log(c.strval());
+	var l = Vect3.dot(a, b);
+	console.log(l);
+	var d = Vect3.cross(a, b);
+	console.log(d.strval());
+	var e = d.neg();
+	console.log(e.strval());	
+}
 
-var R = new Resistor(100, 0.5);
-console.log(R.ping(0.1));
+// 20180520.0000 ok
+function test_prev() {
+	var seq = new Sequence();
+	var poly = new Polynomial();
+	var rand = Random;
+	console.log(rand.randInt(1, 4));
+	console.log(rand.randIntN(1, 4, 10));
 
+	var integ = Integration;
+
+
+	var rgb = RGB;
+	console.log(rgb.int2rgb(255, 0, 128));
+
+
+	var res = integ.integTrapezError(fx, 0, 10, 1E-3);
+	console.log(res);
+
+	function fx(x) {
+		return x;
+	}
+
+	var tim = new Timer(fx, 10);
+	console.log(tim);
+
+	var R = new Resistor(100, 0.5);
+	console.log(R.ping(0.1));
+}
 </script>
 </body>
 </html>
