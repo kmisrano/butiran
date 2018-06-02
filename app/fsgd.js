@@ -15,6 +15,9 @@
 
 // Require classes
 var Vect3 = require('../lib/vect3')();
+var Grain = require('../lib/grain')();
+var Buoyant = require('../lib/buoyant')();
+var Gravitation = require('../lib/gravitation')();
 
 // Execute main function in development stage
 main();
@@ -24,6 +27,25 @@ function main() {
 	// Get command line arguments
 	var args = process.argv.slice(2);
 	console.log(args);
+	
+	var grain = new Grain;
+	grain.m = 1;
+	var grain2 = new Grain;
+	grain2.m = 2;
+	grain2.r = new Vect3(1, 0, 0);
+	
+	var buoyant = new Buoyant();
+	buoyant.setFluidDensity(1000);
+	buoyant.setGravity(new Vect3(0, 0, -10));
+	console.log(buoyant.force(0.01));
+	
+	var gravitation = new Gravitation();
+	gravitation.setGravity(new Vect3(0, 0, -10));
+	console.log(gravitation.force(grain));
+	
+	gravitation.setGravitationalConstant(120);
+	console.log(gravitation.force(grain, grain2));
+	
 	
 	// Define application name
 	var appname = "fsgd";
