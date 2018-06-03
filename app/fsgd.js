@@ -14,6 +14,8 @@
 	20180603
 	Continue after improving butiran.js and its classes and
 	functions.
+	20180604
+	Run this application after some correction.
 */
 
 // Require classes
@@ -28,6 +30,13 @@ main();
 
 // Define main function
 function main() {
+	// Define some physical constants
+	var g = 9.81; // m s^-2
+	var rhof = 1000; // kg m^-3;
+	var etaf = 1E-3; // Pa s
+	var Db = 1E-2; // m;
+	var rhob = 800; // kg m^-3 (200..900)
+	
 	// Define application name
 	var appname = "fsgd";
 	
@@ -35,8 +44,8 @@ function main() {
 	var args = process.argv.slice(2);
 	
 	// Create spherical grain
-	var rho = 500; // kg m^-3
-	var D = 0.1; // m;
+	var rho = rhob;
+	var D = Db;
 	var V = (Math.PI / 6) * D * D * D;
 	var m = rho * V;
 	var grain = new Grain;
@@ -47,28 +56,24 @@ function main() {
 	
 	// Create buoyant force
 	var buoyant = new Buoyant();
-	buoyant.setFluidDensity(1000);
-	buoyant.setGravity(new Vect3(0, 0, -10));
+	buoyant.setFluidDensity(rhof);
+	buoyant.setGravity(new Vect3(0, 0, -g));
 	
 	// Create gravitational force
 	var gravitational = new Gravitational();
-	gravitational.setField(new Vect3(0, 0, -10));
-	
-	// Create gravitational force
-	var gravitational = new Gravitational();
-	gravitational.setField(new Vect3(0, 0, -10));
+	gravitational.setField(new Vect3(0, 0, -g));
 	
 	// Creat drag force
 	var drag = new Drag();
-	drag.setConstant(0, 0, 100);
+	drag.setConstant(0, 1, 0);
 
 	// Define simulation duration
 	var dt = 0.001; // s
 	var tbeg = 0; // s
-	var tend = 10; // s
+	var tend = 20; // s
 	
 	// Define data output period
-	var Tdata = 0.01; // s
+	var Tdata = 0.05; // s
 	var Ndata = Math.round(Tdata / dt);
 	var idata = Ndata;
 	
@@ -80,10 +85,10 @@ function main() {
 	var Af = 0.01; // m
 	var Tf = 1; // s
 	var fif0 = 0; // rad
-	var Tdelay = 4; // s
+	var Trel = 10; // s
 	
 	// Define data header
-	var outstr = "# t\tzf\tVf\tz\tv\n";
+	var outstr = "t\tzf\tvf\tVf\tz\tv\n";
 	
 	// Perform simulation
 	var t = tbeg;
@@ -95,9 +100,15 @@ function main() {
 		var D = grain.D;
 		
 		// Calculate fluid surface height
-		var zf = Af * Math.sin(2 * Math.PI * t / Tf + fif0);
+		var omegaf = 2 * Math.PI / Tf;
+		var zf = Af * Math.sin(omegaf * t + fif0);
 		zf = (Math.abs(zf) < eps) ? 0 : zf;
-		zf = (t < Tdelay) ? 0 : zf;
+		zf = (t < Trel) ? 0 : zf;
+		
+		// Calculate fluid surface velocity
+		var vf = omegaf * Af * Math.cos(omegaf * t + + fif0);
+		vf = (Math.abs(vf) < eps) ? 0 : vf;
+		vf = (t < Trel) ? 0 : vf;
 		
 		// Calculate immersed volume
 		var Vf = 0;
@@ -115,10 +126,10 @@ function main() {
 		if(idata == Ndata) {
 			var linestr = t.toFixed(digit) + "\t";
 			linestr += zf.toExponential(3) + "\t";
+			linestr += vf.toExponential(3) + "\t";
 			linestr += Vf.toExponential(3) + "\t";
 			linestr += z.toExponential(3) + "\t";
-			linestr += v.toExponential(3) + "\t";
-			linestr += "\n";
+			linestr += v.toExponential(3) + "\n";
 			
 			// Add line of data to output string
 			outstr += linestr;
@@ -128,10 +139,28 @@ function main() {
 		}
 		idata++;
 		
-		// Sum all forces
+		// Calculate gravitational force
 		var Fg = gravitational.force(grain);
+		
+		// Calculate buoyant force
 		var Fb = buoyant.force(Vf);
+		
+		// Calculate drag force
+		var Rf = Math.pow((3 * Vf) / (4 * Math.PI), (1/3));
+		var c1 = 6 * Math.PI * etaf * Rf;
+		if(zf + Rf < z) {
+			c1 = 0;
+		} else if(zf <= z && z <= zf + Rf) {
+			c1 = 6 * Math.PI * etaf * Rf;
+		} else {
+			var Rb = 0.5 * Db;
+			c1 = 6 * Math.PI * etaf * Rb;
+		}
+		drag.setConstant(0, c1, 0);
+		drag.setField(new Vect3(0, 0, vf));
 		var Fd = drag.force(grain);
+		
+		// Sum all forces
 		var SF = Vect3.add(Fg, Fb, Fd);
 		
 		// Calculate acceleration, velocity, and position
