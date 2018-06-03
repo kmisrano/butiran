@@ -24,7 +24,7 @@
 	20180527
 	Port Vect3, Grain from old version.
 	20180603
-	Fix Grain and create new Buoyant, Gravitation.
+	Fix Grain and add new Buoyant, Gravitation.
 */
 
 // Require classes
