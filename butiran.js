@@ -26,28 +26,37 @@
 	20180603
 	Fix Grain and add new Buoyant, Gravitation, Electrostatic,
 	Normal, Spring.
+	Change folder structure.
 */
 
-// Require classes
-var Sequence = require('./lib/sequence')();
-var Polynomial = require('./lib/polynomial')();
-var Timer = require('./lib/timer')();
-var Resistor = require('./lib/resistor')();
-var Generator = require('./lib/generator')();
-var Vect3 = require('./lib/vect3')();
+// lib
 var Grain = require('./lib/grain')();
+var Vect3 = require('./lib/vect3')();
+
+// lib/color
+var RGB = require('./lib/color/rgb');
+
+// lib/electronic
+var Resistor = require('./lib/electronic/resistor')();
+
+// lib/force
 var Buoyant = require('./lib/force/buoyant')();
-var Gravitational = require('./lib/force/gravitational')();
+var Drag = require('./lib/force/drag')();
 var Electrostatic = require('./lib/force/electrostatic')();
+var Gravitational = require('./lib/force/gravitational')();
+var Magnetic = require('./lib/force/magnetic')();
 var Normal = require('./lib/force/normal')();
 var Spring = require('./lib/force/spring')();
-var Drag = require('./lib/force/drag')();
-var Magnetic = require('./lib/force/magnetic')();
 
-// Require functions
-var Random = require('./lib/random');
-var Integration = require('./lib/integration');
-var RGB = require('./lib/rgb');
+// lib/generator
+var Generator = require('./lib/generator/generator')();
+var Sequence = require('./lib/generator/sequence')();
+var Timer = require('./lib/generator/timer')();
+
+// lib/math
+var Integration = require('./lib/math/integration');
+var Polynomial = require('./lib/math/polynomial')();
+var Random = require('./lib/generator/random');
 
 // Store information 
 if(typeof window !== 'undefined') {
