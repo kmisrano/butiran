@@ -24,7 +24,8 @@
 	20180527
 	Port Vect3, Grain from old version.
 	20180603
-	Fix Grain and add new Buoyant, Gravitation.
+	Fix Grain and add new Buoyant, Gravitation, Electrostatic,
+	Normal, Spring.
 */
 
 // Require classes
@@ -39,6 +40,9 @@ var Buoyant = require('./lib/force/buoyant')();
 var Gravitational = require('./lib/force/gravitational')();
 var Electrostatic = require('./lib/force/electrostatic')();
 var Normal = require('./lib/force/normal')();
+var Spring = require('./lib/force/spring')();
+var Drag = require('./lib/force/drag')();
+var Magnetic = require('./lib/force/magnetic')();
 
 // Require functions
 var Random = require('./lib/random');
@@ -62,4 +66,7 @@ if(typeof window !== 'undefined') {
 	window["Gravitational"] = Gravitational;
 	window["Electrostatic"] = Electrostatic;
 	window["Normal"] = Normal;
+	window["Spring"] = Spring;
+	window["Drag"] = Drag;
+	window["Magnetic"] = Magnetic;
 }
