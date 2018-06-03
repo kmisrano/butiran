@@ -5,7 +5,7 @@
 	Sparisoma Viridi | dudung@gmail.com
 	
 	Execute: node butiran.js
-	Compile: webpack butiran.js -o dist/butiran.min.js
+	Compile: webpack butiran.js -o dist\butiran.min.js
 	
 	Version info:
 		Node.js	v10.1.0
@@ -23,6 +23,8 @@
 	also ok.
 	20180527
 	Port Vect3, Grain from old version.
+	20180603
+	Fix Grain and create new Buoyant, Gravitation.
 */
 
 // Require classes
@@ -30,8 +32,11 @@ var Sequence = require('./lib/sequence')();
 var Polynomial = require('./lib/polynomial')();
 var Timer = require('./lib/timer')();
 var Resistor = require('./lib/resistor')();
+var Generator = require('./lib/generator')();
 var Vect3 = require('./lib/vect3')();
 var Grain = require('./lib/grain')();
+var Buoyant = require('./lib/buoyant')();
+var Gravitation = require('./lib/gravitation')();
 
 // Require functions
 var Random = require('./lib/random');
@@ -48,6 +53,9 @@ if(typeof window !== 'undefined') {
 	window["RGB"] = RGB;
 	window["Timer"] = Timer;
 	window["Resistor"] = Resistor;
+	window["Generator"] = Generator;
 	window["Vect3"] = Vect3;
 	window["Grain"] = Grain;
+	window["Buoyant"] = Buoyant;
+	window["Gravitation"] = Gravitation;
 }

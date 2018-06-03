@@ -9,9 +9,39 @@
 <body>
 <script>
 
-test_grain();
+test_gravitation();
 
-// 20180527.1607 !ok
+// 20180603.1029 ok
+function test_gravitation() {
+	var grain1 = new Grain();
+	grain1.m = 1;
+	grain1.r = new Vect3(-1, 0, 0);
+	
+	var grain2 = new Grain();
+	grain2.m = 4;
+	grain2.r = new Vect3(1, 0, 0);
+	
+	var gravitation = new Gravitation();
+	gravitation.setGravity(new Vect3(0, 0, -10));
+	var force1 = gravitation.force(grain1);
+	console.log(force1);
+	
+	gravitation.setGravitationalConstant(1);
+	var force12 = gravitation.force(grain1, grain2);
+	console.log(force12);
+}
+
+// 20180603.1021 ok
+function test_buoyant() {
+	var buoyant = new Buoyant();
+	buoyant.setFluidDensity(1000);
+	buoyant.setGravity(new Vect3(0, 0, -10));
+	var V = 1;
+	var force = buoyant.force(1);
+	console.log(force);
+}
+
+// 20180527.1607 ok
 function test_grain() {
 	var grain = new Grain();
 	console.log(grain.strval());
@@ -45,10 +75,8 @@ function test_prev() {
 
 	var integ = Integration;
 
-
 	var rgb = RGB;
 	console.log(rgb.int2rgb(255, 0, 128));
-
 
 	var res = integ.integTrapezError(fx, 0, 10, 1E-3);
 	console.log(res);
