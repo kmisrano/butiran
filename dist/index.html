@@ -9,9 +9,48 @@
 <body>
 <script>
 
-test_gravitation();
+test_normal();
 
-// 20180603.1029 ok
+// 20180603.1233 ok
+function test_normal() {
+	var g1 = new Grain();
+	g1.m = 1;
+	g1.D = 3;
+	g1.r = new Vect3(-1, 0, 0);
+	g1.v = new Vect3(0, 0, 0);
+	var g2 = new Grain();
+	g2.m = 1;
+	g2.D = 2;
+	g2.r = new Vect3(1, 0, 0);
+	g2.v = new Vect3(1, 0, 0);
+	
+	var normal = new Normal();
+	normal.setConstant(1000, 1);
+	var force12 = normal.force(g1, g2);
+	console.log(force12);
+}
+
+// 20180603.1155 ok
+function test_electrostatic() {
+	var grain1 = new Grain();
+	grain1.q = -1;
+	grain1.r = new Vect3(-1, 0, 0);
+	
+	var grain2 = new Grain();
+	grain2.q = 4;
+	grain2.r = new Vect3(1, 0, 0);
+	
+	var electrostatic = new Electrostatic();
+	electrostatic.setField(new Vect3(2, 0, 0));
+	var force1 = electrostatic.force(grain1);
+	console.log(force1);
+	
+	electrostatic.setConstant(1);
+	var force12 = electrostatic.force(grain1, grain2);
+	console.log(force12);
+}
+
+// 20180603.1152 ok
 function test_gravitation() {
 	var grain1 = new Grain();
 	grain1.m = 1;
@@ -21,13 +60,13 @@ function test_gravitation() {
 	grain2.m = 4;
 	grain2.r = new Vect3(1, 0, 0);
 	
-	var gravitation = new Gravitation();
-	gravitation.setGravity(new Vect3(0, 0, -10));
-	var force1 = gravitation.force(grain1);
+	var gravitational = new Gravitational();
+	gravitational.setField(new Vect3(0, 0, -10));
+	var force1 = gravitational.force(grain1);
 	console.log(force1);
 	
-	gravitation.setGravitationalConstant(1);
-	var force12 = gravitation.force(grain1, grain2);
+	gravitational.setConstant(1);
+	var force12 = gravitational.force(grain1, grain2);
 	console.log(force12);
 }
 

@@ -35,8 +35,10 @@ var Resistor = require('./lib/resistor')();
 var Generator = require('./lib/generator')();
 var Vect3 = require('./lib/vect3')();
 var Grain = require('./lib/grain')();
-var Buoyant = require('./lib/buoyant')();
-var Gravitation = require('./lib/gravitation')();
+var Buoyant = require('./lib/force/buoyant')();
+var Gravitational = require('./lib/force/gravitational')();
+var Electrostatic = require('./lib/force/electrostatic')();
+var Normal = require('./lib/force/normal')();
 
 // Require functions
 var Random = require('./lib/random');
@@ -57,5 +59,7 @@ if(typeof window !== 'undefined') {
 	window["Vect3"] = Vect3;
 	window["Grain"] = Grain;
 	window["Buoyant"] = Buoyant;
-	window["Gravitation"] = Gravitation;
+	window["Gravitational"] = Gravitational;
+	window["Electrostatic"] = Electrostatic;
+	window["Normal"] = Normal;
 }
