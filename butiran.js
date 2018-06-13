@@ -4,8 +4,12 @@
 	
 	Sparisoma Viridi | dudung@gmail.com
 	
-	Execute: node butiran.js
-	Compile: webpack butiran.js -o dist\butiran.min.js
+	Execute:
+	node butiran.js
+	
+	Compile:
+	webpack butiran.js --mode=production -o dist\butiran.min.js
+	webpack butiran.js --mode=none -o dist\butiran.js
 	
 	Version info:
 		Node.js	v10.1.0
@@ -27,6 +31,12 @@
 	Fix Grain and add new Buoyant, Gravitation, Electrostatic,
 	Normal, Spring.
 	Change folder structure.
+	20180612
+	Add grid/tablet.js for grid based simulation of tablet
+	dissolution.
+	20180613
+	Find webpack with mode=none which produces not optimized
+	output of butiran.js in one file.
 */
 
 // lib
@@ -53,6 +63,9 @@ var Generator = require('./lib/generator/generator')();
 var Sequence = require('./lib/generator/sequence')();
 var Timer = require('./lib/generator/timer')();
 
+// lib/grid
+var Tablet = require('./lib/grid/tablet');
+
 // lib/math
 var Integration = require('./lib/math/integration');
 var Polynomial = require('./lib/math/polynomial')();
@@ -78,4 +91,5 @@ if(typeof window !== 'undefined') {
 	window["Spring"] = Spring;
 	window["Drag"] = Drag;
 	window["Magnetic"] = Magnetic;
+	window["Tablet"] = Tablet;
 }

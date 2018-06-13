@@ -7,7 +7,27 @@
 	20180603
 	Create this test and collect previous functions from
 	index.html file, after it succeeds there.
+	20180612
+	Add test from gstd basic.
 */
+
+// 20180612.1749 ok
+function test_gstd_basic() {
+	var Nx = 5;
+	var Ny = 5;
+	var Nz = 5;
+	var tabBlock = Tablet.createBlockTablet(Nx, Ny, Nz);
+	console.log(tabBlock[1]);
+	
+	Tablet.setMaxValue(tabBlock, 10);
+	console.log(tabBlock[2]);
+	
+	Tablet.stepDissolve(tabBlock);
+	console.log(tabBlock[2]);
+	
+	Tablet.stepDissolve(tabBlock);
+	console.log(tabBlock[2]);
+}
 
 // 20180603.1438 ok
 function test_magnetic() {
