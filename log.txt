@@ -1,0 +1,7 @@
+[20180613]
+Start to port app/*.js to app/*.html by only including
+butiran.js (or butiran.min.js).
+Try to create output for substituting console since it will
+be called from a HTML file. Candidate is a textarea.
+Library of fs for writing file is not work with weback. See
+sandbox/die/testfs.js for this.

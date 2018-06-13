@@ -79,8 +79,12 @@
 	
 	Sparisoma Viridi | dudung@gmail.com
 	
-	Execute: node butiran.js
-	Compile: webpack butiran.js -o dist\butiran.min.js
+	Execute:
+	node butiran.js
+	
+	Compile:
+	webpack butiran.js --mode=production -o dist\butiran.min.js
+	webpack butiran.js --mode=none -o dist\butiran.js
 	
 	Version info:
 		Node.js	v10.1.0
@@ -105,6 +109,9 @@
 	20180612
 	Add grid/tablet.js for grid based simulation of tablet
 	dissolution.
+	20180613
+	Find webpack with mode=none which produces not optimized
+	output of butiran.js in one file.
 */
 
 // lib
@@ -139,6 +146,8 @@ var Integration = __webpack_require__(16);
 var Polynomial = __webpack_require__(17)();
 var Random = __webpack_require__(18);
 
+var TestFS = __webpack_require__(19)
+
 // Store information 
 if(typeof window !== 'undefined') {
 	// Store to window object -- 20180519.2358
@@ -160,6 +169,8 @@ if(typeof window !== 'undefined') {
 	window["Drag"] = Drag;
 	window["Magnetic"] = Magnetic;
 	window["Tablet"] = Tablet;
+
+	window["TestFS"] = TestFS;
 }
 
 
@@ -1338,6 +1349,9 @@ module.exports = function() {
 	Sparisoma Viridi | dudung@gmail.com
 	
 	20180612
+	Start this application gstd.js by creating functions
+	createBlockTablet, setMaxValue, stepDissolve, and move
+	them to grid/tablet.js library. And also tested in HTML.
 	Create this library of functions from gstd.js with
 	functions createBlockTablet, setMaxValue, stepDissolve.
 */
@@ -1791,6 +1805,26 @@ module.exports = {
 	randIntN: function(min, max, N) {
 		return randIntN(min, max, N);
 	}
+};
+
+
+/***/ }),
+/* 19 */
+/***/ (function(module, exports, __webpack_require__) {
+
+function testfs(fname, outstr) {
+	const fs = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"fs\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
+	fs.writeFile(fname, outstr, function(err) {
+		if(err) throw err;
+		console.log(appname + ": " + fname + " saved");
+	});
+}
+
+// Export module
+module.exports = {
+	testfs: function(fname, outstr) {
+		return testfs(fname, outstr)
+	},
 };
 
 
