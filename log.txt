@@ -5,3 +5,5 @@ Try to create output for substituting console since it will
 be called from a HTML file. Candidate is a textarea.
 Library of fs for writing file is not work with weback. See
 sandbox/die/testfs.js for this.
+Move app/fsgd.js and app/fcbs.js to app/js and later to be
+converted to html based application not js.
