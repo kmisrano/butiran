@@ -112,39 +112,43 @@
 	20180613
 	Find webpack with mode=none which produces not optimized
 	output of butiran.js in one file.
+	20180614
+	Add css/style.js library to this. Change folder from lib/css
+	to lib.
 */
 
 // lib
 var Grain = __webpack_require__(1)();
+var Style = __webpack_require__(3);
 var Vect3 = __webpack_require__(2)();
 
 // lib/color
-var RGB = __webpack_require__(3);
+var RGB = __webpack_require__(4);
 
 // lib/electronic
-var Resistor = __webpack_require__(4)();
+var Resistor = __webpack_require__(5)();
 
 // lib/force
-var Buoyant = __webpack_require__(5)();
-var Drag = __webpack_require__(6)();
-var Electrostatic = __webpack_require__(7)();
-var Gravitational = __webpack_require__(8)();
-var Magnetic = __webpack_require__(9)();
-var Normal = __webpack_require__(10)();
-var Spring = __webpack_require__(11)();
+var Buoyant = __webpack_require__(6)();
+var Drag = __webpack_require__(7)();
+var Electrostatic = __webpack_require__(8)();
+var Gravitational = __webpack_require__(9)();
+var Magnetic = __webpack_require__(10)();
+var Normal = __webpack_require__(11)();
+var Spring = __webpack_require__(12)();
 
 // lib/generator
-var Generator = __webpack_require__(12)();
-var Sequence = __webpack_require__(13)();
-var Timer = __webpack_require__(14)();
+var Generator = __webpack_require__(13)();
+var Sequence = __webpack_require__(14)();
+var Timer = __webpack_require__(15)();
 
 // lib/grid
-var Tablet = __webpack_require__(15);
+var Tablet = __webpack_require__(16);
 
 // lib/math
-var Integration = __webpack_require__(16);
-var Polynomial = __webpack_require__(17)();
-var Random = __webpack_require__(18);
+var Integration = __webpack_require__(17);
+var Polynomial = __webpack_require__(18)();
+var Random = __webpack_require__(19);
 
 // Store information 
 if(typeof window !== 'undefined') {
@@ -167,6 +171,7 @@ if(typeof window !== 'undefined') {
 	window["Drag"] = Drag;
 	window["Magnetic"] = Magnetic;
 	window["Tablet"] = Tablet;
+	window["Style"] = Style;
 }
 
 
@@ -450,6 +455,80 @@ module.exports = function() {
 /***/ (function(module, exports) {
 
 /*
+	style.js
+	Create style, get attribute, change attribute
+	
+	Sparisoma Viridi | dudung@gmail.com
+	
+	20180614
+	Create this library of functions by moving it from gstd.js
+	application.
+	Move it from lib/css to lib since it is only one.
+*/
+
+// Get attribute value of a style
+function getStyleAttribute(style, attr) {
+	var N = document.styleSheets.length;
+	var styles = document.styleSheets;
+	var value;
+	for(var i = 0; i < N; i++)
+	{
+		if(styles[i].rules[0].selectorText == style)
+		value = styles[i].rules[0].style[attr];
+	}
+	return value;
+}
+
+// Change style attribute with value
+function changeStyleAttribute(style, attr, value) {
+	// dudung, "Modify previously defined style in JS"
+	// https://stackoverflow.com/q/50847689/9475509
+	var N = document.styleSheets.length;
+	var styles = document.styleSheets;
+	for(var i = 0; i < N; i++)
+	{
+		if(styles[i].rules[0].selectorText == style)
+		styles[i].rules[0].style[attr] = value;
+	}
+}
+
+// Create a style
+function createStyle(css) {
+	// Christoph, TomFuertes, answer of "How to create
+	// a <style> tag with Javascript"
+	// https://stackoverflow.com/a/524721/9475509
+	var head = document.head ||
+		document.getElementsByTagName("head")[0];
+	var style = document.createElement("style");
+	style.type = "text/css";
+	if(style.styleSheet) {
+		style.styleSheet.cssText = css;
+	} else {
+		var textNode = document.createTextNode(css);
+		style.append(textNode);
+	}
+	head.append(style);
+}
+
+// Export module
+module.exports = {
+	createStyle: function(css) {
+		return createStyle(css)
+	},
+	changeStyleAttribute: function(style, attr, value) {
+		return changeStyleAttribute(style, attr, value);
+	},
+	getStyleAttribute: function(style, attr) {
+		return getStyleAttribute(style, attr);
+	},
+};
+
+
+/***/ }),
+/* 4 */
+/***/ (function(module, exports) {
+
+/*
 	rgb.js
 	Conversion from and to RBG color format
 	
@@ -494,7 +573,7 @@ module.exports = {
 
 
 /***/ }),
-/* 4 */
+/* 5 */
 /***/ (function(module, exports) {
 
 /*
@@ -568,7 +647,7 @@ module.exports = function() {
 
 
 /***/ }),
-/* 5 */
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -621,7 +700,7 @@ module.exports = function() {
 
 
 /***/ }),
-/* 6 */
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -690,7 +769,7 @@ module.exports = function() {
 
 
 /***/ }),
-/* 7 */
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -768,7 +847,7 @@ module.exports = function() {
 
 
 /***/ }),
-/* 8 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -848,7 +927,7 @@ module.exports = function() {
 
 
 /***/ }),
-/* 9 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -931,7 +1010,7 @@ module.exports = function() {
 
 
 /***/ }),
-/* 10 */
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -1005,7 +1084,7 @@ module.exports = function() {
 
 
 /***/ }),
-/* 11 */
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -1111,7 +1190,7 @@ module.exports = function() {
 
 
 /***/ }),
-/* 12 */
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -1134,7 +1213,7 @@ module.exports = function() {
 */
 
 // List dependencies
-var Sequence = __webpack_require__(13)();
+var Sequence = __webpack_require__(14)();
 
 // Define class of Generator
 class Generator {
@@ -1227,7 +1306,7 @@ module.exports = function() {
 
 
 /***/ }),
-/* 13 */
+/* 14 */
 /***/ (function(module, exports) {
 
 /*
@@ -1287,7 +1366,7 @@ module.exports = function() {
 
 
 /***/ }),
-/* 14 */
+/* 15 */
 /***/ (function(module, exports) {
 
 /*
@@ -1335,7 +1414,7 @@ module.exports = function() {
 
 
 /***/ }),
-/* 15 */
+/* 16 */
 /***/ (function(module, exports) {
 
 /*
@@ -1431,7 +1510,7 @@ module.exports = {
 
 
 /***/ }),
-/* 16 */
+/* 17 */
 /***/ (function(module, exports) {
 
 /*
@@ -1691,7 +1770,7 @@ module.exports = {
 
 
 /***/ }),
-/* 17 */
+/* 18 */
 /***/ (function(module, exports) {
 
 /*
@@ -1762,7 +1841,7 @@ module.exports = function() {
 
 
 /***/ }),
-/* 18 */
+/* 19 */
 /***/ (function(module, exports) {
 
 /*

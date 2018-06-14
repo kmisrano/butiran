@@ -37,10 +37,14 @@
 	20180613
 	Find webpack with mode=none which produces not optimized
 	output of butiran.js in one file.
+	20180614
+	Add css/style.js library to this. Change folder from lib/css
+	to lib.
 */
 
 // lib
 var Grain = require('./lib/grain')();
+var Style = require('./lib/style');
 var Vect3 = require('./lib/vect3')();
 
 // lib/color
@@ -92,4 +96,5 @@ if(typeof window !== 'undefined') {
 	window["Drag"] = Drag;
 	window["Magnetic"] = Magnetic;
 	window["Tablet"] = Tablet;
+	window["Style"] = Style;
 }

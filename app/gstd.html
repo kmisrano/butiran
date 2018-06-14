@@ -12,6 +12,7 @@
 	20180614
 	Continue creating this application, with functions
 	createIODiv, createAllStyles, changeStyleAttribute, openTA.
+	Rename createIODiv to createIOTabText.
 -->
 <html>
 <head>
@@ -33,21 +34,16 @@ main();
 
 // Define main function
 function main() {
-	createAndSetLayoutElements();
-	openTA(0)
-}
-
-// Create all elements and set layout of them
-function createAndSetLayoutElements() {
 	var menu = ["Params", "Results", "Others", "Error", "Now"];
 	var dimension = {width: "300px", height: "300px"};
-	createIODiv(menu, document.body, dimension);
+	var taIds = createTabTextIO(menu, document.body, dimension);
+	console.log(taIds);
 }
 
 // Create IO division based on several divs and a textarea
-function createIODiv(menu, parent, dimension) {
+function createTabTextIO(menu, parent, dimension) {
 	// Set style of the tab
-	createStyle(`
+	Style.createStyle(`
 	.tab {
 		overflow: hidden;
 		width: 200px;
@@ -58,7 +54,7 @@ function createIODiv(menu, parent, dimension) {
 	`);
 
 	// Set style of the buttons inside the tab
-	createStyle(`
+	Style.createStyle(`
 	.tab button {
 		background: #ddd;
 		float: left;
@@ -75,7 +71,7 @@ function createIODiv(menu, parent, dimension) {
 	`);
 
 	// Set style of the buttons inside the tab on mouse hover
-	createStyle(`
+	Style.createStyle(`
 	.tab button:hover {
 		background: #e7e7e7;
 		color: #000;
@@ -83,7 +79,7 @@ function createIODiv(menu, parent, dimension) {
 	`);
 
 	// Set style of current active button
-	createStyle(`
+	Style.createStyle(`
 	.tab button.active {
 		background: #f1f1f1;
 		color: #000;
@@ -91,7 +87,7 @@ function createIODiv(menu, parent, dimension) {
 	`);
 	
 	// Set style of div content, parent of textarea
-	createStyle(`
+	Style.createStyle(`
 	.divcontent {
 		clear: both;
 		padding: 4px 4px;
@@ -100,7 +96,7 @@ function createIODiv(menu, parent, dimension) {
 	`);
 	
 	// Set style of tab content, which is a textarea
-	createStyle(`
+	Style.createStyle(`
 	.tabcontent {
 		width: 182px;
 		display: none;
@@ -120,23 +116,27 @@ function createIODiv(menu, parent, dimension) {
 	// Adjust IODiv dimension
 	var div = document.createElement("div");
 	div.className = "tab";
-	changeStyleAttribute(".tab", "width", width);
-	changeStyleAttribute(".tab", "height", height);
+	Style.changeStyleAttribute(".tab", "width", width);
+	Style.changeStyleAttribute(".tab", "height", height);
 	parent.append(div);
 	
 	// Adjust button width	
 	var btnWidth = Math.floor(parseInt(dimension.width) / N) +
 		"px";
-	changeStyleAttribute(".tab button", "width", btnWidth);
+	Style.changeStyleAttribute(".tab button", "width",
+		btnWidth);
 	
 	for(var i = 0; i < N; i++) {
 		var btnMenu = document.createElement("button");
 		btnMenu.id = "btn" + menu[i];
 		btnMenu.innerHTML = menu[i];
 		btnMenu.className = "tablinks";
-		btnMenu.addEventListener("click", openTA);
+		btnMenu.addEventListener("click", openTabText);
 		div.append(btnMenu);
 	}
+	
+	// Reserver id of textareas
+	var taIds = [];
 	
 	var divMenu = document.createElement("div");
 	divMenu.className = "divcontent";
@@ -144,6 +144,7 @@ function createIODiv(menu, parent, dimension) {
 	for(var i = 0; i < N; i++) {
 		var taMenu = document.createElement("textarea");
 		taMenu.id = "ta" + menu[i];
+		taIds.push(taMenu.id);
 		taMenu.innerHTML = menu[i];
 		taMenu.className = "tabcontent";
 		divMenu.append(taMenu);
@@ -152,42 +153,49 @@ function createIODiv(menu, parent, dimension) {
 	
 	// Get dimension of elements and set its children's
 	var btnPadTop =
-		getStyleAttribute(".tab button", "paddingTop");
+		Style.getStyleAttribute(".tab button", "paddingTop");
 	var btnPadBtm =
-		getStyleAttribute(".tab button", "paddingBottom");
-	var btnHeight = getStyleAttribute(".tab button", "height");
+		Style.getStyleAttribute(".tab button", "paddingBottom");
+	var btnHeight =
+		Style.getStyleAttribute(".tab button", "height");
 	var divHeight = (parseInt(height) - parseInt(btnHeight)
 		- parseInt(btnPadTop) - parseInt(btnPadBtm)) + "px";
-	changeStyleAttribute(".divcontent", "height", divHeight);
+	Style.changeStyleAttribute(".divcontent", "height",
+		divHeight);
 	
 	var divPadTop =
-		getStyleAttribute(".divcontent", "paddingTop");
+		Style.getStyleAttribute(".divcontent", "paddingTop");
 	var divPadBtm =
-		getStyleAttribute(".divcontent", "paddingBottom");
+		Style.getStyleAttribute(".divcontent", "paddingBottom");
 	var tabCoB =
-		getStyleAttribute(".tabcontent", "borderWidth");
+		Style.getStyleAttribute(".tabcontent", "borderWidth");
 	var tabCoH = (parseInt(divHeight) - parseInt(divPadTop)
 		- parseInt(divPadBtm) + 2 * parseInt(tabCoB)) + "px";
-	changeStyleAttribute(".tabcontent", "height", tabCoH);
+	Style.changeStyleAttribute(".tabcontent", "height",
+		tabCoH);
 	
 	var tabCoPL = 
-		getStyleAttribute(".tabcontent", "paddingLeft");
+		Style.getStyleAttribute(".tabcontent", "paddingLeft");
 	var tabCoPR = 
-		getStyleAttribute(".tabcontent", "paddingRight");
-	console.log(tabCoPL, tabCoPR);
+		Style.getStyleAttribute(".tabcontent", "paddingRight");
 	var scrollBarWidth = 10; // Not known
 	var tabCoW = (parseInt(width) - parseInt(tabCoPL)
 		- parseInt(tabCoPR) - scrollBarWidth) + "px";
-	changeStyleAttribute(".tabcontent", "width", tabCoW);
+	Style.changeStyleAttribute(".tabcontent", "width", tabCoW);
 	
 	/*
 	20180614.1301 There are still some problems with dimension,
 	and child - parent size relations in width and height.
 	*/
+	
+	// Call initial active button and textarea
+	openTabText(0);
+	
+	return taIds;
 }
 
 // Open a textarea
-function openTA(event) {
+function openTabText(event) {
 	// Remove active from all button
 	var tablinks = document.getElementsByClassName("tablinks");
 	var N = tablinks.length;
@@ -216,50 +224,6 @@ function openTA(event) {
 		tablinks[0].className += " active";
 		tabcont[0].style.display = "block";
 	}
-}
-
-// Get attribute value of a style
-function getStyleAttribute(style, attr) {
-	var N = document.styleSheets.length;
-	var styles = document.styleSheets;
-	var value;
-	for(var i = 0; i < N; i++)
-	{
-		if(styles[i].rules[0].selectorText == style)
-		value = styles[i].rules[0].style[attr];
-	}
-	return value;
-}
-
-// Change style attribute with value
-function changeStyleAttribute(style, attr, value) {
-	// dudung, "Modify previously defined style in JS"
-	// https://stackoverflow.com/q/50847689/9475509
-	var N = document.styleSheets.length;
-	var styles = document.styleSheets;
-	for(var i = 0; i < N; i++)
-	{
-		if(styles[i].rules[0].selectorText == style)
-		styles[i].rules[0].style[attr] = value;
-	}
-}
-
-// Create a style
-function createStyle(css) {
-	// Christoph, TomFuertes, answer of "How to create
-	// a <style> tag with Javascript"
-	// https://stackoverflow.com/a/524721/9475509
-	var head = document.head ||
-		document.getElementsByTagName("head")[0];
-	var style = document.createElement("style");
-	style.type = "text/css";
-	if(style.styleSheet) {
-		style.styleSheet.cssText = css;
-	} else {
-		var textNode = document.createTextNode(css);
-		style.append(textNode);
-	}
-	head.append(style);
 }
 
 </script>
