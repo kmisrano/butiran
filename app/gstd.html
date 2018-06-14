@@ -1,0 +1,267 @@
+<!doctype html>
+<!--
+	gstd.js
+	Grid based simulation of table dissolution
+	
+	Sparisoma Viridi | dudung@gmail.com
+	
+	20180613
+	Create this HTML application based on lib/grid/table.js
+	in butiran.js libraries and functions.
+	Constructing createAndSetLayoutElements, createStyle.
+	20180614
+	Continue creating this application, with functions
+	createIODiv, createAllStyles, changeStyleAttribute, openTA.
+-->
+<html>
+<head>
+<!--
+<script
+	src="https://raw.githack.com\
+	/dudung/butiran/\
+	master/dist/butiran.js"
+	>
+</script>
+-->
+<script src="butiran.js"></script>
+</head>
+<body>
+<script>
+
+// Call main function
+main();
+
+// Define main function
+function main() {
+	createAndSetLayoutElements();
+	openTA(0)
+}
+
+// Create all elements and set layout of them
+function createAndSetLayoutElements() {
+	var menu = ["Params", "Results", "Others", "Error", "Now"];
+	var dimension = {width: "300px", height: "300px"};
+	createIODiv(menu, document.body, dimension);
+}
+
+// Create IO division based on several divs and a textarea
+function createIODiv(menu, parent, dimension) {
+	// Set style of the tab
+	createStyle(`
+	.tab {
+		overflow: hidden;
+		width: 200px;
+		height: 300px;
+		background: #f1f1f1;
+		border: 1px solid #ccc;
+	}
+	`);
+
+	// Set style of the buttons inside the tab
+	createStyle(`
+	.tab button {
+		background: #ddd;
+		float: left;
+		outline: none;
+		border: none;
+		padding: 6px 6px;
+		width: 60px;
+		height: 28px;
+		cursor: pointer;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+	`);
+
+	// Set style of the buttons inside the tab on mouse hover
+	createStyle(`
+	.tab button:hover {
+		background: #e7e7e7;
+		color: #000;
+	}
+	`);
+
+	// Set style of current active button
+	createStyle(`
+	.tab button.active {
+		background: #f1f1f1;
+		color: #000;
+	}
+	`);
+	
+	// Set style of div content, parent of textarea
+	createStyle(`
+	.divcontent {
+		clear: both;
+		padding: 4px 4px;
+		background: inherit;
+	}
+	`);
+	
+	// Set style of tab content, which is a textarea
+	createStyle(`
+	.tabcontent {
+		width: 182px;
+		display: none;
+		padding: 4px 6px;
+		overflow-Y: scroll;
+		border: 1px solid #aaa;
+	}
+	`);
+	
+	// Get IODiv dimension
+	width = dimension.width;
+	height = dimension.height;
+	
+	// Get number of menu item
+	var N = menu.length;
+
+	// Adjust IODiv dimension
+	var div = document.createElement("div");
+	div.className = "tab";
+	changeStyleAttribute(".tab", "width", width);
+	changeStyleAttribute(".tab", "height", height);
+	parent.append(div);
+	
+	// Adjust button width	
+	var btnWidth = Math.floor(parseInt(dimension.width) / N) +
+		"px";
+	changeStyleAttribute(".tab button", "width", btnWidth);
+	
+	for(var i = 0; i < N; i++) {
+		var btnMenu = document.createElement("button");
+		btnMenu.id = "btn" + menu[i];
+		btnMenu.innerHTML = menu[i];
+		btnMenu.className = "tablinks";
+		btnMenu.addEventListener("click", openTA);
+		div.append(btnMenu);
+	}
+	
+	var divMenu = document.createElement("div");
+	divMenu.className = "divcontent";
+	divMenu.id = "divMenu";
+	for(var i = 0; i < N; i++) {
+		var taMenu = document.createElement("textarea");
+		taMenu.id = "ta" + menu[i];
+		taMenu.innerHTML = menu[i];
+		taMenu.className = "tabcontent";
+		divMenu.append(taMenu);
+	}
+	div.append(divMenu);
+	
+	// Get dimension of elements and set its children's
+	var btnPadTop =
+		getStyleAttribute(".tab button", "paddingTop");
+	var btnPadBtm =
+		getStyleAttribute(".tab button", "paddingBottom");
+	var btnHeight = getStyleAttribute(".tab button", "height");
+	var divHeight = (parseInt(height) - parseInt(btnHeight)
+		- parseInt(btnPadTop) - parseInt(btnPadBtm)) + "px";
+	changeStyleAttribute(".divcontent", "height", divHeight);
+	
+	var divPadTop =
+		getStyleAttribute(".divcontent", "paddingTop");
+	var divPadBtm =
+		getStyleAttribute(".divcontent", "paddingBottom");
+	var tabCoB =
+		getStyleAttribute(".tabcontent", "borderWidth");
+	var tabCoH = (parseInt(divHeight) - parseInt(divPadTop)
+		- parseInt(divPadBtm) + 2 * parseInt(tabCoB)) + "px";
+	changeStyleAttribute(".tabcontent", "height", tabCoH);
+	
+	var tabCoPL = 
+		getStyleAttribute(".tabcontent", "paddingLeft");
+	var tabCoPR = 
+		getStyleAttribute(".tabcontent", "paddingRight");
+	console.log(tabCoPL, tabCoPR);
+	var scrollBarWidth = 10; // Not known
+	var tabCoW = (parseInt(width) - parseInt(tabCoPL)
+		- parseInt(tabCoPR) - scrollBarWidth) + "px";
+	changeStyleAttribute(".tabcontent", "width", tabCoW);
+	
+	/*
+	20180614.1301 There are still some problems with dimension,
+	and child - parent size relations in width and height.
+	*/
+}
+
+// Open a textarea
+function openTA(event) {
+	// Remove active from all button
+	var tablinks = document.getElementsByClassName("tablinks");
+	var N = tablinks.length;
+	for(var i = 0; i < N; i++) {
+		var className = tablinks[i].className;
+		var newClassName = className.replace("active", "");
+		tablinks[i].className = newClassName;
+	}
+	
+	// Hide all tabcontent
+	var tabcont = document.getElementsByClassName("tabcontent");
+	var N = tabcont.length;
+	for(var i = 0; i < N; i++) {
+		tabcont[i].style.display = "none";
+	}
+	
+	// Set active to current button and show related content
+	var target = event.target;
+	if(target != undefined) {
+		target.className += " active";
+		var id = "ta" + target.id.substring(3);
+		var ta = document.getElementById(id);
+		ta.style.display = "block";
+	} else {
+		var id = event;
+		tablinks[0].className += " active";
+		tabcont[0].style.display = "block";
+	}
+}
+
+// Get attribute value of a style
+function getStyleAttribute(style, attr) {
+	var N = document.styleSheets.length;
+	var styles = document.styleSheets;
+	var value;
+	for(var i = 0; i < N; i++)
+	{
+		if(styles[i].rules[0].selectorText == style)
+		value = styles[i].rules[0].style[attr];
+	}
+	return value;
+}
+
+// Change style attribute with value
+function changeStyleAttribute(style, attr, value) {
+	// dudung, "Modify previously defined style in JS"
+	// https://stackoverflow.com/q/50847689/9475509
+	var N = document.styleSheets.length;
+	var styles = document.styleSheets;
+	for(var i = 0; i < N; i++)
+	{
+		if(styles[i].rules[0].selectorText == style)
+		styles[i].rules[0].style[attr] = value;
+	}
+}
+
+// Create a style
+function createStyle(css) {
+	// Christoph, TomFuertes, answer of "How to create
+	// a <style> tag with Javascript"
+	// https://stackoverflow.com/a/524721/9475509
+	var head = document.head ||
+		document.getElementsByTagName("head")[0];
+	var style = document.createElement("style");
+	style.type = "text/css";
+	if(style.styleSheet) {
+		style.styleSheet.cssText = css;
+	} else {
+		var textNode = document.createTextNode(css);
+		style.append(textNode);
+	}
+	head.append(style);
+}
+
+</script>
+</body>
+</html>
