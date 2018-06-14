@@ -1906,7 +1906,12 @@ module.exports = {
 	Continue creating this application, with functions
 	createIODiv, createAllStyles, changeStyleAttribute, openTA.
 	Rename createIODiv to createIOTabText.
+	Add pop and push.
 */
+
+// Reserver id of textareas
+var taIds = [];
+var taId;
 
 // Create IO division based on several divs and a textarea
 function createTabTextIO(menu, parent, dimension) {
@@ -2003,9 +2008,6 @@ function createTabTextIO(menu, parent, dimension) {
 		div.append(btnMenu);
 	}
 	
-	// Reserver id of textareas
-	var taIds = [];
-	
 	var divMenu = document.createElement("div");
 	divMenu.className = "divcontent";
 	divMenu.id = "divMenu";
@@ -2094,6 +2096,33 @@ function openTabText(event) {
 	}
 }
 
+// Set id
+function setId(id) {
+	taId = taIds[id];
+	console.log(taId);
+}
+
+// Pop last line from textarea
+function pop(id) {
+	var ta = document.getElementById(taId);
+	var val = ta.value;
+	var lines = val.split("\n");
+	var last = lines.pop();
+	val = lines.join("\n");
+	ta.value = val;
+	return last;
+}
+
+// Push to textarea
+function push(line) {
+	var ta = document.getElementById(taId);
+	var val = ta.value;
+	var lines = val.split("\n");
+	lines.push(line);
+	val = lines.join("\n");
+	ta.value = val;
+}
+
 // Export module
 module.exports = {
 	createTabTextIO: function(menu, parent, dimension) {
@@ -2101,7 +2130,16 @@ module.exports = {
 	},
 	openTabText: function(event) {
 		return openTabText(event);
-	}
+	},
+	setId: function(id) {
+		return setId(id);
+	},
+	pop: function() {
+		return pop();
+	},
+	push: function(line) {
+		return push(line);
+	},
 };
 
 

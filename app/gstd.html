@@ -36,10 +36,13 @@ main()
 function main() {
 	var menu = ["Params", "Results", "Others", "Error", "Now"];
 	var dimension = {width: "350px", height: "200px"};
-	var taIds = TabText
-		.createTabTextIO(menu, document.body, dimension);
-	console.log(taIds);
+	TabText.createTabTextIO(menu, document.body, dimension);
+	TabText.setId(0);
+	TabText.push("test1");
+	TabText.push("test2");
+	TabText.push("test3");
 }
+
 </script>
 </body>
 </html>
