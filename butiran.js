@@ -40,6 +40,7 @@
 	20180614
 	Add css/style.js library to this. Change folder from lib/css
 	to lib.
+	Add tabtext.js and tabcanvas.js libraries and functions.
 */
 
 // lib
@@ -77,6 +78,7 @@ var Random = require('./lib/generator/random');
 
 // lib/ui
 var TabText = require('./lib/ui/tabtext.js');
+var TabCanvas = require('./lib/ui/tabcanvas.js');
 
 // Store information 
 if(typeof window !== 'undefined') {
@@ -101,4 +103,5 @@ if(typeof window !== 'undefined') {
 	window["Tablet"] = Tablet;
 	window["Style"] = Style;
 	window["TabText"] = TabText;
+	window["TabCanvas"] = TabCanvas;
 }

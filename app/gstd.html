@@ -39,6 +39,9 @@ function main() {
 	var dimension = {width: "350px", height: "200px"};
 	TabText.createTabTextIO(menu, document.body, dimension);
 	
+	TabCanvas
+		.createTabCanvasIO(menu, document.body, dimension);
+	
 	// Set to a textarea and manipulate the content
 	TabText.setId(0);
 	TabText.push("test1");
