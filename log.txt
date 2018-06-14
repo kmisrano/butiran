@@ -1,7 +1,71 @@
 [20180614]
+It works
+
+1
+Create github folder
+
+2
+In the github folder Git Bash Here with right click
+
+3
+git clone https://github.com/dudung/butiran
+
+4
+git config --global user.email "user@server.com"
+git config --globar user.name "username"
+Close Git Bash
+
+5
+In github/butiran Git Bash Here
+
+6
+Change log.txt file
+
+7
+git add log.txt
+git commit -a -m "Change log.txt"
+git push
+
 Create style.js and start ui library of functions.
 Confusing with git bash. And still. It works and tested again.
 Recreate directory and test update.
+
+
+[20180226]
+Initialize git
+git init
+
+Clear git
+rm -rf .git
+
+Configure user email and user name
+git config --global user.email "user@server.com"
+git config --globar user.name "username"
+
+Add all directory
+git add
+
+Commit first change
+git commit -a -m "my initial commit"
+
+Show log
+git log
+
+Show status
+git status
+
+Restore previous id
+git checkout id
+
+Pull origin master
+git pull origin master
+
+Push origin master
+git push origin master
+
+Clone a repo
+git clone url-repo
+
 
 [20180613]
 Start to port app/*.js to app/*.html by only including
@@ -12,3 +76,4 @@ Library of fs for writing file is not work with weback. See
 sandbox/die/testfs.js for this.
 Move app/fsgd.js and app/fcbs.js to app/js and later to be
 converted to html based application not js.
+
