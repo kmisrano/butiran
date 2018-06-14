@@ -1,6 +1,7 @@
 [20180614]
 Create style.js and start ui library of functions.
 Confusing with git bash. And still. It works and tested again.
+Recreate directory and test update.
 
 [20180613]
 Start to port app/*.js to app/*.html by only including
