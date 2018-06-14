@@ -1,6 +1,11 @@
 [20180615]
+
 0414
 Today plan is to convert or transfor tabtext.js and tabcanvas.js, where the later has not yet worked, to object and create a better procedure in giving id for each canvas or simply draw using object function instead of directly accessing the canvas.
+
+0421
+First is to calm self down and thinkin about the name. The idea is to have tabs of textarea and canvas which can be shown by clicking appropriate button. The textarea and canvas can be used as I/O for UI (or GUI). Tab as the beginning maybe ok. And the content could be flexible, which are textarea and canvas? Maybe it is better to design it in gstd.html instead directly using node.js, just of efficiency of transpiling.
+
 
 [20180614]
 tabtext.js and tabcanvas.js can not declare more than once since they have not unique id. It must be fixed.
