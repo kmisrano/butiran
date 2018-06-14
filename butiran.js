@@ -75,6 +75,9 @@ var Integration = require('./lib/math/integration');
 var Polynomial = require('./lib/math/polynomial')();
 var Random = require('./lib/generator/random');
 
+// lib/ui
+var TabText = require('./lib/ui/tabtext.js');
+
 // Store information 
 if(typeof window !== 'undefined') {
 	// Store to window object -- 20180519.2358
@@ -97,4 +100,5 @@ if(typeof window !== 'undefined') {
 	window["Magnetic"] = Magnetic;
 	window["Tablet"] = Tablet;
 	window["Style"] = Style;
+	window["TabText"] = TabText;
 }
