@@ -34,13 +34,18 @@ main()
 
 // Define main function
 function main() {
+	// Define menu items, dimension of TabTextIO, and create it
 	var menu = ["Params", "Results", "Others", "Error", "Now"];
 	var dimension = {width: "350px", height: "200px"};
 	TabText.createTabTextIO(menu, document.body, dimension);
+	
+	// Set to a textarea and manipulate the content
 	TabText.setId(0);
 	TabText.push("test1");
 	TabText.push("test2");
 	TabText.push("test3");
+	TabText.push("test3 wer erw wer wr wee wrew");
+	console.log(TabText.pop());
 }
 
 </script>
