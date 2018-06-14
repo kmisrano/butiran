@@ -1,3 +1,7 @@
+[20180615]
+0414
+Today plan is to convert or transfor tabtext.js and tabcanvas.js, where the later has not yet worked, to object and create a better procedure in giving id for each canvas or simply draw using object function instead of directly accessing the canvas.
+
 [20180614]
 tabtext.js and tabcanvas.js can not declare more than once since they have not unique id. It must be fixed.
 
