@@ -36,8 +36,12 @@ main()
 // Define main function
 function main() {
 	
-	var tabs1 = new Tabs("tabs1", document.body);
-	
+	var tabs1 = new Tabs("tabs1");
+	tabs1.show();
+	//tabs1.hide();
+	var tabs2 = new Tabs("tabs2");
+	tabs2.show();
+	//tabs2.hide();
 	/*
 	// Define menu items, dimension of TabTextIO, and create it
 	var menu = ["Params", "Results", "Others", "Error", "Now"];
