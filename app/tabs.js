@@ -13,6 +13,8 @@
 	20180616
 	Continue creating this class. Class style tablinks must
 	also be labeled with id.
+	20180617
+	Fix referencing to this in event handler.
 */
 
 // Define class of Tabs
@@ -153,14 +155,26 @@ class Tabs {
 		}
 	}
 	
+	// Get class name -- problem by event
+	getStyleClassName() {
+		var scn = [];
+		scn.push(this.tabcs);
+		scn.push(this.tabbtncs);
+		scn.push(this.tablinkscs);
+		scn.push(this.tabcontcs);
+		return scn;
+	}
+		
 	// Toggle tab content when button clicked
 	toggleContent() {
 		// https://www.w3schools.com/howto/howto_js_tabs.asp
 		
+		var parent = event.target.parentElement;
+		console.log(parent);
+				
 		// Remove active from all button
-		console.log(this);
-		var tablinks = document
-			.getElementsByClassName(this.tablinkscs);
+		var tlcs = parent.getStyleClassName();
+		var tablinks = document.getElementsByClassName(tlcs);
 		var N = tablinks.length;
 		for(var i = 0; i < N; i++) {
 			var className = tablinks[i].className;
