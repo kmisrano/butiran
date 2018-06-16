@@ -44,9 +44,11 @@ class Tabs {
 		}
 		
 		// Create style
-		createAllStyle(this.id);
+		this.createAllStyle(this.id);
 		this.tabcs = "tab" + this.id;
 		this.tabbtncs = "tab" + this.id + " button";
+		this.tablinkscs =  "tablinks" + this.id;
+		this.tabcontcs =  "tabcontent" + this.id;
 		
 		// Define visual container
 		var tab  = document.createElement("div");
@@ -101,8 +103,9 @@ class Tabs {
 			if(btn == undefined) {
 				var btn = document.createElement("button");
 				btn.id = id;
-				btn.className = this.id + "tablinks";
+				btn.className = this.tablinkscs;
 				btn.innerHTML = this.tabs[i];
+				btn.addEventListener("click", this.toggleContent)
 				this.tab.append(btn);
 			}
 		}
@@ -137,8 +140,9 @@ class Tabs {
 	// Check and update tab buttons
 	updateTabButtonsWidth() {
 		var N = this.tabs.length;
-		var M = document.getElementsByClassName(this.id +
-			"tablinks").length;
+		var M = document.getElementsByClassName(this.tablinkscs)
+			.length;
+		console.log(this.tablinkscs);
 		// Make sure that label and tabbutton have the same size
 		if(M == N) {
 			var width =
@@ -148,72 +152,111 @@ class Tabs {
 				"width", btnWidth);
 		}
 	}
+	
+	// Toggle tab content when button clicked
+	toggleContent() {
+		// https://www.w3schools.com/howto/howto_js_tabs.asp
+		
+		// Remove active from all button
+		console.log(this);
+		var tablinks = document
+			.getElementsByClassName(this.tablinkscs);
+		var N = tablinks.length;
+		for(var i = 0; i < N; i++) {
+			var className = tablinks[i].className;
+			var newClassName = className.replace("active", "");
+			tablinks[i].className = newClassName;
+		}
+		
+		// Hide all tabcontent
+		var tabcont = document
+			.getElementsByClassName(this.tabcontcs);
+		var N = tabcont.length;
+		for(var i = 0; i < N; i++) {
+			tabcont[i].style.display = "none";
+		}
+		// Set active to current button and show related content
+		var target = event.target;
+		if(target != undefined) {
+			target.className += " active";
+			/*
+			var id = "ta" + target.id.substring(3);
+			var ta = document.getElementById(id);
+			ta.style.display = "block";
+			*/
+		} else {
+			var id = event;
+			tablinks[0].className += " active";
+			tabcont[0].style.display = "block";
+		}
+	}
+	
+	// Create default style for this class
+	createAllStyle(id) {
+		// Set style of the tab
+		Style.createStyle(
+		'.tab' + id + ` {
+			overflow: hidden;
+			width: 240px;
+			height: 200px;
+			background: #f1f1f1;
+			border: 1px solid #ccc;
+			float: left;
+		}
+		`);
+
+		// Set style of the buttons inside the tab
+		Style.createStyle(
+		'.tab' + id +  ` button {
+			background: #ddd;
+			float: left;
+			outline: none;
+			border: none;
+			padding: 6px 6px;
+			width: 60px;
+			height: 28px;
+			cursor: pointer;
+			white-space: nowrap;
+			overflow: hidden;
+			text-overflow: ellipsis;
+		}
+		`);
+
+		// Set style of the buttons inside the tab on mouse hover
+		Style.createStyle(
+		'.tab' + id + ` button:hover {
+			background: #e7e7e7;
+			color: #000;
+		}
+		`);
+
+		// Set style of current active button
+		Style.createStyle(
+		'.tab' + id + ` button.active {
+			background: #f1f1f1;
+			color: #000;
+		}
+		`);
+		
+		// Set style of div content, parent of textarea
+		Style.createStyle(
+		'.divcontent' + id + ` {
+			clear: both;
+			padding: 4px 4px;
+			background: inherit;
+		}
+		`);
+		
+		// Set style of tab content, which is a textarea
+		Style.createStyle(
+		'.tabcontent' + id + ` {
+			width: 182px;
+			display: none;
+			padding: 4px 6px;
+			overflow-Y: scroll;
+			border: 1px solid #aaa;
+		}
+		`);
+	}
 }
 
-// Create default style for this class
-function createAllStyle(id) {
-	// Set style of the tab
-	Style.createStyle(
-	'.tab' + id + ` {
-		overflow: hidden;
-		width: 240px;
-		height: 200px;
-		background: #f1f1f1;
-		border: 1px solid #ccc;
-		float: left;
-	}
-	`);
-
-	// Set style of the buttons inside the tab
-	Style.createStyle(
-	'.tab' + id +  ` button {
-		background: #ddd;
-		float: left;
-		outline: none;
-		border: none;
-		padding: 6px 6px;
-		width: 60px;
-		height: 28px;
-		cursor: pointer;
-		white-space: nowrap;
-		overflow: hidden;
-		text-overflow: ellipsis;
-	}
-	`);
-
-	// Set style of the buttons inside the tab on mouse hover
-	Style.createStyle(
-	'.tab' + id + ` button:hover {
-		background: #e7e7e7;
-		color: #000;
-	}
-	`);
-
-	// Set style of current active button
-	Style.createStyle(
-	'.tab' + id + ` button.active {
-		background: #f1f1f1;
-		color: #000;
-	}
-	`);
-	
-	// Set style of div content, parent of textarea
-	Style.createStyle(
-	'.divcontent' + id + ` {
-		clear: both;
-		padding: 4px 4px;
-		background: inherit;
-	}
-	`);
-	
-	// Set style of tab content, which is a textarea
-	Style.createStyle(
-	'.tabcontent' + id + ` {
-		width: 182px;
-		display: none;
-		padding: 4px 6px;
-		overflow-Y: scroll;
-		border: 1px solid #aaa;
-	}
-	`);
-}
