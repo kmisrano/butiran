@@ -93,8 +93,19 @@ class Tabs {
 			var msg = "Duplicate label " + label + " is igonered";
 			console.warn(msg);
 		}
-		//console.log(this.tabs);
-		this.refreshAppendedElements();
+		var N = this.tabs.length;
+		for(var i = 0; i < N; i++) {
+			var id = this.id + this.tabs[i];
+			var btn = document.getElementById(id);
+			if(btn == undefined) {
+				var btn = document.createElement("button");
+				btn.id = id;
+				btn.className = "tablinks";
+				btn.innerHTML = this.tabs[i];
+				this.tab.append(btn);
+			}
+		}
+		this.updateTabButtonsWidth();
 	}
 	
 	// Remove label for tab button
@@ -103,32 +114,41 @@ class Tabs {
 		// Tom Wadley, Beau Smith
 		// https://stackoverflow.com/a/5767357/9475509
 		var i = this.tabs.indexOf(label);
-		this.tabs.splice(i, 1);
-		//console.log(this.tabs);
+		var remE = this.tabs.splice(i, 1);
+		
+		// Warn only for unexisting label for removing
+		if(i < 0) {
+			var msg = "Unexisting label " + label + " for removing "
+				+ "is igonered";
+			console.warn(msg);
+		}
+		
+		// 20180616.1612
+		// Catalin Rosu
+		// https://catalin.red/removing-an-element-with
+		// -plain-javascript-remove-method/
+		var id = this.id + remE;
+		var btn = document.getElementById(id);
+		btn.remove();
+		this.updateTabButtonsWidth();
 	}
 	
-	// Refresh appended elements
-	refreshAppendedElements() {
-		var width =
-			Style.getStyleAttribute('.' + this.tabcs, "width");
+	// Check and update tab buttons
+	updateTabButtonsWidth() {
 		var N = this.tabs.length;
-		var btnWidth = width / N;
-		Style.changeStyleAttribute('.' + this.tabbtncs, "width",
-			btnWidth);
+		var M = document.getElementsByClassName("tablinks")
+			.length;
 		
-		for(var i = 0; i < N; i++) {
-			var id = this.id + this.tabs[i];
-			var btn = document.getElementById(id);
-			if(btn == undefined) {
-				var btn = document.createElement("button");
-				btn.className = "tablinks";
-				btn.innerHTML = this.tabs[i];
-				this.tab.append(btn);
-			}
+		// Make sure that label and tabbutton have the same size
+		if(M == N) {
+			var width =
+				Style.getStyleAttribute('.' + this.tabcs, "width");
+			var btnWidth = parseInt(width) / N + "px";
+			Style.changeStyleAttribute('.' + this.tabbtncs,
+				"width", btnWidth);
+			btnWidth = Style.getStyleAttribute('.' + this.tabbtncs,
+			"width");
 		}
-		/*
-		var id = this.id + "btn" + label;
-		*/
 	}
 }
 
