@@ -10,6 +10,8 @@
 	Create this class in order to overcome problem of not
 	unique ID of elements as TabText and TabCanvas functions
 	are used.
+	20180616
+	Continue creating this class.
 */
 
 // Define class of Tabs
@@ -43,6 +45,7 @@ class Tabs {
 		// Create style
 		createAllStyle(this.id);
 		this.tabcs = "tab" + this.id;
+		this.tabbtncs = "tab" + this.id + " button";
 		
 		// Define visual container
 		var tab  = document.createElement("div");
@@ -62,37 +65,70 @@ class Tabs {
 		this.tabs = [];
 	}
 	
+	// Set background color
 	setBackground(color) {
 		Style.changeStyleAttribute('.' + this.tabcs,
 			"background", color);
 	}
 	
+	// Set width
 	setWidth(width) {
 		Style.changeStyleAttribute('.' + this.tabcs,
 			"width", width);		
 	}
 	
+	// Set hight
 	setHeight(height) {
 		Style.changeStyleAttribute('.' + this.tabcs,
 			"height", height);		
 	}
 	
+	// Ada label for tab button
 	addTab(label) {
-		this.tabs.push(label);
-		console.log(this.tabs);
-		/*
-		var id = this.id + "btn" + label;
-		var width =
-			Style.getStyleAttribute('.' + this.tabcs, "width");
-		*/
+		// Avoid same tab label
+		var ilabel = this.tabs.indexOf(label);
+		if(ilabel < 0) {
+			this.tabs.push(label);
+		} else {
+			var msg = "Duplicate label " + label + " is igonered";
+			console.warn(msg);
+		}
+		//console.log(this.tabs);
+		this.refreshAppendedElements();
 	}
 	
+	// Remove label for tab button
 	removeTab(label) {
 		// 20180616.0445
+		// Tom Wadley, Beau Smith
 		// https://stackoverflow.com/a/5767357/9475509
 		var i = this.tabs.indexOf(label);
 		this.tabs.splice(i, 1);
-		console.log(this.tabs);
+		//console.log(this.tabs);
+	}
+	
+	// Refresh appended elements
+	refreshAppendedElements() {
+		var width =
+			Style.getStyleAttribute('.' + this.tabcs, "width");
+		var N = this.tabs.length;
+		var btnWidth = width / N;
+		Style.changeStyleAttribute('.' + this.tabbtncs, "width",
+			btnWidth);
+		
+		for(var i = 0; i < N; i++) {
+			var id = this.id + this.tabs[i];
+			var btn = document.getElementById(id);
+			if(btn == undefined) {
+				var btn = document.createElement("button");
+				btn.className = "tablinks";
+				btn.innerHTML = this.tabs[i];
+				this.tab.append(btn);
+			}
+		}
+		/*
+		var id = this.id + "btn" + label;
+		*/
 	}
 }
 
