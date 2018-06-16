@@ -11,7 +11,8 @@
 	unique ID of elements as TabText and TabCanvas functions
 	are used.
 	20180616
-	Continue creating this class.
+	Continue creating this class. Class style tablinks must
+	also be labeled with id.
 */
 
 // Define class of Tabs
@@ -100,7 +101,7 @@ class Tabs {
 			if(btn == undefined) {
 				var btn = document.createElement("button");
 				btn.id = id;
-				btn.className = "tablinks";
+				btn.className = this.id + "tablinks";
 				btn.innerHTML = this.tabs[i];
 				this.tab.append(btn);
 			}
@@ -136,9 +137,8 @@ class Tabs {
 	// Check and update tab buttons
 	updateTabButtonsWidth() {
 		var N = this.tabs.length;
-		var M = document.getElementsByClassName("tablinks")
-			.length;
-		
+		var M = document.getElementsByClassName(this.id +
+			"tablinks").length;
 		// Make sure that label and tabbutton have the same size
 		if(M == N) {
 			var width =
@@ -146,8 +146,6 @@ class Tabs {
 			var btnWidth = parseInt(width) / N + "px";
 			Style.changeStyleAttribute('.' + this.tabbtncs,
 				"width", btnWidth);
-			btnWidth = Style.getStyleAttribute('.' + this.tabbtncs,
-			"width");
 		}
 	}
 }

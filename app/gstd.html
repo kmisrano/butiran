@@ -37,18 +37,16 @@ main()
 function main() {
 	
 	var tabs1 = new Tabs("tabs1");
-	tabs1.setWidth("250px");
-	tabs1.setHeight("180px");
+	tabs1.setWidth("180px");
+	tabs1.addTab("Params");
+	tabs1.addTab("Results");
+	tabs1.addTab("Log");
 	
 	var tabs2 = new Tabs("tabs2");
-	tabs2.addTab("Params");
-	tabs2.addTab("Results")
-	tabs2.addTab("Error")
-	tabs2.addTab("Error")
-	tabs2.removeTab("Results")
-	tabs2.addTab("Results")
-	tabs2.addTab("Blablack")
-	tabs2.removeTab("Param")
+	tabs2.setWidth("300px");
+	tabs2.addTab("xy");
+	tabs2.addTab("yz");
+	tabs2.addTab("zx");
 	
 	/*
 	// Define menu items, dimension of TabTextIO, and create it
