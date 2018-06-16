@@ -53,7 +53,7 @@ class Tabs {
 		this.tabcontcs =  "tabcontent" + this.id;
 		
 		// Try not so good workaround
-		localStorage.setItem("tablinkscs", this.tablinkscs);
+		localStorage.setItem(this.tablinkscs, this.tablinkscs);
 		
 		// Define visual container
 		var tab  = document.createElement("div");
@@ -173,10 +173,10 @@ class Tabs {
 		// https://www.w3schools.com/howto/howto_js_tabs.asp
 		
 		var parent = event.target.parentElement;
-		console.log(parent);
+		console.log(parent.id);
 		
 		// Get style name
-		var tlcs = localStorage.getItem("tablinkscs");
+		var tlcs = localStorage.getItem("tablinks" + parent.id);
 
 		// Remove active from all button
 		var tablinks = document.getElementsByClassName(tlcs);
