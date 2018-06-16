@@ -50,6 +50,7 @@ class Tabs {
 		this.tabcs = "tab" + this.id;
 		this.tabbtncs = "tab" + this.id + " button";
 		this.tablinkscs =  "tablinks" + this.id;
+		this.divcontcs =  "divcontent" + this.id;
 		this.tabcontcs =  "tabcontent" + this.id;
 		
 		// Try not so good workaround
@@ -93,6 +94,13 @@ class Tabs {
 	
 	// Ada label for tab button
 	addTab(label) {
+		// Erase div
+		var divid = this.id + "div";
+		var div = document.getElementById(divid);
+		if(div != undefined) {
+			div.remove();
+		}
+		
 		// Avoid same tab label
 		var ilabel = this.tabs.indexOf(label);
 		if(ilabel < 0) {
@@ -101,6 +109,8 @@ class Tabs {
 			var msg = "Duplicate label " + label + " is igonered";
 			console.warn(msg);
 		}
+		
+		// Create tab buttons
 		var N = this.tabs.length;
 		for(var i = 0; i < N; i++) {
 			var id = this.id + this.tabs[i];
@@ -114,6 +124,16 @@ class Tabs {
 				this.tab.append(btn);
 			}
 		}
+		
+		// Recreate div
+		if(div == undefined) {
+			var div = document.createElement("div");
+			div.id = divid;
+			console.log(div.id);
+			div.className = this.divcontcs;
+			this.tab.append(div);
+		}
+		
 		this.updateTabButtonsWidth();
 	}
 	
@@ -170,12 +190,11 @@ class Tabs {
 		
 	// Toggle tab content when button clicked
 	toggleContent() {
+		// The idea using styles is from
 		// https://www.w3schools.com/howto/howto_js_tabs.asp
 		
+		// Get style name with workaround using localStorage
 		var parent = event.target.parentElement;
-		console.log(parent.id);
-		
-		// Get style name
 		var tlcs = localStorage.getItem("tablinks" + parent.id);
 
 		// Remove active from all button
@@ -262,7 +281,7 @@ class Tabs {
 		'.divcontent' + id + ` {
 			clear: both;
 			padding: 4px 4px;
-			background: inherit;
+			background: #ff0; //inherit;
 		}
 		`);
 		
