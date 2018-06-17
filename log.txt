@@ -4,6 +4,7 @@ Adjust width and height of canvas with define using style.
 Check whether text() and graphic() accessed properly and throw error when not.
 Fix message error.
 Canvas has dafault text and curve.
+setContentId, push, pop, clear for textarea are ok, but it still fells like something not too right. It will be change.
 
 
 [20180615]
