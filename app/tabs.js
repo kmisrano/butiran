@@ -430,7 +430,7 @@ class Tabs {
 		return el;
 	}
 	
-	// Manipulate directy tab content of type text
+	// Manipulate directly tab content of type text
 	text(label) {
 		var i = this.tabs.indexOf(label);
 		var id = this.id + this.tabs[i] + "content";
@@ -473,7 +473,7 @@ class Tabs {
 		}
 	}
 
-	// Manipulate directy tab content of type graphic
+	// Manipulate directly tab content of type graphic
 	graphic(label) {
 		var i = this.tabs.indexOf(label);
 		var id = this.id + this.tabs[i] + "content";
@@ -483,6 +483,18 @@ class Tabs {
 		// Handle content as canvas
 		if(canvas) {
 			var can = {
+				xrange: {min: 0, max: 1},
+				yrange: {min: 0, max: 1},
+				getCoordinates: function() {
+					var range = {x: this.xrange, y: this.yrange};
+					return range;
+				},
+				setCoordinates: function({x, y}) {
+					this.xrange.min = x.min;
+					this.xrange.max = x.max;
+					this.yrange.min = y.min;
+					this.yrange.max = y.max;
+				},
 			}
 			return can;
 		} else {
