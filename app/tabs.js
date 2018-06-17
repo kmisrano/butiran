@@ -375,3 +375,34 @@ class Tabs {
 	}
 }
 
+/*
+
+// Access textarea element
+
+// Set id
+function setId(id) {
+	taId = taIds[id];
+}
+
+// Pop last line from textarea
+function pop(id) {
+	var ta = document.getElementById(taId);
+	var val = ta.value;
+	var lines = val.split("\n");
+	var last = lines.pop();
+	val = lines.join("\n");
+	ta.value = val;
+	return last;
+}
+
+// Push to textarea
+function push(line) {
+	var ta = document.getElementById(taId);
+	var val = ta.value;
+	var lines = val.split("\n");
+	lines.push(line);
+	val = lines.join("\n");
+	ta.value = val;
+}
+
+*/
