@@ -418,36 +418,53 @@ class Tabs {
 			return el;
 		}
 	}
+	
+	// Set textarea id for accessing with push, pop, and clear
+	setContentId(label) {
+		var i = this.tabs.indexOf(label);
+		if(i < 0) {
+			var msg = "Tabs " + this.id + " " + label +
+				" does not exist";
+			throw new Error(msg);
+		} else {
+			var contentId = this.id + this.tabs[i] + "content";
+			var ta = document.getElementById(contentId);
+			this.contentId = contentId;			
+		}
+	}
+
+	// Pop last line from textarea
+	pop() {
+		var contentId = this.contentId;
+		if(contentId == undefined) {
+			var msg = "contentId might be not defined, "
+				+ "use setContentId first";
+			throw new Error(msg);
+		} else {
+			var ta = document.getElementById(contentId);
+			var val = ta.value;
+			var lines = val.split("\n");
+			var last = lines.pop();
+			val = lines.join("\n");
+			ta.value = val;
+			return last;
+		}
+	}
+
+	// Push to textarea
+	push(line) {
+		var contentId = this.contentId;
+		if(contentId == undefined) {
+			var msg = "contentId might be not defined, "
+				+ "use setContentId first";
+			throw new Error(msg);
+		} else {
+			var ta = document.getElementById(contentId);
+			var val = ta.value;
+			var lines = val.split("\n");
+			lines.push(line);
+			val = lines.join("\n");
+			ta.value = val;
+		}
+	}
 }
-
-/*
-
-// Access textarea element
-
-// Set id
-function setId(id) {
-	taId = taIds[id];
-}
-
-// Pop last line from textarea
-function pop(id) {
-	var ta = document.getElementById(taId);
-	var val = ta.value;
-	var lines = val.split("\n");
-	var last = lines.pop();
-	val = lines.join("\n");
-	ta.value = val;
-	return last;
-}
-
-// Push to textarea
-function push(line) {
-	var ta = document.getElementById(taId);
-	var val = ta.value;
-	var lines = val.split("\n");
-	lines.push(line);
-	val = lines.join("\n");
-	ta.value = val;
-}
-
-*/
