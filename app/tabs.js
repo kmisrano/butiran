@@ -74,6 +74,9 @@ class Tabs {
 		// Define array for storing tab button information
 		this.tabs = [];
 		this.tabsType = [];
+		
+		// Initiate visible tab
+		this.toggleContent(0);
 	}
 	
 	// Set background color
@@ -154,6 +157,9 @@ class Tabs {
 				div.append(el);
 			}
 		}
+		var tcwidth = 100 + "px";
+		Style.changeStyleAttribute('.' + this.tabcontcs,
+			"width", tcwidth);
 		
 		this.updateTabButtonsWidth();
 	}
