@@ -15,6 +15,9 @@
 	also be labeled with id.
 	20180617
 	Fix referencing to this in event handler.
+	Fix size of canvas.
+	Canvas and textarea can be accessed through text(label)
+	graphic(label).
 */
 
 // Define class of Tabs
@@ -138,25 +141,6 @@ class Tabs {
 			this.tab.append(div);
 		}
 		
-		// Create content of div
-		for(var i = 0; i < N; i++) {
-			var id = this.id + this.tabs[i] + "content";
-			var el = document.getElementById(id);
-			if(el == undefined) {
-				var el;
-				if(this.tabsType[i] == 0) {
-					el = document.createElement("textarea");
-					el.className = this.tabcontcs;
-					el.innerHTML = this.tabs[i];
-				} else if(this.tabsType[i] == 1) {
-					el = document.createElement("canvas");
-					el.className = this.tabcontcs;
-				}
-				el.id = id;
-				div.append(el);
-			}
-		}
-		
 		// Adjust textarea or canvas width
 		var width = parseInt(Style.getStyleAttribute('.' +
 			this.tabcs, "width"));
@@ -180,7 +164,28 @@ class Tabs {
 		Style.changeStyleAttribute('.' + this.tabcontcs,
 			"height", tcheight);
 
-			// Adjust width according to number of tab buttons
+		// Create content of div
+		for(var i = 0; i < N; i++) {
+			var id = this.id + this.tabs[i] + "content";
+			var el = document.getElementById(id);
+			if(el == undefined) {
+				var el;
+				if(this.tabsType[i] == 0) {
+					el = document.createElement("textarea");
+					el.className = this.tabcontcs;
+					el.innerHTML = this.tabs[i];
+				} else if(this.tabsType[i] == 1) {
+					el = document.createElement("canvas");
+					el.className = this.tabcontcs;
+					el.width = parseInt(tcwidth);
+					el.height = parseInt(tcheight);
+				}
+				el.id = id;
+				div.append(el);
+			}
+		}
+		
+		// Adjust width according to number of tab buttons
 		this.updateTabButtonsWidth();
 		
 		// Initiate visible tab -- 20180617.0918
@@ -379,7 +384,14 @@ class Tabs {
 		var i = this.tabs.indexOf(label);
 		var id = this.id + this.tabs[i] + "content";
 		var el = document.getElementById(id);
-		return el;
+		var nottextarea = !(el instanceof HTMLTextAreaElement);
+		if(nottextarea) {
+			var msg = "Tabs " + this.id + " " + label +
+				" is accessed not as textarea";
+			throw new Error(msg);
+		} else {
+			return el;
+		}
 	}
 	
 	// Get access to canvas of tab with name
@@ -387,7 +399,14 @@ class Tabs {
 		var i = this.tabs.indexOf(label);
 		var id = this.id + this.tabs[i] + "content";
 		var el = document.getElementById(id);
-		return el;
+		var notcanvas = !(el instanceof HTMLCanvasElement);
+		if(notcanvas) {
+			var msg = "Tabs " + this.id + " " + label +
+				" is accessed not as canvas";
+			throw new Error(msg);
+		} else {
+			return el;
+		}
 	}
 }
 

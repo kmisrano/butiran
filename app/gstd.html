@@ -52,8 +52,12 @@ function main() {
 	tabs2.addTab("zx", 1);
 	tabs2.addTab("xyz", 1);
 	
-	var el = tabs1.text("Params");
-	el.value = "Hellow world";
+	tabs1.text("Params").value = "Hello, world!";
+	
+	var el2 = tabs1.graphic("xy");
+	el2.getContext("2d").beginPath();
+	el2.getContext("2d").arc(100, 100, 80, 0, 2 * Math.PI);
+	el2.getContext("2d").stroke();
 	
 	/*
 	// Define menu items, dimension of TabTextIO, and create it

@@ -1,5 +1,6 @@
 [20180617]
 Still do something.
+Adjust width and height of canvas with define using style.
 
 
 [20180615]
