@@ -480,4 +480,18 @@ class Tabs {
 			ta.value = "";
 		}
 	}
+	
+	
+	// It should return object that handles value of ta
+	// Manipulate tab content directly -- assuming right label
+	content(label) {
+		var i = this.tabs.indexOf(label);
+		var id = this.id + this.tabs[i] + "content";
+		var el = document.getElementById(id);
+		var textarea = (el instanceof HTMLTextAreaElement);
+		if(textarea) {
+			var lines = el.value.split("\n");
+			return(lines);			
+		}		
+	}
 }
