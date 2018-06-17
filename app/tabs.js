@@ -207,10 +207,18 @@ class Tabs {
 		// Catalin Rosu
 		// https://catalin.red/removing-an-element-with
 		// -plain-javascript-remove-method/
+		// Removing tab button
 		var id = this.id + remE;
 		var btn = document.getElementById(id);
 		btn.remove();
 		this.updateTabButtonsWidth();
+		
+		// Removing element related to tab button
+		var id2 = this.id + remE + "content";
+		var el = document.getElementById(id2);
+		el.remove();
+		
+		console.log(this.tabs, this.tabsType);
 	}
 	
 	// Check and update tab buttons
