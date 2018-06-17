@@ -1,6 +1,7 @@
 [20180617]
 Still do something.
 Adjust width and height of canvas with define using style.
+Check whether text() and graphic() accessed properly and throw error when not.
 
 
 [20180615]
