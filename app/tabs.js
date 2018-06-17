@@ -27,11 +27,11 @@ class Tabs {
 				+ "arguments";
 			throw new Error(msg);
 		} else if(arguments.length == 1){
-			var msg = "Tabs assumes that parent is document."
-				+ "body";
-			console.warn(msg);
 			this.id = arguments[0];
 			this.parentId = "document.body";
+			var msg = "Tabs " + this.id + " assumes that parent is"
+				+ " document.body";
+			console.warn(msg);
 		} else {
 			this.id = arguments[0];
 			this.parentId = arguments[1]
@@ -55,6 +55,7 @@ class Tabs {
 		
 		// Try not so good workaround
 		localStorage.setItem(this.tablinkscs, this.tablinkscs);
+		localStorage.setItem(this.tabcontcs, this.tabcontcs);
 		
 		// Define visual container
 		var tab  = document.createElement("div");
@@ -72,6 +73,7 @@ class Tabs {
 		
 		// Define array for storing tab button information
 		this.tabs = [];
+		this.tabsType = [];
 	}
 	
 	// Set background color
@@ -93,7 +95,7 @@ class Tabs {
 	}
 	
 	// Ada label for tab button
-	addTab(label) {
+	addTab(label, type) {
 		// Erase div
 		var divid = this.id + "div";
 		var div = document.getElementById(divid);
@@ -105,6 +107,7 @@ class Tabs {
 		var ilabel = this.tabs.indexOf(label);
 		if(ilabel < 0) {
 			this.tabs.push(label);
+			this.tabsType.push(type);
 		} else {
 			var msg = "Duplicate label " + label + " is igonered";
 			console.warn(msg);
@@ -129,9 +132,27 @@ class Tabs {
 		if(div == undefined) {
 			var div = document.createElement("div");
 			div.id = divid;
-			console.log(div.id);
 			div.className = this.divcontcs;
 			this.tab.append(div);
+		}
+		
+		// Create content of div
+		for(var i = 0; i < N; i++) {
+			var id = this.id + this.tabs[i] + "content";
+			var el = document.getElementById(id);
+			if(el == undefined) {
+				var el;
+				if(this.tabsType[i] == 0) {
+					el = document.createElement("textarea");
+					el.className = this.tabcontcs;
+					el.innerHTML = this.tabs[i];
+				} else if(this.tabsType[i] == 1) {
+					el = document.createElement("canvas");
+					el.className = this.tabcontcs;
+				}
+				el.id = id;
+				div.append(el);
+			}
 		}
 		
 		this.updateTabButtonsWidth();
@@ -144,6 +165,7 @@ class Tabs {
 		// https://stackoverflow.com/a/5767357/9475509
 		var i = this.tabs.indexOf(label);
 		var remE = this.tabs.splice(i, 1);
+		this.tabsType.splice(i, 1);
 		
 		// Warn only for unexisting label for removing
 		if(i < 0) {
@@ -167,7 +189,6 @@ class Tabs {
 		var N = this.tabs.length;
 		var M = document.getElementsByClassName(this.tablinkscs)
 			.length;
-		console.log(this.tablinkscs);
 		// Make sure that label and tabbutton have the same size
 		if(M == N) {
 			var width =
@@ -178,7 +199,7 @@ class Tabs {
 		}
 	}
 	
-	// Get class name -- problem by event
+	// Get class name -- problem by event also not work
 	getStyleClassName() {
 		var scn = [];
 		scn.push(this.tabcs);
@@ -196,6 +217,7 @@ class Tabs {
 		// Get style name with workaround using localStorage
 		var parent = event.target.parentElement;
 		var tlcs = localStorage.getItem("tablinks" + parent.id);
+		var tccs = localStorage.getItem("tabcontent" + parent.id);
 
 		// Remove active from all button
 		var tablinks = document.getElementsByClassName(tlcs);
@@ -207,8 +229,7 @@ class Tabs {
 		}
 		
 		// Hide all tabcontent
-		var tabcont = document
-			.getElementsByClassName(this.tabcontcs);
+		var tabcont = document.getElementsByClassName(tccs);
 		var N = tabcont.length;
 		for(var i = 0; i < N; i++) {
 			tabcont[i].style.display = "none";
@@ -217,11 +238,9 @@ class Tabs {
 		var target = event.target;
 		if(target != undefined) {
 			target.className += " active";
-			/*
-			var id = "ta" + target.id.substring(3);
-			var ta = document.getElementById(id);
-			ta.style.display = "block";
-			*/
+			var id = target.id + "content";
+			var el = document.getElementById(id);
+			el.style.display = "block";
 		} else {
 			var id = event;
 			tablinks[0].className += " active";
