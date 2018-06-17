@@ -74,9 +74,6 @@ class Tabs {
 		// Define array for storing tab button information
 		this.tabs = [];
 		this.tabsType = [];
-		
-		// Initiate visible tab
-		this.toggleContent(0);
 	}
 	
 	// Set background color
@@ -162,6 +159,9 @@ class Tabs {
 			"width", tcwidth);
 		
 		this.updateTabButtonsWidth();
+		
+		// Initiate visible tab -- 20180617.0918
+		this.toggleContent(0);
 	}
 	
 	// Remove label for tab button
@@ -220,12 +220,13 @@ class Tabs {
 		// The idea using styles is from
 		// https://www.w3schools.com/howto/howto_js_tabs.asp
 		
-		
 		if(event != undefined) {
 			// Get style name with workaround using localStorage
 			var parent = event.target.parentElement;
-			var tlcs = localStorage.getItem("tablinks" + parent.id);
-			var tccs = localStorage.getItem("tabcontent" + parent.id);
+			var tlcs = localStorage
+				.getItem("tablinks" + parent.id);
+			var tccs = localStorage
+				.getItem("tabcontent" + parent.id);
 
 			// Remove active from all button
 			var tablinks = document.getElementsByClassName(tlcs);
@@ -244,18 +245,24 @@ class Tabs {
 			}
 			// Set active to current button and show related content
 			var target = event.target;
-			if(target != undefined) {
-				target.className += " active";
-				var id = target.id + "content";
-				var el = document.getElementById(id);
-				el.style.display = "block";
-			} else {
-				var id = event;
-				tablinks[0].className += " active";
-				tabcont[0].style.display = "block";
-			}
+			target.className += " active";
+			var id = target.id + "content";
+			var el = document.getElementById(id);
+			el.style.display = "block";
 		} else {
+			console.log("Tabs: Adding buton ");
+			var i = arguments[0];
+			var id = this.id;
+			var tlcs = localStorage.getItem("tablinks" + id);
+			var tccs = localStorage.getItem("tabcontent" + id);
+			var tablinks = document.getElementsByClassName(tlcs);
+			var tabcont = document.getElementsByClassName(tccs);
 			
+			// Fixed -- 20180617.0918
+			if(tablinks.length > 0 && tabcont.length > 0) {
+				tablinks[i].className += " active";
+				tabcont[i].style.display = "block";
+			}
 		}
 	}
 	
