@@ -18,6 +18,9 @@
 	Fix size of canvas.
 	Canvas and textarea can be accessed through text(label)
 	graphic(label).
+	20180618
+	Add element(label) for alternative to textarea(label) and
+	canvas(label).
 */
 
 // Define class of Tabs
@@ -417,6 +420,14 @@ class Tabs {
 		} else {
 			return el;
 		}
+	}
+	
+	// Get element
+	element(label) {
+		var i = this.tabs.indexOf(label);
+		var id = this.id + this.tabs[i] + "content";
+		var el = document.getElementById(id);
+		return el;
 	}
 	
 	// Manipulate directy tab content of type text
