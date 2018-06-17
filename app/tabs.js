@@ -128,7 +128,8 @@ class Tabs {
 			}
 		}
 		
-		// Recreate div
+		// Recreate div -- without following line act differently
+		// when number of tab buttons is odd or even
 		div = document.getElementById(divid);
 		if(div == undefined) {
 			var div = document.createElement("div");
@@ -280,8 +281,12 @@ class Tabs {
 			var tablinks = document.getElementsByClassName(tlcs);
 			var tabcont = document.getElementsByClassName(tccs);
 			
-			// Fixed -- 20180617.0918
+			// Fixed -- 20180617.0918 for undefined
+			// -- 1020 for multiple active
 			if(tablinks.length > 0 && tabcont.length > 0) {
+				var className = tablinks[i].className;
+				var newClassName = className.replace("active", "");
+				tablinks[i].className = newClassName;
 				tablinks[i].className += " active";
 				tabcont[i].style.display = "block";
 			}
