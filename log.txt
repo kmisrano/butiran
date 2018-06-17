@@ -6,6 +6,74 @@ Fix message error.
 Canvas has dafault text and curve.
 setContentId, push, pop, clear for textarea are ok, but it still fells like something not too right. It will be change.
 
+remove following code from tabs.js at 2044
+
+// Set textarea id for accessing with push, pop, and clear
+setContentId(label) {
+	var i = this.tabs.indexOf(label);
+	if(i < 0) {
+		var msg = "Tabs " + this.id + " " + label +
+			" does not exist";
+		throw new Error(msg);
+	} else {
+		var contentId = this.id + this.tabs[i] + "content";
+		var ta = document.getElementById(contentId);
+		this.contentId = contentId;			
+	}
+}
+
+// Pop last line from textarea
+pop() {
+	var contentId = this.contentId;
+	if(contentId == undefined) {
+		var msg = "contentId might be not defined, "
+			+ "use setContentId first";
+		throw new Error(msg);
+	} else {
+		var ta = document.getElementById(contentId);
+		var val = ta.value;
+		var lines = val.split("\n");
+		var last = lines.pop();
+		val = lines.join("\n");
+		ta.value = val;
+		return last;
+	}
+}
+
+// Push to textarea
+push(line) {
+	var contentId = this.contentId;
+	if(contentId == undefined) {
+		var msg = "contentId might be not defined, "
+			+ "use setContentId first";
+		throw new Error(msg);
+	} else {
+		var ta = document.getElementById(contentId);
+		var val = ta.value;
+		var lines = val.split("\n");
+		lines.push(line);
+		val = lines.join("\n");
+		ta.value = val;
+	}
+}
+
+// Clear textarea
+clear() {
+	var contentId = this.contentId;
+	if(contentId == undefined) {
+		var msg = "contentId might be not defined, "
+			+ "use setContentId first";
+		throw new Error(msg);
+	} else {
+		var ta = document.getElementById(contentId);
+		ta.value = "";
+	}
+}
+
+since it is substituted by object with push, pop, popAll, clear, which are more efficient and elegant.	
+
+fix clear by next push at 2101.
+
 
 [20180615]
 0414

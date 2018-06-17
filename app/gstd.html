@@ -52,15 +52,13 @@ function main() {
 	tabs2.addTab("zx", 1);
 	tabs2.addTab("xyz", 1);
 	
-	tabs1.setContentId("Log");
-	tabs1.push("Hello, world!");
-	tabs1.push("This morning");
-	console.log(tabs1.pop());
+	tabs1.text("Params").clear();
+	var N = 5;
+	for(var i = 0; i < N; i++) {
+		tabs1.text("Params").push("step " + i);
+	}
 	
-	tabs1.setContentId("Results");
-	tabs1.clear();
-	
-	tabs1.content("Params").push("ds");
+	tabs2.graphic("xy");
 }
 
 </script>

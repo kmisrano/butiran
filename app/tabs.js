@@ -390,7 +390,7 @@ class Tabs {
 	}
 	
 	// Get access to textarea of tab with name
-	text(label) {
+	textarea(label) {
 		var i = this.tabs.indexOf(label);
 		var id = this.id + this.tabs[i] + "content";
 		var el = document.getElementById(id);
@@ -405,7 +405,7 @@ class Tabs {
 	}
 	
 	// Get access to canvas of tab with name
-	graphic(label) {
+	canvas(label) {
 		var i = this.tabs.indexOf(label);
 		var id = this.id + this.tabs[i] + "content";
 		var el = document.getElementById(id);
@@ -419,79 +419,65 @@ class Tabs {
 		}
 	}
 	
-	// Set textarea id for accessing with push, pop, and clear
-	setContentId(label) {
-		var i = this.tabs.indexOf(label);
-		if(i < 0) {
-			var msg = "Tabs " + this.id + " " + label +
-				" does not exist";
-			throw new Error(msg);
-		} else {
-			var contentId = this.id + this.tabs[i] + "content";
-			var ta = document.getElementById(contentId);
-			this.contentId = contentId;			
-		}
-	}
-
-	// Pop last line from textarea
-	pop() {
-		var contentId = this.contentId;
-		if(contentId == undefined) {
-			var msg = "contentId might be not defined, "
-				+ "use setContentId first";
-			throw new Error(msg);
-		} else {
-			var ta = document.getElementById(contentId);
-			var val = ta.value;
-			var lines = val.split("\n");
-			var last = lines.pop();
-			val = lines.join("\n");
-			ta.value = val;
-			return last;
-		}
-	}
-
-	// Push to textarea
-	push(line) {
-		var contentId = this.contentId;
-		if(contentId == undefined) {
-			var msg = "contentId might be not defined, "
-				+ "use setContentId first";
-			throw new Error(msg);
-		} else {
-			var ta = document.getElementById(contentId);
-			var val = ta.value;
-			var lines = val.split("\n");
-			lines.push(line);
-			val = lines.join("\n");
-			ta.value = val;
-		}
-	}
-	
-	// Clear textarea
-	clear() {
-		var contentId = this.contentId;
-		if(contentId == undefined) {
-			var msg = "contentId might be not defined, "
-				+ "use setContentId first";
-			throw new Error(msg);
-		} else {
-			var ta = document.getElementById(contentId);
-			ta.value = "";
-		}
-	}
-	
-	
-	// It should return object that handles value of ta
-	// Manipulate tab content directly -- assuming right label
-	content(label) {
+	// Manipulate directy tab content of type text
+	text(label) {
 		var i = this.tabs.indexOf(label);
 		var id = this.id + this.tabs[i] + "content";
 		var el = document.getElementById(id);
 		var textarea = (el instanceof HTMLTextAreaElement);
+		
+		// Handle content as textarea
 		if(textarea) {
 			var lines = el.value.split("\n");
-			return(lines);			
-		}		
+			var tav = {
+				push: function(line) {
+					// Avoid first empty line after clear textarea
+					if(lines.length == 1 && lines[0].length == 0) {
+						lines[0] = line;
+					} else {
+						lines.push(line);
+					}
+					var val = lines.join("\n");
+					el.value = val;
+				},
+				pop: function() {
+					var pl = lines.pop();
+					var val = lines.join("\n");
+					el.value = val;
+					return pl;
+				},
+				popAll: function() {
+					el.value;
+					return lines;
+				},
+				clear: function() {
+					el.value = "";
+				},
+			}
+			return tav;
+		} else {
+			var msg = this.id + " " + this.tabs[i] +
+				" is not a textarea";
+			throw new Error(msg);
+		}
+	}
+
+	// Manipulate directy tab content of type graphic
+	graphic(label) {
+		var i = this.tabs.indexOf(label);
+		var id = this.id + this.tabs[i] + "content";
+		var el = document.getElementById(id);
+		var canvas = (el instanceof HTMLCanvasElement);
+		
+		// Handle content as canvas
+		if(canvas) {
+			var can = {
+			}
+			return can;
+		} else {
+			var msg = this.id + " " + this.tabs[i] +
+				" is not a canvas";
+			throw new Error(msg);
+		}
 	}
 }
