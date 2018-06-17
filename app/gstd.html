@@ -38,12 +38,11 @@ function main() {
 	
 	var tabs1 = new Tabs("tabs1");
 	tabs1.setWidth("180px");
-	tabs1.addTab("Params", 0);
-	tabs1.addTab("Results", 1);
-	tabs1.addTab("Log", 0);
 	tabs1.addTab("Error", 0);
-	tabs1.removeTab("Log");
-	tabs1.removeTab("Params");
+	tabs1.addTab("Params", 0);
+	tabs1.addTab("Results", 0);
+	tabs1.addTab("Log", 0);
+	tabs1.removeTab("Error");
 	
 	var tabs2 = new Tabs("tabs2");
 	tabs2.setWidth("300px");
