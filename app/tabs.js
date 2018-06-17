@@ -467,4 +467,17 @@ class Tabs {
 			ta.value = val;
 		}
 	}
+	
+	// Clear textarea
+	clear() {
+		var contentId = this.contentId;
+		if(contentId == undefined) {
+			var msg = "contentId might be not defined, "
+				+ "use setContentId first";
+			throw new Error(msg);
+		} else {
+			var ta = document.getElementById(contentId);
+			ta.value = "";
+		}
+	}
 }
