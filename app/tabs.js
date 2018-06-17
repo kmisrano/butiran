@@ -129,6 +129,7 @@ class Tabs {
 		}
 		
 		// Recreate div
+		div = document.getElementById(divid);
 		if(div == undefined) {
 			var div = document.createElement("div");
 			div.id = divid;
@@ -264,6 +265,7 @@ class Tabs {
 			for(var i = 0; i < N; i++) {
 				tabcont[i].style.display = "none";
 			}
+			
 			// Set active to current button and show related content
 			var target = event.target;
 			target.className += " active";
@@ -350,6 +352,8 @@ class Tabs {
 			padding: 4px 6px;
 			overflow-Y: scroll;
 			border: 1px solid #aaa;
+			background: #fff;
+			margin: 0px;
 		}
 		`);
 	}
