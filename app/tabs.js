@@ -373,6 +373,22 @@ class Tabs {
 		}
 		`);
 	}
+	
+	// Get access to textarea of tab with name
+	text(label) {
+		var i = this.tabs.indexOf(label);
+		var id = this.id + this.tabs[i] + "content";
+		var el = document.getElementById(id);
+		return el;
+	}
+	
+	// Get access to canvas of tab with name
+	graphic(label) {
+		var i = this.tabs.indexOf(label);
+		var id = this.id + this.tabs[i] + "content";
+		var el = document.getElementById(id);
+		return el;
+	}
 }
 
 /*
