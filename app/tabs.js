@@ -154,10 +154,31 @@ class Tabs {
 				div.append(el);
 			}
 		}
-		var tcwidth = 100 + "px";
+		
+		// Adjust textarea or canvas width
+		var width = parseInt(Style.getStyleAttribute('.' +
+			this.tabcs, "width"));
+		var pl = parseInt(Style.getStyleAttribute('.' +
+			this.divcontcs, "paddingLeft"));
+		var pr = parseInt(Style.getStyleAttribute('.' +
+			this.divcontcs, "paddingRight"));
+		var dh = 14;
+		var tcwidth = (width - pl - pr - dh) + "px";
 		Style.changeStyleAttribute('.' + this.tabcontcs,
 			"width", tcwidth);
 		
+		var height = parseInt(Style.getStyleAttribute('.' +
+			this.tabcs, "height"));
+		var pt = parseInt(Style.getStyleAttribute('.' +
+			this.divcontcs, "paddingTop"));
+		var pb = parseInt(Style.getStyleAttribute('.' +
+			this.divcontcs, "paddingBottom"));
+		var dv = 38;
+		var tcheight = (height - pt - pb - dv) + "px";
+		Style.changeStyleAttribute('.' + this.tabcontcs,
+			"height", tcheight);
+
+			// Adjust width according to number of tab buttons
 		this.updateTabButtonsWidth();
 		
 		// Initiate visible tab -- 20180617.0918
@@ -250,7 +271,6 @@ class Tabs {
 			var el = document.getElementById(id);
 			el.style.display = "block";
 		} else {
-			console.log("Tabs: Adding buton ");
 			var i = arguments[0];
 			var id = this.id;
 			var tlcs = localStorage.getItem("tablinks" + id);
@@ -318,7 +338,7 @@ class Tabs {
 		'.divcontent' + id + ` {
 			clear: both;
 			padding: 4px 4px;
-			background: #ff0; //inherit;
+			background: inherit;
 		}
 		`);
 		
