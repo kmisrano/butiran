@@ -220,37 +220,42 @@ class Tabs {
 		// The idea using styles is from
 		// https://www.w3schools.com/howto/howto_js_tabs.asp
 		
-		// Get style name with workaround using localStorage
-		var parent = event.target.parentElement;
-		var tlcs = localStorage.getItem("tablinks" + parent.id);
-		var tccs = localStorage.getItem("tabcontent" + parent.id);
-
-		// Remove active from all button
-		var tablinks = document.getElementsByClassName(tlcs);
-		var N = tablinks.length;
-		for(var i = 0; i < N; i++) {
-			var className = tablinks[i].className;
-			var newClassName = className.replace("active", "");
-			tablinks[i].className = newClassName;
-		}
 		
-		// Hide all tabcontent
-		var tabcont = document.getElementsByClassName(tccs);
-		var N = tabcont.length;
-		for(var i = 0; i < N; i++) {
-			tabcont[i].style.display = "none";
-		}
-		// Set active to current button and show related content
-		var target = event.target;
-		if(target != undefined) {
-			target.className += " active";
-			var id = target.id + "content";
-			var el = document.getElementById(id);
-			el.style.display = "block";
+		if(event != undefined) {
+			// Get style name with workaround using localStorage
+			var parent = event.target.parentElement;
+			var tlcs = localStorage.getItem("tablinks" + parent.id);
+			var tccs = localStorage.getItem("tabcontent" + parent.id);
+
+			// Remove active from all button
+			var tablinks = document.getElementsByClassName(tlcs);
+			var N = tablinks.length;
+			for(var i = 0; i < N; i++) {
+				var className = tablinks[i].className;
+				var newClassName = className.replace("active", "");
+				tablinks[i].className = newClassName;
+			}
+			
+			// Hide all tabcontent
+			var tabcont = document.getElementsByClassName(tccs);
+			var N = tabcont.length;
+			for(var i = 0; i < N; i++) {
+				tabcont[i].style.display = "none";
+			}
+			// Set active to current button and show related content
+			var target = event.target;
+			if(target != undefined) {
+				target.className += " active";
+				var id = target.id + "content";
+				var el = document.getElementById(id);
+				el.style.display = "block";
+			} else {
+				var id = event;
+				tablinks[0].className += " active";
+				tabcont[0].style.display = "block";
+			}
 		} else {
-			var id = event;
-			tablinks[0].className += " active";
-			tabcont[0].style.display = "block";
+			
 		}
 	}
 	
