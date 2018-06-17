@@ -179,6 +179,16 @@ class Tabs {
 					el.className = this.tabcontcs;
 					el.width = parseInt(tcwidth);
 					el.height = parseInt(tcheight);
+					el.getContext("2d").font = "12px Courier";
+					el.getContext("2d").fillText(this.tabs[i], 2, 10);
+					el.getContext("2d").beginPath();
+					el.getContext("2d")
+						.arc(45, 45, 20, 0, 2 * Math.PI);
+					el.getContext("2d").stroke();
+					el.getContext("2d").beginPath();
+					el.getContext("2d")
+						.arc(55, 25, 10, 0, 2 * Math.PI);
+					el.getContext("2d").stroke();
 				}
 				el.id = id;
 				div.append(el);

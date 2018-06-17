@@ -3,6 +3,7 @@ Still do something.
 Adjust width and height of canvas with define using style.
 Check whether text() and graphic() accessed properly and throw error when not.
 Fix message error.
+Canvas has dafault text and curve.
 
 
 [20180615]
