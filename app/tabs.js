@@ -387,7 +387,7 @@ class Tabs {
 		var nottextarea = !(el instanceof HTMLTextAreaElement);
 		if(nottextarea) {
 			var msg = "Tabs " + this.id + " " + label +
-				" is accessed not as textarea";
+				" is not as a textarea";
 			throw new Error(msg);
 		} else {
 			return el;
@@ -402,7 +402,7 @@ class Tabs {
 		var notcanvas = !(el instanceof HTMLCanvasElement);
 		if(notcanvas) {
 			var msg = "Tabs " + this.id + " " + label +
-				" is accessed not as canvas";
+				" is not as a canvas";
 			throw new Error(msg);
 		} else {
 			return el;
