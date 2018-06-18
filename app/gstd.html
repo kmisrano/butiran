@@ -113,6 +113,10 @@ function initiate() {
 	btn.innerHTML = "Start"
 	btn.addEventListener("click", buttonClick);
 	document.body.append(btn);
+	
+	// Update log
+	tabs1.text("Log").clear();
+	tabs1.text("Log").push(logjs[0].text);
 }
 
 // Do something when button clicked
