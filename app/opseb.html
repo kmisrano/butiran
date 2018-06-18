@@ -109,7 +109,14 @@ function initiate() {
 	document.body.append(btn);
 	
 	// Show log manually
-	console.log(showOnly(logjs).forDate(20180619));
+	console.log(
+		showOnly(logjs).forFilter(
+			{
+				app: "opseb",
+				date: "20180619",
+			}
+		)
+	);
 }
 
 // Do something when button clicked
