@@ -70,6 +70,7 @@ var Generator = require('./lib/generator/generator')();
 var Random = require('./lib/generator/random');
 var Sequence = require('./lib/generator/sequence')();
 var Timer = require('./lib/generator/timer')();
+var Sample = require('./lib/generator/sample')();
 
 // lib/grid
 var Tablet = require('./lib/grid/tablet');
@@ -110,4 +111,5 @@ if(typeof window !== 'undefined') {
 	window["TabCanvas"] = TabCanvas;
 	window["Transformation"] = Transformation;
 	window["Parse"] = Parse;
+	window["Sample"] = Sample;
 }

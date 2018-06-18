@@ -145,19 +145,20 @@ var Generator = __webpack_require__(13)();
 var Random = __webpack_require__(15);
 var Sequence = __webpack_require__(14)();
 var Timer = __webpack_require__(16)();
+var Sample = __webpack_require__(17)();
 
 // lib/grid
-var Tablet = __webpack_require__(17);
+var Tablet = __webpack_require__(18);
 
 // lib/math
-var Integration = __webpack_require__(18);
-var Polynomial = __webpack_require__(19)();
-var Transformation = __webpack_require__(20);
+var Integration = __webpack_require__(19);
+var Polynomial = __webpack_require__(20)();
+var Transformation = __webpack_require__(21);
 
 // lib/ui
-var TabText = __webpack_require__(21);
-var TabCanvas = __webpack_require__(22);
-var Parse = __webpack_require__(23);
+var TabText = __webpack_require__(22);
+var TabCanvas = __webpack_require__(23);
+var Parse = __webpack_require__(24);
 
 // Store information 
 if(typeof window !== 'undefined') {
@@ -185,6 +186,7 @@ if(typeof window !== 'undefined') {
 	window["TabCanvas"] = TabCanvas;
 	window["Transformation"] = Transformation;
 	window["Parse"] = Parse;
+	window["Sample"] = Sample;
 }
 
 
@@ -1474,6 +1476,48 @@ module.exports = function() {
 /***/ (function(module, exports) {
 
 /*
+	sample.js
+	Sample data from calculated one
+	
+	Sparisoma Viridi | dudung@gmail.com
+	
+	20180619
+	Start this library.
+*/
+
+// Define class of Sample
+class Sample {
+	
+	// Define constructor
+	constructor(period, dt) {
+		this.period = period;
+		this.dt = dt;
+		this.maxCount = parseInt(period / dt);
+		this.count = this.maxCount;
+	}
+	
+	sampling() {
+		var state = false;
+		if(this.count >= this.maxCount) {
+			this.count = 0;
+			state = true;
+		}
+		this.count++;
+		return state;
+	}
+}
+
+// Export module
+module.exports = function() {
+	return Sample;
+};
+
+
+/***/ }),
+/* 18 */
+/***/ (function(module, exports) {
+
+/*
 	tablet.js
 	Grid based tablet
 	
@@ -1566,7 +1610,7 @@ module.exports = {
 
 
 /***/ }),
-/* 18 */
+/* 19 */
 /***/ (function(module, exports) {
 
 /*
@@ -1826,7 +1870,7 @@ module.exports = {
 
 
 /***/ }),
-/* 19 */
+/* 20 */
 /***/ (function(module, exports) {
 
 /*
@@ -1897,7 +1941,7 @@ module.exports = function() {
 
 
 /***/ }),
-/* 20 */
+/* 21 */
 /***/ (function(module, exports) {
 
 /*
@@ -1936,7 +1980,7 @@ module.exports = {
 
 
 /***/ }),
-/* 21 */
+/* 22 */
 /***/ (function(module, exports) {
 
 /*
@@ -2194,7 +2238,7 @@ module.exports = {
 
 
 /***/ }),
-/* 22 */
+/* 23 */
 /***/ (function(module, exports) {
 
 /*
@@ -2446,7 +2490,7 @@ module.exports = {
 
 
 /***/ }),
-/* 23 */
+/* 24 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
