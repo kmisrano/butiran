@@ -182,6 +182,7 @@ if(typeof window !== 'undefined') {
 	window["Style"] = Style;
 	window["TabText"] = TabText;
 	window["TabCanvas"] = TabCanvas;
+	window["Transformation"] = Transformation;
 }
 
 

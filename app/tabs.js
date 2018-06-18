@@ -502,10 +502,80 @@ class Tabs {
 				setFillColor: function(color) {
 					ctx.fillStyle = color;
 				},
-				drawRect: function(x, y, width, height) {
-					ctx.beginPath();
-					ctx.rect(x, y, width, height);
-					ctx.stroke();
+				rect: function(x, y, width, height) {
+					var xx = Transformation.linearTransform(
+						x,
+						[el.range[0], el.range[2]], 
+						[el.RANGE[0], el.RANGE[2]]
+					);
+					var yy = Transformation.linearTransform(
+						y,
+						[el.range[1], el.range[3]], 
+						[el.RANGE[1], el.RANGE[3]]
+					);
+					var xxdx = Transformation.linearTransform(
+						x + width,
+						[el.range[0], el.range[2]], 
+						[el.RANGE[0], el.RANGE[2]]
+					);
+					var yydy = Transformation.linearTransform(
+						y + height,
+						[el.range[1], el.range[3]], 
+						[el.RANGE[1], el.RANGE[3]]
+					);
+					var ww = xxdx - xx;
+					var hh = yydy - yy;
+					ctx.rect(xx, yy, ww, hh);
+				},
+				strokeRect: function(x, y, width, height) {
+					var xx = Transformation.linearTransform(
+						x,
+						[el.range[0], el.range[2]], 
+						[el.RANGE[0], el.RANGE[2]]
+					);
+					var yy = Transformation.linearTransform(
+						y,
+						[el.range[1], el.range[3]], 
+						[el.RANGE[1], el.RANGE[3]]
+					);
+					var xxdx = Transformation.linearTransform(
+						x + width,
+						[el.range[0], el.range[2]], 
+						[el.RANGE[0], el.RANGE[2]]
+					);
+					var yydy = Transformation.linearTransform(
+						y + height,
+						[el.range[1], el.range[3]], 
+						[el.RANGE[1], el.RANGE[3]]
+					);
+					var ww = xxdx - xx;
+					var hh = yydy - yy;
+					ctx.strokeRect(xx, yy, ww, hh);
+				},
+				fillRect: function(x, y, width, height) {
+					var xx = Transformation.linearTransform(
+						x,
+						[el.range[0], el.range[2]], 
+						[el.RANGE[0], el.RANGE[2]]
+					);
+					var yy = Transformation.linearTransform(
+						y,
+						[el.range[1], el.range[3]], 
+						[el.RANGE[1], el.RANGE[3]]
+					);
+					var xxdx = Transformation.linearTransform(
+						x + width,
+						[el.range[0], el.range[2]], 
+						[el.RANGE[0], el.RANGE[2]]
+					);
+					var yydy = Transformation.linearTransform(
+						y + height,
+						[el.range[1], el.range[3]], 
+						[el.RANGE[1], el.RANGE[3]]
+					);
+					var ww = xxdx - xx;
+					var hh = yydy - yy;
+					ctx.fillRect(xx, yy, ww, hh);
 				},
 			}
 			return can;

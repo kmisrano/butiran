@@ -35,7 +35,6 @@ main()
 
 // Define main function
 function main() {
-	
 	var tabs1 = new Tabs("tabs1");
 	tabs1.setWidth("180px");
 	tabs1.addTab("Error", 0);
@@ -61,8 +60,9 @@ function main() {
 	var g = tabs2.graphic("xy");
 	g.setCoord([-1, -1, 1, 1]);
 	g.setLineColor("#00f");
-	g.setFillColor("#aaa");
-	g.drawRect(0, 0, 10, 10);
+	g.strokeRect(0, 0, 0.5, 0.5);
+	g.setFillColor("#faa");
+	g.fillRect(-0.5, -0.5, 0.5, 0.5);
 }
 
 </script>
