@@ -41,6 +41,8 @@
 	Add css/style.js library to this. Change folder from lib/css
 	to lib.
 	Add tabtext.js and tabcanvas.js libraries and functions.
+	20180618
+	Add math/transformation.js for drawing in tab.js class.
 */
 
 // lib
@@ -65,6 +67,7 @@ var Spring = require('./lib/force/spring')();
 
 // lib/generator
 var Generator = require('./lib/generator/generator')();
+var Random = require('./lib/generator/random');
 var Sequence = require('./lib/generator/sequence')();
 var Timer = require('./lib/generator/timer')();
 
@@ -74,7 +77,7 @@ var Tablet = require('./lib/grid/tablet');
 // lib/math
 var Integration = require('./lib/math/integration');
 var Polynomial = require('./lib/math/polynomial')();
-var Random = require('./lib/generator/random');
+var Transformation = require('./lib/math/transformation');
 
 // lib/ui
 var TabText = require('./lib/ui/tabtext.js');

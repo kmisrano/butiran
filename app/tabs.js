@@ -479,21 +479,33 @@ class Tabs {
 		var id = this.id + this.tabs[i] + "content";
 		var el = document.getElementById(id);
 		var canvas = (el instanceof HTMLCanvasElement);
+		var ctx = el.getContext("2d");
 		
 		// Handle content as canvas
 		if(canvas) {
+			// Define COORD
+			el.RANGE = [0, el.height, el.width, 0];
+			
 			var can = {
-				xrange: {min: 0, max: 1},
-				yrange: {min: 0, max: 1},
-				getCoordinates: function() {
-					var range = {x: this.xrange, y: this.yrange};
-					return range;
+				setCoord: function(range) {
+					el.range = range;
 				},
-				setCoordinates: function({x, y}) {
-					this.xrange.min = x.min;
-					this.xrange.max = x.max;
-					this.yrange.min = y.min;
-					this.yrange.max = y.max;
+				getCoord: function() {
+					return el.range;
+				},
+				getCOORD: function() {
+					return el.RANGE;
+				},
+				setLineColor: function(color) {
+					ctx.strokeStyle = color;
+				},
+				setFillColor: function(color) {
+					ctx.fillStyle = color;
+				},
+				drawRect: function(x, y, width, height) {
+					ctx.beginPath();
+					ctx.rect(x, y, width, height);
+					ctx.stroke();
 				},
 			}
 			return can;

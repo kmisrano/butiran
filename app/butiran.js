@@ -116,6 +116,8 @@
 	Add css/style.js library to this. Change folder from lib/css
 	to lib.
 	Add tabtext.js and tabcanvas.js libraries and functions.
+	20180618
+	Add math/transformation.js for drawing in tab.js class.
 */
 
 // lib
@@ -140,20 +142,21 @@ var Spring = __webpack_require__(12)();
 
 // lib/generator
 var Generator = __webpack_require__(13)();
+var Random = __webpack_require__(15);
 var Sequence = __webpack_require__(14)();
-var Timer = __webpack_require__(15)();
+var Timer = __webpack_require__(16)();
 
 // lib/grid
-var Tablet = __webpack_require__(16);
+var Tablet = __webpack_require__(17);
 
 // lib/math
-var Integration = __webpack_require__(17);
-var Polynomial = __webpack_require__(18)();
-var Random = __webpack_require__(19);
+var Integration = __webpack_require__(18);
+var Polynomial = __webpack_require__(19)();
+var Transformation = __webpack_require__(20);
 
 // lib/ui
-var TabText = __webpack_require__(20);
-var TabCanvas = __webpack_require__(21);
+var TabText = __webpack_require__(21);
+var TabCanvas = __webpack_require__(22);
 
 // Store information 
 if(typeof window !== 'undefined') {
@@ -1377,6 +1380,49 @@ module.exports = function() {
 /***/ (function(module, exports) {
 
 /*
+	random.js
+	Generate random number
+	
+	Sparisoma Viridi | dudung@gmail.com
+	
+	20180302
+	Create this library of functions.
+	20180520
+	Add module.export for ES module support.
+*/
+
+// Generate int \in [min, max]
+function randInt(min, max) {
+	var x = Math.random() * (max - min) + min;
+	x = Math.round(x);
+	return x;
+}
+
+// Generate array of N number of int
+function randIntN(min, max, N) {
+	var x = [];
+	for(var i = 0; i < N; i++) {
+		x.push(randInt(min, max));
+	}
+	return x;
+}
+
+// Export module -- 20180520.0724 ok
+module.exports = {
+	randInt: function(min, max) {
+		return randInt(min, max);
+	},
+	randIntN: function(min, max, N) {
+		return randIntN(min, max, N);
+	}
+};
+
+
+/***/ }),
+/* 16 */
+/***/ (function(module, exports) {
+
+/*
 	timer.js
 	Generate timing event using setInterval and clearInterval
 	
@@ -1421,7 +1467,7 @@ module.exports = function() {
 
 
 /***/ }),
-/* 16 */
+/* 17 */
 /***/ (function(module, exports) {
 
 /*
@@ -1517,7 +1563,7 @@ module.exports = {
 
 
 /***/ }),
-/* 17 */
+/* 18 */
 /***/ (function(module, exports) {
 
 /*
@@ -1777,7 +1823,7 @@ module.exports = {
 
 
 /***/ }),
-/* 18 */
+/* 19 */
 /***/ (function(module, exports) {
 
 /*
@@ -1848,50 +1894,46 @@ module.exports = function() {
 
 
 /***/ }),
-/* 19 */
+/* 20 */
 /***/ (function(module, exports) {
 
 /*
-	random.js
-	Generate random number
+	transformation.js
+	Simple coordinates transformation
 	
 	Sparisoma Viridi | dudung@gmail.com
 	
-	20180302
-	Create this library of functions.
-	20180520
-	Add module.export for ES module support.
+	20180221
+	Create as a part of Chart2 class.
+	20180618
+	Move to this separate file for more broader use.
 */
 
-// Generate int \in [min, max]
-function randInt(min, max) {
-	var x = Math.random() * (max - min) + min;
-	x = Math.round(x);
-	return x;
+// Transform linearly coordinate from real to screen
+function linearTransform(x, src, dest) {
+	// Get range of src and dest coordinates
+	var xmin = src[0];
+	var xmax = src[1];
+	var XMIN = dest[0];
+	var XMAX = dest[1];
+	
+	// Perform transformation
+	var M = (XMAX - XMIN) / (xmax - xmin);
+	var X = (x - xmin) * M + XMIN;
+	
+	return X;
 }
 
-// Generate array of N number of int
-function randIntN(min, max, N) {
-	var x = [];
-	for(var i = 0; i < N; i++) {
-		x.push(randInt(min, max));
-	}
-	return x;
-}
-
-// Export module -- 20180520.0724 ok
+// Export module -- 20180618.1133 ok
 module.exports = {
-	randInt: function(min, max) {
-		return randInt(min, max);
+	linearTransform: function(x, src, dest) {
+		return linearTransform(x, src, dest);
 	},
-	randIntN: function(min, max, N) {
-		return randIntN(min, max, N);
-	}
 };
 
 
 /***/ }),
-/* 20 */
+/* 21 */
 /***/ (function(module, exports) {
 
 /*
@@ -2149,7 +2191,7 @@ module.exports = {
 
 
 /***/ }),
-/* 21 */
+/* 22 */
 /***/ (function(module, exports) {
 
 /*

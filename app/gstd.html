@@ -58,14 +58,11 @@ function main() {
 		tabs1.text("Params").push("step " + i);
 	}
 	
-	var range = tabs2.graphic("xy").getCoordinates();
-	console.log(range.x.min, range.x.max);
-	console.log(range.y.min, range.y.max);
-	tabs2.graphic("xy").setCoordinates(
-		{x: {min: -1, max: 1}, y: {min: -1, max: 1}});
-	var range2 = tabs2.graphic("xy").getCoordinates();
-	console.log(range2.x.min, range2.x.max);
-	console.log(range2.y.min, range2.y.max);
+	var g = tabs2.graphic("xy");
+	g.setCoord([-1, -1, 1, 1]);
+	g.setLineColor("#00f");
+	g.setFillColor("#aaa");
+	g.drawRect(0, 0, 10, 10);
 }
 
 </script>
