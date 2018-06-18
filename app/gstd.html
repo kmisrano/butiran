@@ -41,6 +41,11 @@ main()
 
 // Define main function
 function main() {
+	initiate();
+}
+
+// Initiate
+function initate() {
 	// Define first Tabs
 	tabs1 = new Tabs("tabs1");
 	tabs1.setWidth("180px");
@@ -101,7 +106,6 @@ function main() {
 	btn.innerHTML = "Start"
 	btn.addEventListener("click", buttonClick);
 	document.body.append(btn);
-	
 }
 
 // Do something when button clicked
