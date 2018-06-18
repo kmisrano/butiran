@@ -1,6 +1,8 @@
 [20180618]
 Add element(label) for alternative to textarea(label) and canvas(label).
 Update and move test from app/js to app.
+Implement Timer.
+Need to create Sampling.
 
 
 [20180617]

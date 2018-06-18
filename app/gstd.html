@@ -45,7 +45,7 @@ function main() {
 }
 
 // Initiate
-function initate() {
+function initiate() {
 	// Define first Tabs
 	tabs1 = new Tabs("tabs1");
 	tabs1.setWidth("180px");
@@ -96,7 +96,7 @@ function initate() {
 	
 	// Set time and timer variable
 	t = tbeg;
-	proc;
+	proc = new Timer(simulate, Tdata);
 	Ndata = parseInt(Tdata / dt);
 	idata = Ndata;
 	
@@ -113,10 +113,10 @@ function buttonClick(event) {
 	var target = event.target;
 	if(target.innerHTML == "Start") {
 		target.innerHTML = "Stop";
-		proc = setInterval(simulate, 10);
+		proc.start();
 	} else {
 		target.innerHTML = "Start";
-		clearInterval(proc);
+		proc.stop();
 	}
 }
 
@@ -130,7 +130,7 @@ function simulate() {
 		idata = 0;
 	}
 	if(t >= tend) {
-		clearInterval(proc);
+		proc.stop();
 		var btn = document.getElementById("simulation");
 		btn.disabled = "disabled";
 		btn.innerHTML = "Start";
