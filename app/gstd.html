@@ -58,11 +58,36 @@ function main() {
 	}
 	
 	var g = tabs2.graphic("xy");
-	g.setCoord([-1, -1, 1, 1]);
+	console.log(g.getCOORD());
+	g.setCoord([-1.39, -1.02, 1.39, 1.02]);
+
+	g.setLineColor("#f00");
+	g.strokeCircle(-0.5, 0.5, 0.5);
+	g.setFillColor("#aaf");
+	g.setLineColor("#aaf");
+	g.fillCircle(0.5, 0.5, 0.5);
+
 	g.setLineColor("#00f");
 	g.strokeRect(0, 0, 0.5, 0.5);
 	g.setFillColor("#faa");
 	g.fillRect(-0.5, -0.5, 0.5, 0.5);
+	g.setLineColor("#0f0");
+	g.strokeRect(-0.25, -0.25, 0.5, 0.5);
+	
+	g.setLineColor("#000");
+	g.setPointType("circle")
+	g.setPointSize(4);
+	g.point(0.5, -0.5);
+	g.setPointType("box")
+	g.setPointSize(4);
+	g.point(0.8, -0.5);
+	
+	g.setLineColor("#ff0");
+	g.setPointType("circle");
+	for(var x = -0.5; x <= 0.5; x += 0.05) {
+		var y = 2 * x * x;
+		g.point(x, y);
+	}
 }
 
 </script>

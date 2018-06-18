@@ -486,6 +486,7 @@ class Tabs {
 			// Define COORD
 			el.RANGE = [0, el.height, el.width, 0];
 			
+			// Define object for handling drawing process
 			var can = {
 				setCoord: function(range) {
 					el.range = range;
@@ -502,7 +503,7 @@ class Tabs {
 				setFillColor: function(color) {
 					ctx.fillStyle = color;
 				},
-				rect: function(x, y, width, height) {
+				trect: function(x, y, width, height) {
 					var xx = Transformation.linearTransform(
 						x,
 						[el.range[0], el.range[2]], 
@@ -525,57 +526,53 @@ class Tabs {
 					);
 					var ww = xxdx - xx;
 					var hh = yydy - yy;
-					ctx.rect(xx, yy, ww, hh);
+					return [xx, yy, ww, hh];
+				},
+				rect: function(x, y, width, height) {
+					var tc = this.trect(x, y, width, height);
+					ctx.rect(tc[0], tc[1], tc[2], tc[3]);
 				},
 				strokeRect: function(x, y, width, height) {
-					var xx = Transformation.linearTransform(
-						x,
-						[el.range[0], el.range[2]], 
-						[el.RANGE[0], el.RANGE[2]]
-					);
-					var yy = Transformation.linearTransform(
-						y,
-						[el.range[1], el.range[3]], 
-						[el.RANGE[1], el.RANGE[3]]
-					);
-					var xxdx = Transformation.linearTransform(
-						x + width,
-						[el.range[0], el.range[2]], 
-						[el.RANGE[0], el.RANGE[2]]
-					);
-					var yydy = Transformation.linearTransform(
-						y + height,
-						[el.range[1], el.range[3]], 
-						[el.RANGE[1], el.RANGE[3]]
-					);
-					var ww = xxdx - xx;
-					var hh = yydy - yy;
-					ctx.strokeRect(xx, yy, ww, hh);
+					var tc = this.trect(x, y, width, height);
+					ctx.strokeRect(tc[0], tc[1], tc[2], tc[3]);
 				},
 				fillRect: function(x, y, width, height) {
-					var xx = Transformation.linearTransform(
-						x,
-						[el.range[0], el.range[2]], 
-						[el.RANGE[0], el.RANGE[2]]
-					);
-					var yy = Transformation.linearTransform(
-						y,
-						[el.range[1], el.range[3]], 
-						[el.RANGE[1], el.RANGE[3]]
-					);
-					var xxdx = Transformation.linearTransform(
-						x + width,
-						[el.range[0], el.range[2]], 
-						[el.RANGE[0], el.RANGE[2]]
-					);
-					var yydy = Transformation.linearTransform(
-						y + height,
-						[el.range[1], el.range[3]], 
-						[el.RANGE[1], el.RANGE[3]]
-					);
-					var ww = xxdx - xx;
-					var hh = yydy - yy;
-					ctx.fillRect(xx, yy, ww, hh);
+					var tc = this.trect(x, y, width, height);
+					ctx.fillRect(tc[0], tc[1], tc[2], tc[3]);
+				},
+				arc: function(x, y, r, sAngle, eAngle) {
+					var tc = this.trect(x, y, r, r);
+					console.log(tc);
+					ctx.beginPath();
+					ctx.arc(tc[0], tc[1], tc[2], sAngle, eAngle);
+					ctx.stroke();
+				},
+				strokeCircle: function(x, y, r) {
+					this.arc(x, y, r, 0, 2 * Math.PI);
+				},
+				fillCircle: function(x, y, r) {
+					this.arc(x, y, r, 0, 2 * Math.PI);
+					ctx.fill();
+				},
+				setPointType: function(pointType) {
+					el.pointType = pointType;
+				},
+				setPointSize: function(pointSize) {
+					el.pointSize = pointSize;
+				},
+				point: function(x, y) {
+					var r = el.pointSize;
+					var t = el.pointType;
+					if(t == "circle") {
+						var tc = this.trect(x, y, r, r);
+						ctx.beginPath();
+						ctx.arc(tc[0], tc[1], 0.5 * r, 0, 2 * Math.PI);
+						ctx.stroke();
+					} else if(t == "box") {
+						var tc = this.trect(x, y, r, r);
+						var dr = 0.5 * r;
+						ctx.strokeRect(tc[0] - dr, tc[1] - dr, r, r);
+					}
 				},
 			}
 			return can;
