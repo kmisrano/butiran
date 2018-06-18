@@ -29,6 +29,12 @@
 </head>
 <body>
 <script>
+// Define some global variables
+var m, q, r, v;
+var EField, BField;
+var t, dt, tbeg, tend, Tdata, idata, Ndata;
+var proc;
+var tabs1, tabs2;
 
 // Call main function
 main()
@@ -36,15 +42,19 @@ main()
 // Define main function
 function main() {
 	// Define first Tabs
-	var tabs1 = new Tabs("tabs1");
+	tabs1 = new Tabs("tabs1");
 	tabs1.setWidth("180px");
 	tabs1.setHeight("240px");
 	tabs1.addTab("Params", 0);
 	tabs1.addTab("Results", 0);
 	tabs1.addTab("Log", 0);
 	
+	// Clear tabs1
+	tabs1.text("Params").clear();
+	tabs1.text("Results").clear();
+	
 	// Define second Tabs
-	var tabs2 = new Tabs("tabs2");
+	tabs2 = new Tabs("tabs2");
 	tabs2.setWidth("300px");
 	tabs2.setHeight("300px");
 	tabs2.addTab("xy", 1);
@@ -53,7 +63,6 @@ function main() {
 	tabs2.addTab("xyz", 1);
 	
 	// Set parameters
-	tabs1.text("Params").clear();
 	tabs1.text("Params").push("MASS 1");
 	tabs1.text("Params").push("CHARGE 1");
 	tabs1.text("Params").push("VELOCITY 1 0 0");
@@ -62,14 +71,68 @@ function main() {
 	tabs1.text("Params").push("ELECFIELD 0 0 1");
 	tabs1.text("Params").push("GRAVFIELD 0 0 0");
 	tabs1.text("Params").push("MOMEFIELD 0 0 0");
-	tabs1.text("Params").push("TSTEP 1E-5");
+	tabs1.text("Params").push("TSTEP 1E-3");
 	tabs1.text("Params").push("TDATA 1E-1");
-	tabs1.text("Params").push("TBEG 1E-1");
-	tabs1.text("Params").push("TEND 1E-1");
+	tabs1.text("Params").push("TBEG 0");
+	tabs1.text("Params").push("TEND 1.5");
 	
-	var textarea = tabs1.element("Params").value;
-	var val = Parse.getFrom(textarea).valueOf("MAGNFIELD");
-	console.log(val);
+	// Get parameters
+	var text = tabs1.element("Params").value;
+	m = Parse.getFrom(text).valueOf("MASS");
+	q = Parse.getFrom(text).valueOf("CHARGE");
+	r = Parse.getFrom(text).valueOf("POSITION");
+	v = Parse.getFrom(text).valueOf("VELOCITY");
+	EField = Parse.getFrom(text).valueOf("ELECFIELD");
+	BField = Parse.getFrom(text).valueOf("MAGNFIELD");
+	tbeg = Parse.getFrom(text).valueOf("TBEG");
+	tend = Parse.getFrom(text).valueOf("TEND");
+	dt = Parse.getFrom(text).valueOf("TSTEP");
+	Tdata = Parse.getFrom(text).valueOf("TDATA");
+	
+	// Set time and timer variable
+	t = tbeg;
+	proc;
+	Ndata = parseInt(Tdata / dt);
+	idata = Ndata;
+	
+	// Create button for starting simulation
+	var btn = document.createElement("button");
+	btn.id = "simulation";
+	btn.innerHTML = "Start"
+	btn.addEventListener("click", buttonClick);
+	document.body.append(btn);
+	
+}
+
+// Do something when button clicked
+function buttonClick(event) {
+	var target = event.target;
+	if(target.innerHTML == "Start") {
+		target.innerHTML = "Stop";
+		proc = setInterval(simulate, 10);
+	} else {
+		target.innerHTML = "Start";
+		clearInterval(proc);
+	}
+}
+
+// Perform simulation
+function simulate() {
+	t = +t.toFixed(10);
+	if(idata >= Ndata) {
+		tabs1.text("Results").push(t);
+		var textarea = tabs1.element("Results");
+		textarea.scrollTop = textarea.scrollHeight;
+		idata = 0;
+	}
+	if(t >= tend) {
+		clearInterval(proc);
+		var btn = document.getElementById("simulation");
+		btn.disabled = "disabled";
+		btn.innerHTML = "Start";
+	}
+	idata++;
+	t += dt;
 }
 
 </script>

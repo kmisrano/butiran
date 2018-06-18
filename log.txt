@@ -1,5 +1,7 @@
 [20180618]
 Add element(label) for alternative to textarea(label) and canvas(label).
+Update and move test from app/js to app.
+
 
 [20180617]
 Still do something.
