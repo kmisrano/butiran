@@ -82,6 +82,7 @@ var Transformation = require('./lib/math/transformation');
 // lib/ui
 var TabText = require('./lib/ui/tabtext.js');
 var TabCanvas = require('./lib/ui/tabcanvas.js');
+var Parse = require('./lib/ui/parse.js');
 
 // Store information 
 if(typeof window !== 'undefined') {
@@ -108,4 +109,5 @@ if(typeof window !== 'undefined') {
 	window["TabText"] = TabText;
 	window["TabCanvas"] = TabCanvas;
 	window["Transformation"] = Transformation;
+	window["Parse"] = Parse;
 }

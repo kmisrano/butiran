@@ -157,6 +157,7 @@ var Transformation = __webpack_require__(20);
 // lib/ui
 var TabText = __webpack_require__(21);
 var TabCanvas = __webpack_require__(22);
+var Parse = __webpack_require__(23);
 
 // Store information 
 if(typeof window !== 'undefined') {
@@ -183,6 +184,7 @@ if(typeof window !== 'undefined') {
 	window["TabText"] = TabText;
 	window["TabCanvas"] = TabCanvas;
 	window["Transformation"] = Transformation;
+	window["Parse"] = Parse;
 }
 
 
@@ -2439,6 +2441,59 @@ module.exports = {
 	},
 	push: function(line) {
 		return push(line);
+	},
+};
+
+
+/***/ }),
+/* 23 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/*
+	parse.js
+	Parse key and value pair
+	
+	Sparisoma Viridi | dudung@gmail.com
+	
+	20180618
+	Create this library of functions
+*/
+
+// Require classes
+var Vect3 = __webpack_require__(2)();
+
+// Get value of related key from multi line text with '\n'
+function getFrom(text) {
+	var par = {
+		valueOf: function(key) {
+			var lines = text.split('\n');
+			var N = lines.length;
+			var val;
+			for(var i = 0; i < N; i++) {
+				var j = lines[i].indexOf(key);
+				if(j != -1) {
+					var cols = lines[i].split(' ');
+					var M = cols.length;
+					if(M == 2) {
+						val = parseFloat(cols[1]);
+					} else if(M == 4) {
+						var x = parseFloat(cols[1]);
+						var y = parseFloat(cols[2]);
+						var z = parseFloat(cols[3]);
+						val = new Vect3(x, y, z)
+					}
+				}
+			}
+			return val;
+		},
+	};
+	return par;
+}
+
+// Export module
+module.exports = {
+	getFrom: function(text) {
+		return getFrom(text)
 	},
 };
 
