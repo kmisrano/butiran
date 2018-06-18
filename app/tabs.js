@@ -574,6 +574,14 @@ class Tabs {
 						ctx.strokeRect(tc[0] - dr, tc[1] - dr, r, r);
 					}
 				},
+				points: function(x, y) {
+					var Nx = x.length;
+					var Ny = y.length;
+					var N = Math.min(Nx, Ny);
+					for(var i = 0; i < N; i++) {
+						this.point(x[i], y[i]);
+					}
+				}
 			}
 			return can;
 		} else {

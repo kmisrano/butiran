@@ -84,10 +84,14 @@ function main() {
 	
 	g.setLineColor("#ff0");
 	g.setPointType("circle");
+	var xx = [];
+	var yy = [];
 	for(var x = -0.5; x <= 0.5; x += 0.05) {
 		var y = 2 * x * x;
-		g.point(x, y);
+		xx.push(x);
+		yy.push(y);
 	}
+	g.points(xx, yy);
 }
 
 </script>
