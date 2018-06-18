@@ -72,66 +72,6 @@ function main() {
 	console.log(val);
 }
 
-function test_tabs1() {
-	var tabs1 = new Tabs("tabs1");
-	tabs1.setWidth("180px");
-	tabs1.addTab("Error", 0);
-	tabs1.addTab("Params", 0);
-	tabs1.addTab("Results", 0);
-	tabs1.addTab("Log", 0);
-	tabs1.removeTab("Error");
-	
-	var tabs2 = new Tabs("tabs2");
-	tabs2.setWidth("300px");
-	tabs2.setHeight("250px");
-	tabs2.addTab("xy", 1);
-	tabs2.addTab("yz", 1);
-	tabs2.addTab("zx", 1);
-	tabs2.addTab("xyz", 1);
-	
-	tabs1.text("Params").clear();
-	var N = 5;
-	for(var i = 0; i < N; i++) {
-		tabs1.text("Params").push("step " + i);
-	}
-	
-	var g = tabs2.graphic("xy");
-	console.log(g.getCOORD());
-	g.setCoord([-1.39, -1.02, 1.39, 1.02]);
-
-	g.setLineColor("#f00");
-	g.strokeCircle(-0.5, 0.5, 0.5);
-	g.setFillColor("#aaf");
-	g.setLineColor("#aaf");
-	g.fillCircle(0.5, 0.5, 0.5);
-
-	g.setLineColor("#00f");
-	g.strokeRect(0, 0, 0.5, 0.5);
-	g.setFillColor("#faa");
-	g.fillRect(-0.5, -0.5, 0.5, 0.5);
-	g.setLineColor("#0f0");
-	g.strokeRect(-0.25, -0.25, 0.5, 0.5);
-	
-	g.setLineColor("#000");
-	g.setPointType("circle")
-	g.setPointSize(4);
-	g.point(0.5, -0.5);
-	g.setPointType("box")
-	g.setPointSize(4);
-	g.point(0.8, -0.5);
-	
-	g.setLineColor("#ff0");
-	g.setPointType("circle");
-	var xx = [];
-	var yy = [];
-	for(var x = -0.5; x <= 0.5; x += 0.05) {
-		var y = 2 * x * x;
-		xx.push(x);
-		yy.push(y);
-	}
-	g.points(xx, yy);
-}
-
 </script>
 </body>
 </html>
