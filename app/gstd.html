@@ -94,11 +94,12 @@ function initiate() {
 	dt = Parse.getFrom(text).valueOf("TSTEP");
 	Tdata = Parse.getFrom(text).valueOf("TDATA");
 	
-	// Set time and timer variable
+	// Set time, timer variable, and sampling time
 	t = tbeg;
-	proc = new Timer(simulate, Tdata);
+	proc = new Timer(simulate, 10);
 	Ndata = parseInt(Tdata / dt);
 	idata = Ndata;
+	// sampling = new Sampling(Tdata, dt)
 	
 	// Create button for starting simulation
 	var btn = document.createElement("button");
