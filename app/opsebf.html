@@ -41,22 +41,60 @@ main()
 
 // Define main function
 function main() {
-	initiate();
+	// Set layout of elements
+	setLayout();
+	
+	// Log something
+	log();
+		
+	// Set timer for processing simulation
+	proc = new Timer(simulate, 10);
 }
 
-// Initiate
-function initiate() {
+// Perform simulation
+function simulate() {
+	// Format time t
+	t = +t.toFixed(10);
+	
+	// Apply Newton second law of motion
+	{}
+	
+	// Integrate using Euler algorithm
+	{}
+	
+	// Display result in certain period of time
+	if(sample.sampling()) {
+		tabs1.text("Results").push(t);
+		var textarea = tabs1.element("Results");
+		textarea.scrollTop = textarea.scrollHeight;
+	}
+	
+	// Terminate simulation when end time is reached
+	if(t >= tend) {
+		proc.stop();
+		var btn = document.getElementById("simulation");
+		btn.disabled = "disabled";
+		btn.innerHTML = "Start";
+	}
+	
+	// Increase time t
+	t += dt;
+}
+
+// Set layout of elements
+function setLayout() {
 	// Define first Tabs
 	tabs1 = new Tabs("tabs1");
-	tabs1.setWidth("180px");
+	tabs1.setWidth("300px");
 	tabs1.setHeight("240px");
+	tabs1.addTab("Log", 0);
 	tabs1.addTab("Params", 0);
 	tabs1.addTab("Results", 0);
-	tabs1.addTab("Log", 0);
 	
 	// Clear tabs1
 	tabs1.text("Params").clear();
 	tabs1.text("Results").clear();
+	tabs1.text("Log").clear();
 	
 	// Define second Tabs
 	tabs2 = new Tabs("tabs2");
@@ -70,12 +108,16 @@ function initiate() {
 	// Define bgroup
 	bgroup = new Bgroup("bgroup");
 	bgroup.setWidth("60px");
-	bgroup.addButton("Load");
-	bgroup.addButton("Start");
-	bgroup.addButton("Help");
-	bgroup.addButton("About");
-	
-	// Set parameters
+	bgroup.setHeight("105px");
+	bgroup.addButton("Load", 1);
+	bgroup.addButton("Read", 0);
+	bgroup.addButton("Start", 0);
+	bgroup.addButton("Help", 1);
+	bgroup.addButton("About", 1);
+}
+
+// Load parameters
+function loadParameters() {
 	tabs1.text("Params").push("MASS 1");
 	tabs1.text("Params").push("CHARGE 1");
 	tabs1.text("Params").push("VELOCITY 1 0 0");
@@ -88,8 +130,10 @@ function initiate() {
 	tabs1.text("Params").push("TDATA 1E-1");
 	tabs1.text("Params").push("TBEG 0");
 	tabs1.text("Params").push("TEND 1.5");
+}
 	
-	// Get parameters
+// Get parameters
+function readParameters() {
 	var text = tabs1.element("Params").value;
 	m = Parse.getFrom(text).valueOf("MASS");
 	q = Parse.getFrom(text).valueOf("CHARGE");
@@ -102,23 +146,30 @@ function initiate() {
 	dt = Parse.getFrom(text).valueOf("TSTEP");
 	Tdata = Parse.getFrom(text).valueOf("TDATA");
 	
-	// Set time, timer variable, and sampling time
+	// Initiate time
 	t = tbeg;
-	proc = new Timer(simulate, 10);
-	sample = new Sample(Tdata, dt);
 	
-	// -- remove this when deploy openly in distribution -- //
-	// Show log manually
-	console.log(
-		showOnly(logjs).forFilter(
-			{
-				app: "opsebf",
-				date: "20180619",
-				after: "1300",
-			}
-		)
-	);
-	// ----------------------------------------------------- //
+	// Set sampling
+	sample = new Sample(Tdata, dt);
+}	
+
+// Log something and show manually	
+function log() {
+	try { 
+		console.log(
+			showOnly(logjs).forFilter(
+				{
+					app: "opsebf",
+					date: "20180619",
+					after: "1500",
+				}
+			)
+		);
+	}
+	catch(err) {
+		var msg = "opsebf logs only in development stage";
+		console.warn(msg);
+	}
 }
 
 // Do something when buttons clicked
@@ -128,9 +179,11 @@ function buttonClick(event) {
 	if(target.innerHTML == "Start") {
 		target.innerHTML = "Stop";
 		proc.start();
+		tabs1.text("Log").push("Simulation is starting");
 	} else if(target.innerHTML == "Stop"){
 		target.innerHTML = "Start";
 		proc.stop();
+		tabs1.text("Log").push("Simulation stopped");
 	}
 	
 	if(target.innerHTML == "About") {
@@ -146,30 +199,25 @@ function buttonClick(event) {
 			+ "MIT License | "
 			+ "Copyright (c) 2018 Sparisoma Viridi"
 		);
+		tabs1.text("Log").push("About is called");
 	}
 	
 	if(target.innerHTML == "Help") {
 		alert(
 			"Help"
 		);
+		tabs1.text("Log").push("Help is called");
 	}
-}
-
-// Perform simulation
-function simulate() {
-	t = +t.toFixed(10);
-	if(sample.sampling()) {
-		tabs1.text("Results").push(t);
-		var textarea = tabs1.element("Results");
-		textarea.scrollTop = textarea.scrollHeight;
+	
+	if(target.innerHTML == "Load") {
+		loadParameters();
+		tabs1.text("Log").push("Default parameters are loaded");
 	}
-	if(t >= tend) {
-		proc.stop();
-		var btn = document.getElementById("simulation");
-		btn.disabled = "disabled";
-		btn.innerHTML = "Start";
+	
+	if(target.innerHTML == "Read") {
+		readParameters();
+		tabs1.text("Log").push("Parameters are read");
 	}
-	t += dt;
 }
 </script>
 </body>
