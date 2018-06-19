@@ -11,7 +11,27 @@
 	Add test from gstd basic.
 	20180618
 	Add test from Tabs in gstd.
+	20180619
+	Add test from Tabs for lines.
 */
+
+// 20180619.1506 ok
+function test_tabs_lines() {
+	// Define second Tabs
+	tabs2 = new Tabs("tabs2");
+	tabs2.setWidth("300px");
+	tabs2.setHeight("300px");
+	tabs2.addTab("xy", 1);
+	tabs2.addTab("yz", 1);
+	tabs2.addTab("zx", 1);
+	tabs2.addTab("xyz", 1);
+	
+	tabs2.graphic("xy").clear();
+	var x = [0, 100, 100, 0, 50, 0];
+	var y = [0, 0, 100, 100, 50, 0];
+	tabs2.graphic("xy").setCoord([0, 0, 100, 100]);
+	tabs2.graphic("xy").lines(x, y);
+}
 
 // 20180618.1930 ok
 function test_tabs_basic() {

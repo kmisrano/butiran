@@ -43,6 +43,8 @@
 	Add tabtext.js and tabcanvas.js libraries and functions.
 	20180618
 	Add math/transformation.js for drawing in tab.js class.
+	20180619
+	Add tabs and bgroup from app to lib/ui folder.
 */
 
 // lib
@@ -84,6 +86,8 @@ var Transformation = require('./lib/math/transformation');
 var TabText = require('./lib/ui/tabtext.js');
 var TabCanvas = require('./lib/ui/tabcanvas.js');
 var Parse = require('./lib/ui/parse.js');
+var Tabs = require('./lib/ui/tabs.js')();
+var Bgroup = require('./lib/ui/bgroup.js')();
 
 // Store information 
 if(typeof window !== 'undefined') {
@@ -112,4 +116,6 @@ if(typeof window !== 'undefined') {
 	window["Transformation"] = Transformation;
 	window["Parse"] = Parse;
 	window["Sample"] = Sample;
+	window["Tabs"] = Tabs;
+	window["Bgroup"] = Bgroup;
 }
