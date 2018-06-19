@@ -72,9 +72,9 @@ function simulate() {
 	// Terminate simulation when end time is reached
 	if(t >= tend) {
 		proc.stop();
-		var btn = document.getElementById("simulation");
-		btn.disabled = "disabled";
-		btn.innerHTML = "Start";
+		tabs1.text("Log").push("Simulation stopped t = tend");
+		bgroup.disable("Start");
+		bgroup.setCaption("Start").to("Start");
 	}
 	
 	// Increase time t
@@ -109,11 +109,14 @@ function setLayout() {
 	bgroup = new Bgroup("bgroup");
 	bgroup.setWidth("60px");
 	bgroup.setHeight("105px");
-	bgroup.addButton("Load", 1);
-	bgroup.addButton("Read", 0);
-	bgroup.addButton("Start", 0);
-	bgroup.addButton("Help", 1);
-	bgroup.addButton("About", 1);
+	bgroup.addButton("Clear");
+	bgroup.addButton("Load");
+	bgroup.addButton("Read");
+	bgroup.addButton("Start");
+	bgroup.addButton("Help");
+	bgroup.addButton("About");
+	bgroup.disable("Read");
+	bgroup.disable("Start");
 }
 
 // Load parameters
@@ -210,13 +213,23 @@ function buttonClick(event) {
 	}
 	
 	if(target.innerHTML == "Load") {
+		tabs1.text("Params").clear();
 		loadParameters();
 		tabs1.text("Log").push("Default parameters are loaded");
+		bgroup.enable("Read");
 	}
 	
 	if(target.innerHTML == "Read") {
 		readParameters();
 		tabs1.text("Log").push("Parameters are read");
+		bgroup.enable("Start");
+	}
+	
+	if(target.innerHTML == "Clear") {
+		tabs1.text("Params").clear();
+		tabs1.text("Log").push("Parameters are cleared");
+		bgroup.disable("Read");
+		bgroup.disable("Start");
 	}
 }
 </script>
