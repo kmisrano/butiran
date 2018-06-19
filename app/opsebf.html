@@ -30,11 +30,12 @@
 <script>
 // Define some global variables
 var m, q, r, v;
-var EField, BField;
+var EField, BField, GField;
 var t, dt, tbeg, tend;
 var Tdata, sample;
 var proc;
 var tabs1, tabs2, bgroup;
+var coordMin, coordMax;
 
 // Call main function
 main()
@@ -56,15 +57,36 @@ function simulate() {
 	// Format time t
 	t = +t.toFixed(10);
 	
+	// Calculate all forces
+	var FE = Vect3.mul(q, EField);
+	var FB = Vect3.cross(Vect3.mul(q, v), BField);
+	var FG = Vect3.mul(m, GField);
+	
 	// Apply Newton second law of motion
-	{}
+	var F = Vect3.add(FE, FB, FG);
+	var a = Vect3.div(F, m);
 	
 	// Integrate using Euler algorithm
-	{}
+	v = Vect3.add(v, Vect3.mul(a, dt));
+	r = Vect3.add(r, Vect3.mul(v, dt));
+
+	v.x = +v.x.toFixed(10);
+	v.y = +v.y.toFixed(10);
+	v.z = +v.z.toFixed(10);
+	r.x = +r.x.toFixed(10);
+	r.y = +r.y.toFixed(10);
+	r.z = +r.z.toFixed(10);
 	
 	// Display result in certain period of time
 	if(sample.sampling()) {
-		tabs1.text("Results").push(t);
+		var data = t + " "
+			+ r.x.toExponential(2) + " "
+			+ r.y.toExponential(2) + " "
+			+ r.z.toExponential(2) + " "
+			+ v.x.toExponential(2) + " "
+			+ v.y.toExponential(2) + " "
+			+ v.z.toExponential(2);
+		tabs1.text("Results").push(data);
 		var textarea = tabs1.element("Results");
 		textarea.scrollTop = textarea.scrollHeight;
 	}
@@ -92,7 +114,7 @@ function setLayout() {
 
 	// Define first Tabs
 	tabs1 = new Tabs("tabs1");
-	tabs1.setWidth("300px");
+	tabs1.setWidth("450px");
 	tabs1.setHeight("240px");
 	tabs1.addTab("Log", 0);
 	tabs1.addTab("Params", 0);
@@ -136,14 +158,19 @@ function loadParameters() {
 	tabs1.text("Params").push("CHARGE 1");
 	tabs1.text("Params").push("VELOCITY 1 0 0");
 	tabs1.text("Params").push("POSITION 0 0 0");
+	tabs1.text("Params").push();
 	tabs1.text("Params").push("MAGNFIELD 0 0 1");
-	tabs1.text("Params").push("ELECFIELD 0 0 1");
+	tabs1.text("Params").push("ELECFIELD 0 0 0");
 	tabs1.text("Params").push("GRAVFIELD 0 0 0");
 	tabs1.text("Params").push("MOMEFIELD 0 0 0");
+	tabs1.text("Params").push();
 	tabs1.text("Params").push("TSTEP 1E-3");
 	tabs1.text("Params").push("TDATA 1E-1");
 	tabs1.text("Params").push("TBEG 0");
-	tabs1.text("Params").push("TEND 1.5");
+	tabs1.text("Params").push("TEND 10");
+	tabs1.text("Params").push();
+	tabs1.text("Params").push("COORDMIN -1 -1 -1");
+	tabs1.text("Params").push("COORDMAX 1 1 1");
 	var ta = tabs1.element("Params");
 	ta.scrollTop = ta.scrollHeight;
 }
@@ -157,16 +184,27 @@ function readParameters() {
 	v = Parse.getFrom(text).valueOf("VELOCITY");
 	EField = Parse.getFrom(text).valueOf("ELECFIELD");
 	BField = Parse.getFrom(text).valueOf("MAGNFIELD");
+	GField = Parse.getFrom(text).valueOf("GRAVFIELD");
 	tbeg = Parse.getFrom(text).valueOf("TBEG");
 	tend = Parse.getFrom(text).valueOf("TEND");
 	dt = Parse.getFrom(text).valueOf("TSTEP");
 	Tdata = Parse.getFrom(text).valueOf("TDATA");
+	coordMin = Parse.getFrom(text).valueOf("COORDMIN");
+	coordMax = Parse.getFrom(text).valueOf("COORDMAX");
 	
 	// Initiate time
 	t = tbeg;
 	
 	// Set sampling
 	sample = new Sample(Tdata, dt);
+	
+	// Set coordinate ranges
+	tabs2.graphic("xy").setCoord(
+		[coordMin.x, coordMin.y, coordMax.x, coordMax.y]);
+	tabs2.graphic("yz").setCoord(
+		[coordMin.y, coordMin.z, coordMax.y, coordMax.z]);
+	tabs2.graphic("xz").setCoord(
+		[coordMin.x, coordMin.z, coordMax.x, coordMax.z]);
 }	
 
 // Log something and show manually	
