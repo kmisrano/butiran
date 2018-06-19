@@ -12,8 +12,22 @@
 	20180618
 	Add test from Tabs in gstd.
 	20180619
-	Add test from Tabs for lines.
+	Add test from Tabs for lines and parser.
 */
+
+// 20180619.2202 ok
+function test_parser() {
+	var text =
+	"1 2 3 4\n" +
+	"2 2 3 4\n" +
+	"3 2 3 4\n" +
+	"4 2 3 4\n" +
+	"5 2 3 4\n" +
+	"6 2 3 4";
+	console.log(text);
+	var x = Parse.getFrom(text).column(3);
+	console.log(x);
+}
 
 // 20180619.1506 ok
 function test_tabs_lines() {

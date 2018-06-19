@@ -49,7 +49,7 @@ function main() {
 	log();
 		
 	// Set timer for processing simulation
-	proc = new Timer(simulate, 10);
+	proc = new Timer(simulate, 1);
 }
 
 // Perform simulation
@@ -98,6 +98,7 @@ function simulate() {
 		tabs1.text("Log").push(ts + "Simulation stopped t = tend");
 		bgroup.disable("Start");
 		bgroup.setCaption("Start").to("Start");
+		bgroup.enable("Draw");
 	}
 	
 	// Increase time t
@@ -141,15 +142,17 @@ function setLayout() {
 	// Define bgroup
 	bgroup = new Bgroup("bgroup");
 	bgroup.setWidth("60px");
-	bgroup.setHeight("126px");
+	bgroup.setHeight("147px");
 	bgroup.addButton("Clear");
 	bgroup.addButton("Load");
 	bgroup.addButton("Read");
 	bgroup.addButton("Start");
+	bgroup.addButton("Draw");
 	bgroup.addButton("Help");
 	bgroup.addButton("About");
 	bgroup.disable("Read");
 	bgroup.disable("Start");
+	bgroup.disable("Draw");
 }
 
 // Load parameters
@@ -160,7 +163,7 @@ function loadParameters() {
 	tabs1.text("Params").push("POSITION 0 0 0");
 	tabs1.text("Params").push();
 	tabs1.text("Params").push("MAGNFIELD 0 0 1");
-	tabs1.text("Params").push("ELECFIELD 0 0 0");
+	tabs1.text("Params").push("ELECFIELD 0 0 0.1");
 	tabs1.text("Params").push("GRAVFIELD 0 0 0");
 	tabs1.text("Params").push("MOMEFIELD 0 0 0");
 	tabs1.text("Params").push();
@@ -169,8 +172,8 @@ function loadParameters() {
 	tabs1.text("Params").push("TBEG 0");
 	tabs1.text("Params").push("TEND 10");
 	tabs1.text("Params").push();
-	tabs1.text("Params").push("COORDMIN -1 -1 -1");
-	tabs1.text("Params").push("COORDMAX 1 1 1");
+	tabs1.text("Params").push("COORDMIN -3 -4 -0.5");
+	tabs1.text("Params").push("COORDMAX 3 2 5.5");
 	var ta = tabs1.element("Params");
 	ta.scrollTop = ta.scrollHeight;
 }
@@ -215,7 +218,7 @@ function log() {
 				{
 					app: "opsebf",
 					date: "20180619",
-					after: "1900",
+					after: "2200",
 				}
 			)
 		);
@@ -237,6 +240,7 @@ function buttonClick(event) {
 		tabs1.text("Log").push(ts + "Simulation is starting");
 		var ta = tabs1.element("Log");
 		ta.scrollTop = ta.scrollHeight;
+		bgroup.disable("Draw");
 	} else if(target.innerHTML == "Stop"){
 		target.innerHTML = "Start";
 		proc.stop();
@@ -244,6 +248,7 @@ function buttonClick(event) {
 		tabs1.text("Log").push(ts + "Simulation stopped");
 		var ta = tabs1.element("Log");
 		ta.scrollTop = ta.scrollHeight;
+		bgroup.enable("Draw");
 	}
 	
 	if(target.innerHTML == "About") {
@@ -271,6 +276,7 @@ function buttonClick(event) {
 			+ "[Load]     load default parameters\n"
 			+ "[Read]     read parameters from text\n"
 			+ "[Start]     start simulation\n"
+			+ "[Draw]     draw results\n"
 			+ "[Help]     show this help\n"
 			+ "[About]   describe this application\n"
 		);
@@ -308,6 +314,38 @@ function buttonClick(event) {
 		bgroup.disable("Read");
 		bgroup.disable("Start");
 	}
+	
+	if(target.innerHTML == "Draw") {
+		drawResults();
+		var ts = Timer.ts() + "|";
+		tabs1.text("Log").push(ts + "Results will be drawn");
+		var ta = tabs1.element("Log");
+		ta.scrollTop = ta.scrollHeight;
+	}
+}
+
+// Draw on chart
+function drawResults() {
+	// Get results
+	var text = tabs1.element("Results").value;
+	var tt = Parse.getFrom(text).column(0);
+	var rx = Parse.getFrom(text).column(1);
+	var ry = Parse.getFrom(text).column(2);
+	var rz = Parse.getFrom(text).column(3);
+	var vx = Parse.getFrom(text).column(4);
+	var vy = Parse.getFrom(text).column(5);
+	var vz = Parse.getFrom(text).column(6);
+	
+	// Draw on related chart
+	tabs2.graphic("xy").clear();
+	tabs2.graphic("xy").setLineColor("#f00");	
+	tabs2.graphic("xy").lines(rx, ry);
+	tabs2.graphic("yz").clear();
+	tabs2.graphic("yz").setLineColor("#0f0");	
+	tabs2.graphic("yz").lines(ry, rz);
+	tabs2.graphic("xz").clear();
+	tabs2.graphic("xz").setLineColor("#00f");	
+	tabs2.graphic("xz").lines(rx, rz);
 }
 
 </script>

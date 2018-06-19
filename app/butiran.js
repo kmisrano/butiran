@@ -2517,7 +2517,9 @@ module.exports = {
 	Sparisoma Viridi | dudung@gmail.com
 	
 	20180618
-	Create this library of functions
+	Create this library of functions.
+	20180619
+	Get column from multiline text.	
 */
 
 // Require classes
@@ -2544,6 +2546,16 @@ function getFrom(text) {
 						val = new Vect3(x, y, z)
 					}
 				}
+			}
+			return val;
+		},
+		column: function(jcol) {
+			var lines = text.split('\n');
+			var N = lines.length;
+			var val = [];
+			for(var i = 0; i < N; i++) {
+				var cols = lines[i].split(" ");
+				val.push(parseFloat(cols[jcol]));
 			}
 			return val;
 		},
