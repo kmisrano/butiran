@@ -72,7 +72,8 @@ function simulate() {
 	// Terminate simulation when end time is reached
 	if(t >= tend) {
 		proc.stop();
-		tabs1.text("Log").push("Simulation stopped t = tend");
+		var ts = Timer.ts() + "|";
+		tabs1.text("Log").push(ts + "Simulation stopped t = tend");
 		bgroup.disable("Start");
 		bgroup.setCaption("Start").to("Start");
 	}
@@ -83,6 +84,12 @@ function simulate() {
 
 // Set layout of elements
 function setLayout() {
+	// Create title page
+	var p = document.createElement("p");
+	p.innerHTML = "One particle in static electric and magnetic field";
+	p.style.fontWeight = "bold";
+	document.body.append(p);
+
 	// Define first Tabs
 	tabs1 = new Tabs("tabs1");
 	tabs1.setWidth("300px");
@@ -91,24 +98,28 @@ function setLayout() {
 	tabs1.addTab("Params", 0);
 	tabs1.addTab("Results", 0);
 	
-	// Clear tabs1
-	tabs1.text("Params").clear();
-	tabs1.text("Results").clear();
-	tabs1.text("Log").clear();
-	
 	// Define second Tabs
 	tabs2 = new Tabs("tabs2");
 	tabs2.setWidth("300px");
 	tabs2.setHeight("300px");
 	tabs2.addTab("xy", 1);
 	tabs2.addTab("yz", 1);
-	tabs2.addTab("zx", 1);
+	tabs2.addTab("xz", 1);
 	tabs2.addTab("xyz", 1);
 	
+	// Clear all tabs
+	tabs1.text("Params").clear();
+	tabs1.text("Results").clear();
+	tabs1.text("Log").clear();
+	tabs2.graphic("xy").clear();
+	tabs2.graphic("yz").clear();
+	tabs2.graphic("xz").clear();
+	tabs2.graphic("xyz").clear();
+
 	// Define bgroup
 	bgroup = new Bgroup("bgroup");
 	bgroup.setWidth("60px");
-	bgroup.setHeight("105px");
+	bgroup.setHeight("126px");
 	bgroup.addButton("Clear");
 	bgroup.addButton("Load");
 	bgroup.addButton("Read");
@@ -133,6 +144,8 @@ function loadParameters() {
 	tabs1.text("Params").push("TDATA 1E-1");
 	tabs1.text("Params").push("TBEG 0");
 	tabs1.text("Params").push("TEND 1.5");
+	var ta = tabs1.element("Params");
+	ta.scrollTop = ta.scrollHeight;
 }
 	
 // Get parameters
@@ -164,7 +177,7 @@ function log() {
 				{
 					app: "opsebf",
 					date: "20180619",
-					after: "1500",
+					after: "1900",
 				}
 			)
 		);
@@ -182,11 +195,17 @@ function buttonClick(event) {
 	if(target.innerHTML == "Start") {
 		target.innerHTML = "Stop";
 		proc.start();
-		tabs1.text("Log").push("Simulation is starting");
+		var ts = Timer.ts + "|";
+		tabs1.text("Log").push(ts + "Simulation is starting");
+		var ta = tabs1.element("Log");
+		ta.scrollTop = ta.scrollHeight;
 	} else if(target.innerHTML == "Stop"){
 		target.innerHTML = "Start";
 		proc.stop();
-		tabs1.text("Log").push("Simulation stopped");
+		var ts = Timer.ts() + "|";
+		tabs1.text("Log").push(ts + "Simulation stopped");
+		var ta = tabs1.element("Log");
+		ta.scrollTop = ta.scrollHeight;
 	}
 	
 	if(target.innerHTML == "About") {
@@ -202,36 +221,52 @@ function buttonClick(event) {
 			+ "MIT License | "
 			+ "Copyright (c) 2018 Sparisoma Viridi"
 		);
-		tabs1.text("Log").push("About is called");
+		var ts = Timer.ts() + "|";
+		tabs1.text("Log").push(ts + "About is called");
+		var ta = tabs1.element("Log");
+		ta.scrollTop = ta.scrollHeight;
 	}
 	
 	if(target.innerHTML == "Help") {
 		alert(
 			"Help"
 		);
-		tabs1.text("Log").push("Help is called");
+		var ts = Timer.ts() + "|";
+		tabs1.text("Log").push(ts + "Help is called");
+		var ta = tabs1.element("Log");
+		ta.scrollTop = ta.scrollHeight;
 	}
 	
 	if(target.innerHTML == "Load") {
 		tabs1.text("Params").clear();
 		loadParameters();
-		tabs1.text("Log").push("Default parameters are loaded");
+		var ts = Timer.ts() + "|";
+		tabs1.text("Log").push(ts + "Default parameters are loaded");
+		var ta = tabs1.element("Log");
+		ta.scrollTop = ta.scrollHeight;
 		bgroup.enable("Read");
 	}
 	
 	if(target.innerHTML == "Read") {
 		readParameters();
-		tabs1.text("Log").push("Parameters are read");
+		var ts = Timer.ts() + "|";
+		tabs1.text("Log").push(ts + "Parameters are read");
+		var ta = tabs1.element("Log");
+		ta.scrollTop = ta.scrollHeight;
 		bgroup.enable("Start");
 	}
 	
 	if(target.innerHTML == "Clear") {
 		tabs1.text("Params").clear();
-		tabs1.text("Log").push("Parameters are cleared");
+		var ts = Timer.ts() + "|";
+		tabs1.text("Log").push(ts + "Parameters are cleared");
+		var ta = tabs1.element("Log");
+		ta.scrollTop = ta.scrollHeight;
 		bgroup.disable("Read");
 		bgroup.disable("Start");
 	}
 }
+
 </script>
 </body>
 </html>

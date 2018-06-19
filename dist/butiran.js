@@ -1443,6 +1443,8 @@ module.exports = {
 	Start this library.
 	20180520
 	Add module.export for ES module support.
+	20180619
+	Add ts.
 */
 
 // Define class of Timer
@@ -1468,6 +1470,15 @@ class Timer {
 			this.ticking = false;
 			clearInterval(this.uid);
 		}
+	}
+
+	static ts() {
+		var d = new Date;
+		var hh = ("00" + d.getHours()).slice(-2);
+		var mm = ("00" + d.getMinutes()).slice(-2);
+		var ss = ("00" + d.getSeconds()).slice(-2);
+		var ts = "" + hh + mm + ss;
+		return ts;	
 	}
 }
 
