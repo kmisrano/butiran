@@ -1,15 +1,20 @@
 <!doctype html>
 <!--
-	opsebf.js
-	One particle in static electric and magnetic field
+	tdsbgm.js
+	Table dissolution simulation based on grid model
 	
 	Sparisoma Viridi | dudung@gmail.com
 	
-	20180619
-	Create this based on gstd.js application.
-	Show the right images of xy, yz, xz.
+	20180613
+	Create this HTML application based on lib/grid/table.js
+	in butiran.js libraries and functions.
+	Constructing createAndSetLayoutElements, createStyle.
+	20180614
+	Continue creating this application, with functions
+	createIODiv, createAllStyles, changeStyleAttribute, openTA.
+	Rename createIODiv to createIOTabText.
 	20180620
-	Modify layout of the script, minor only, column < 64.
+	Rename it from gstd to tdsbgm and rebuild it from opsebf.
 -->
 <html>
 <head>
@@ -112,8 +117,8 @@ function simulate() {
 function setLayout() {
 	// Create title page
 	var p = document.createElement("p");
-	p.innerHTML = "One particle in static electric and " +
-		"magnetic field";
+	p.innerHTML = "Table dissolution simulation " +
+		"based on grid model";
 	p.style.fontWeight = "bold";
 	document.body.append(p);
 
