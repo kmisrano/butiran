@@ -1,12 +1,12 @@
 <!doctype html>
 <!--
-	opseb.js
+	opsebf.js
 	One particle in static electric and magnetic field
 	
 	Sparisoma Viridi | dudung@gmail.com
 	
 	20180619
-	Create this based on gstd.js application. 
+	Create this based on gstd.js application.
 -->
 <html>
 <head>
@@ -20,6 +20,7 @@
 -->
 <script src="butiran.js"></script>
 <script src="tabs.js"></script>
+<script src="bgroup.js"></script>
 
 <!-- remove this when deploy openly in distribution -->
 <!-- since 20180619.0300                            -->
@@ -35,7 +36,7 @@ var EField, BField;
 var t, dt, tbeg, tend;
 var Tdata, sample;
 var proc;
-var tabs1, tabs2;
+var tabs1, tabs2, bgroup;
 
 // Call main function
 main()
@@ -67,6 +68,14 @@ function initiate() {
 	tabs2.addTab("yz", 1);
 	tabs2.addTab("zx", 1);
 	tabs2.addTab("xyz", 1);
+	
+	// Define bgroup
+	bgroup = new Bgroup("bgroup");
+	bgroup.setWidth("60px");
+	bgroup.addButton("Load");
+	bgroup.addButton("Start");
+	bgroup.addButton("Help");
+	bgroup.addButton("About");
 	
 	// Set parameters
 	tabs1.text("Params").push("MASS 1");
@@ -100,36 +109,51 @@ function initiate() {
 	proc = new Timer(simulate, 10);
 	sample = new Sample(Tdata, dt);
 	
-	// Create button for starting simulation
-	var btn = document.createElement("button");
-	btn.id = "simulation";
-	btn.innerHTML = "Start"
-	btn.addEventListener("click", buttonClick);
-	document.body.append(btn);
-	
 	// -- remove this when deploy openly in distribution -- //
 	// Show log manually
 	console.log(
 		showOnly(logjs).forFilter(
 			{
-				app: "opseb",
+				app: "opsebf",
 				date: "20180619",
-				after: "0500",
+				after: "1300",
 			}
 		)
 	);
 	// ----------------------------------------------------- //
 }
 
-// Do something when button clicked
+// Do something when buttons clicked
 function buttonClick(event) {
 	var target = event.target;
+	
 	if(target.innerHTML == "Start") {
 		target.innerHTML = "Stop";
 		proc.start();
-	} else {
+	} else if(target.innerHTML == "Stop"){
 		target.innerHTML = "Start";
 		proc.stop();
+	}
+	
+	if(target.innerHTML == "About") {
+		alert(
+			"opsebf | "
+			+ "One particle in static electric and magnetic field"
+			+ "\n"
+			+ "Version 20180619"
+			+ "\n"
+			+ "Based on butiran "
+			+ "| https://github.com/dudung/butiran"
+			+ "\n"
+			+ "MIT License | "
+			+ "Copyright (c) 2018 Sparisoma Viridi"
+		);
+	}
+	
+	if(target.innerHTML == "Help") {
+		alert(
+			"Help"
+		);
 	}
 }
 
