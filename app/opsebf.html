@@ -195,7 +195,7 @@ function buttonClick(event) {
 	if(target.innerHTML == "Start") {
 		target.innerHTML = "Stop";
 		proc.start();
-		var ts = Timer.ts + "|";
+		var ts = Timer.ts() + "|";
 		tabs1.text("Log").push(ts + "Simulation is starting");
 		var ta = tabs1.element("Log");
 		ta.scrollTop = ta.scrollHeight;
@@ -228,8 +228,13 @@ function buttonClick(event) {
 	}
 	
 	if(target.innerHTML == "Help") {
-		alert(
-			"Help"
+		alert(""
+			+ "[Clear]    clear all text and graphic\n"
+			+ "[Load]     load default parameters\n"
+			+ "[Read]     read parameters from text\n"
+			+ "[Start]     start simulation\n"
+			+ "[Help]     show this help\n"
+			+ "[About]   describe this application\n"
 		);
 		var ts = Timer.ts() + "|";
 		tabs1.text("Log").push(ts + "Help is called");
