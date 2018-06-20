@@ -43,7 +43,7 @@ var Tdata, sample;
 var proc;
 var tabs1, tabs2, bgroup;
 var coordMin, coordMax;
-var tablet, initial, geomet;
+var tablet, initial, geomet, maxXY, maxYZ, maxXZ;
 
 // Call main function
 main()
@@ -80,6 +80,77 @@ function simulate() {
 		tabs1.text("Results").push(data);
 		var textarea = tabs1.element("Results");
 		textarea.scrollTop = textarea.scrollHeight;
+		
+		// Get projection
+		var projXY = getProjectionOf(tablet).onPlane("xy");
+		var projYZ = getProjectionOf(tablet).onPlane("yz");
+		var projXZ = getProjectionOf(tablet).onPlane("xz");
+		
+		normalizeProjectionInitial(projXY, maxXY);
+		normalizeProjectionInitial(projYZ, maxYZ);
+		normalizeProjectionInitial(projXZ, maxXZ);
+		
+		var row, col, size;
+		
+		row	= projXY.length;
+		col = projXY[0].length;
+		size = 2;
+		tabs2.graphic("xy").clear();
+		for(var r = 0; r < row; r++) {
+			for(var c = 0; c < col; c++) {
+				var val = projXY[r][c];
+				var colR = 1 - val;
+				var colG = 1 - val;
+				var colB = 1 - val;
+				var color = RGB.double2rgb(colR, colG, colB);
+				var x = c * size;
+				var y = r * size;
+				tabs2.graphic("xy").setFillColor(color);
+				var w = 1.1 * size;
+				var h = 1.1 * size;
+				tabs2.graphic("xy").fillRect(x, y, w, h);
+			}
+		}
+		
+		row	= projYZ.length;
+		col = projYZ[0].length;
+		size = 2;
+		tabs2.graphic("yz").clear();
+		for(var r = 0; r < row; r++) {
+			for(var c = 0; c < col; c++) {
+				var val = projYZ[r][c];
+				var colR = 1 - val;
+				var colG = 1 - val;
+				var colB = 1 - val;
+				var color = RGB.double2rgb(colR, colG, colB);
+				var x = c * size;
+				var y = r * size;
+				tabs2.graphic("yz").setFillColor(color);
+				var w = 1.1 * size;
+				var h = 1.1 * size;
+				tabs2.graphic("yz").fillRect(x, y, w, h);
+			}
+		}
+		
+		row	= projXZ.length;
+		col = projXZ[0].length;
+		size = 2;
+		tabs2.graphic("xz").clear();
+		for(var r = 0; r < row; r++) {
+			for(var c = 0; c < col; c++) {
+				var val = projXZ[r][c];
+				var colR = 1 - val;
+				var colG = 1 - val;
+				var colB = 1 - val;
+				var color = RGB.double2rgb(colR, colG, colB);
+				var x = c * size;
+				var y = r * size;
+				tabs2.graphic("xz").setFillColor(color);
+				var w = 1.1 * size;
+				var h = 1.1 * size;
+				tabs2.graphic("xz").fillRect(x, y, w, h);
+			}
+		}
 	}
 	
 	// Terminate simulation when end time is reached
@@ -107,7 +178,7 @@ function setLayout() {
 
 	// Define first Tabs
 	tabs1 = new Tabs("tabs1");
-	tabs1.setWidth("450px");
+	tabs1.setWidth("350px");
 	tabs1.setHeight("240px");
 	tabs1.addTab("Log", 0);
 	tabs1.addTab("Params", 0);
@@ -150,10 +221,10 @@ function setLayout() {
 // Load parameters
 function loadParameters() {
 	tabs1.text("Params").push("GEOMET 2");
-	tabs1.text("Params").push("DIMENX 50");
-	tabs1.text("Params").push("DIMENY 50");
-	tabs1.text("Params").push("DIMENZ 50");
-	tabs1.text("Params").push("MAXVAL 1000");
+	tabs1.text("Params").push("DIMENX 50"); //50
+	tabs1.text("Params").push("DIMENY 50"); //50
+	tabs1.text("Params").push("DIMENZ 50"); //50
+	tabs1.text("Params").push("MAXVAL 1000"); //1000
 	tabs1.text("Params").push();
 	tabs1.text("Params").push("TSTEP 1");
 	tabs1.text("Params").push("TDATA 100");
@@ -192,6 +263,15 @@ function readParameters() {
 	setMaxValue(tablet, maxValue);
 	initial = getRemains(tablet);
 	
+	// Get projection
+	var projXY = getProjectionOf(tablet).onPlane("xy");
+	var projYZ = getProjectionOf(tablet).onPlane("yz");
+	var projXZ = getProjectionOf(tablet).onPlane("xz");
+	
+	maxXY = getMaxProjection(projXY);
+	maxYZ = getMaxProjection(projYZ);
+	maxXZ = getMaxProjection(projXZ);
+	
 	// Initiate time
 	t = tbeg;
 	
@@ -217,7 +297,7 @@ function log() {
 				{
 					app: "tdsbgm",
 					date: "20180620",
-					after: "0600",
+					after: "0800",
 				}
 			)
 		);
