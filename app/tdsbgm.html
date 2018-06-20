@@ -43,7 +43,7 @@ var Tdata, sample;
 var proc;
 var tabs1, tabs2, bgroup;
 var coordMin, coordMax;
-var tablet, initial;
+var tablet, initial, geomet;
 
 // Call main function
 main()
@@ -149,6 +149,7 @@ function setLayout() {
 
 // Load parameters
 function loadParameters() {
+	tabs1.text("Params").push("GEOMET 2");
 	tabs1.text("Params").push("DIMENX 50");
 	tabs1.text("Params").push("DIMENY 50");
 	tabs1.text("Params").push("DIMENZ 50");
@@ -157,7 +158,7 @@ function loadParameters() {
 	tabs1.text("Params").push("TSTEP 1");
 	tabs1.text("Params").push("TDATA 100");
 	tabs1.text("Params").push("TBEG 0");
-	tabs1.text("Params").push("TEND 100000");
+	tabs1.text("Params").push("TEND 20000");
 	tabs1.text("Params").push();
 	tabs1.text("Params").push("COORDMIN 0 0 0");
 	tabs1.text("Params").push("COORDMAX 100 100 100");
@@ -168,6 +169,7 @@ function loadParameters() {
 // Get parameters
 function readParameters() {
 	var text = tabs1.element("Params").value;
+	geomet = Parse.getFrom(text).valueOf("GEOMET");
 	Nx = Parse.getFrom(text).valueOf("DIMENX");
 	Ny = Parse.getFrom(text).valueOf("DIMENY");
 	Nz = Parse.getFrom(text).valueOf("DIMENZ");
@@ -180,7 +182,13 @@ function readParameters() {
 	coordMax = Parse.getFrom(text).valueOf("COORDMAX");
 	
 	// Initiate tablet
-	tablet = createBlockTablet(Nx, Ny, Nz);
+	if(geomet == 0) {
+		tablet = createBlockTablet(Nx, Nx, Nx);
+	} else if(geomet == 1) {
+		tablet = createEllipsoidTablet(Nx, Nx, Nx);
+	} else if(geomet == 2) {
+		tablet = createCylinderTablet(Nx, Nx, Nx);
+	}
 	setMaxValue(tablet, maxValue);
 	initial = getRemains(tablet);
 	
@@ -209,7 +217,7 @@ function log() {
 				{
 					app: "tdsbgm",
 					date: "20180620",
-					after: "0300",
+					after: "0600",
 				}
 			)
 		);
