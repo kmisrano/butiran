@@ -1,9 +1,19 @@
 # butiran
 Simulation of physical system based on granular particles (en: granular particles, id: butiran).
 
-For using with HTML file please use dist/butiran.js or dist/butiran.min.js and examples of application can be found in app folder. And old vesion of js in js.
+## Distribution
+For HTML file please download
 
-## CDNs
+* [dist/butiran.js](https://github.com/dudung/butiran/blob/master/dist/butiran.js)
+* [dist/butiran.min.js](https://github.com/dudung/butiran/blob/master/dist/butiran.min.js)
+
+and use it as
+
+```html
+<script src="butiran.js"></script>
+```
+
+## CDN of application
 
 **opsebf** | One particle in static electric and magnetic field \
 https://cdn.rawgit.com/dudung/butiran/dbe07211/app/opsebf.html
