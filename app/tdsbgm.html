@@ -66,10 +66,10 @@ function simulate() {
 	t = +t.toFixed(10);
 	
 	// Dissolve tablet
-	stepDissolve(tablet);
+	Tablet.stepDissolve(tablet);
 	
 	// Calculate remains of tablet
-	var remains = getRemains(tablet);
+	var remains = Tablet.getRemains(tablet);
 	
 	// Display result in certain period of time
 	if(sample.sampling()) {
@@ -82,13 +82,13 @@ function simulate() {
 		textarea.scrollTop = textarea.scrollHeight;
 		
 		// Get projection
-		var projXY = getProjectionOf(tablet).onPlane("xy");
-		var projYZ = getProjectionOf(tablet).onPlane("yz");
-		var projXZ = getProjectionOf(tablet).onPlane("xz");
+		var projXY = Tablet.getProjectionOf(tablet).onPlane("xy");
+		var projYZ = Tablet.getProjectionOf(tablet).onPlane("yz");
+		var projXZ = Tablet.getProjectionOf(tablet).onPlane("xz");
 		
-		normalizeProjectionInitial(projXY, maxXY);
-		normalizeProjectionInitial(projYZ, maxYZ);
-		normalizeProjectionInitial(projXZ, maxXZ);
+		Tablet.normalizeProjectionInitial(projXY, maxXY);
+		Tablet.normalizeProjectionInitial(projYZ, maxYZ);
+		Tablet.normalizeProjectionInitial(projXZ, maxXZ);
 		
 		var row, col, sr, sc, sizer, sizec;
 		
@@ -201,8 +201,8 @@ function setLayout() {
 	
 	// Define second Tabs
 	tabs2 = new Tabs("tabs2");
-	tabs2.setWidth("250px");
-	tabs2.setHeight("250px");
+	tabs2.setWidth("300px");
+	tabs2.setHeight("300px");
 	tabs2.addTab("xy", 1);
 	tabs2.addTab("yz", 1);
 	tabs2.addTab("xz", 1);
@@ -273,26 +273,26 @@ function readParameters() {
 	
 	// Initiate tablet
 	if(geomet == 0) {
-		tablet = createBlockTablet(Nx, Nx, Nx);
+		tablet = Tablet.createBlockTablet(Nx, Nx, Nx);
 	} else if(geomet == 1) {
-		tablet = createEllipsoidTablet(Nx, Nx, Nx);
+		tablet = Tablet.createEllipsoidTablet(Nx, Nx, Nx);
 	} else if(geomet == 2) {
-		tablet = createCylinderTablet(Nx, Nx, Nx);
+		tablet = Tablet.createCylinderTablet(Nx, Nx, Nx);
 	} else if(geomet == 3) {
-		tablet = createHollowCylinderTablet(Nx, Nx, Nx,
+		tablet = Tablet.createHollowCylinderTablet(Nx, Nx, Nx,
 			Nxh, Nxh);
 	}
-	setMaxValue(tablet, maxValue);
-	initial = getRemains(tablet);
+	Tablet.setMaxValue(tablet, maxValue);
+	initial = Tablet.getRemains(tablet);
 	
 	// Get projection
-	var projXY = getProjectionOf(tablet).onPlane("xy");
-	var projYZ = getProjectionOf(tablet).onPlane("yz");
-	var projXZ = getProjectionOf(tablet).onPlane("xz");
+	var projXY = Tablet.getProjectionOf(tablet).onPlane("xy");
+	var projYZ = Tablet.getProjectionOf(tablet).onPlane("yz");
+	var projXZ = Tablet.getProjectionOf(tablet).onPlane("xz");
 	
-	maxXY = getMaxProjection(projXY);
-	maxYZ = getMaxProjection(projYZ);
-	maxXZ = getMaxProjection(projXZ);
+	maxXY = Tablet.getMaxProjection(projXY);
+	maxYZ = Tablet.getMaxProjection(projYZ);
+	maxXZ = Tablet.getMaxProjection(projXZ);
 	
 	// Initiate time
 	t = tbeg;
