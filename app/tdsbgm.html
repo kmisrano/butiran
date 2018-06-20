@@ -27,7 +27,7 @@
 </script>
 -->
 <script src="butiran.js"></script>
-<script src="tablet.js"></script>
+<!--script src="tablet.js"></script-->
 
 <!-- remove this when deploy openly in distribution -->
 <!-- since 20180619.0300                            -->
@@ -90,11 +90,16 @@ function simulate() {
 		normalizeProjectionInitial(projYZ, maxYZ);
 		normalizeProjectionInitial(projXZ, maxXZ);
 		
-		var row, col, size;
+		var row, col, sr, sc, sizer, sizec;
 		
+		sc = (tabs2.graphic("xy").getCoord()[2] -
+			tabs2.graphic("xy").getCoord()[0]);
+		sr = (tabs2.graphic("xy").getCoord()[3] -
+			tabs2.graphic("xy").getCoord()[1]);
 		row	= projXY.length;
 		col = projXY[0].length;
-		size = 2;
+		sizer = sr / row;
+		sizec = sc / col;
 		tabs2.graphic("xy").clear();
 		for(var r = 0; r < row; r++) {
 			for(var c = 0; c < col; c++) {
@@ -103,18 +108,23 @@ function simulate() {
 				var colG = 1 - val;
 				var colB = 1 - val;
 				var color = RGB.double2rgb(colR, colG, colB);
-				var x = c * size;
-				var y = r * size;
+				var x = c * sizec;
+				var y = r * sizer;
 				tabs2.graphic("xy").setFillColor(color);
-				var w = 1.1 * size;
-				var h = 1.1 * size;
+				var w = 1.2 * sizec;
+				var h = 1.2 * sizer;
 				tabs2.graphic("xy").fillRect(x, y, w, h);
 			}
 		}
 		
+		sc = (tabs2.graphic("yz").getCoord()[2] -
+			tabs2.graphic("yz").getCoord()[0]);
+		sr = (tabs2.graphic("yz").getCoord()[3] -
+			tabs2.graphic("yz").getCoord()[1]);
 		row	= projYZ.length;
 		col = projYZ[0].length;
-		size = 2;
+		sizer = sr / row;
+		sizec = sc / col;
 		tabs2.graphic("yz").clear();
 		for(var r = 0; r < row; r++) {
 			for(var c = 0; c < col; c++) {
@@ -123,18 +133,23 @@ function simulate() {
 				var colG = 1 - val;
 				var colB = 1 - val;
 				var color = RGB.double2rgb(colR, colG, colB);
-				var x = c * size;
-				var y = r * size;
+				var x = c * sizec;
+				var y = r * sizer;
 				tabs2.graphic("yz").setFillColor(color);
-				var w = 1.1 * size;
-				var h = 1.1 * size;
+				var w = 1.2 * sizec;
+				var h = 1.2 * sizer;
 				tabs2.graphic("yz").fillRect(x, y, w, h);
 			}
 		}
 		
+		sc = (tabs2.graphic("xz").getCoord()[2] -
+			tabs2.graphic("xz").getCoord()[0]);
+		sr = (tabs2.graphic("xz").getCoord()[3] -
+			tabs2.graphic("xz").getCoord()[1]);
 		row	= projXZ.length;
 		col = projXZ[0].length;
-		size = 2;
+		sizer = sr / row;
+		sizec = sc / col;
 		tabs2.graphic("xz").clear();
 		for(var r = 0; r < row; r++) {
 			for(var c = 0; c < col; c++) {
@@ -143,11 +158,11 @@ function simulate() {
 				var colG = 1 - val;
 				var colB = 1 - val;
 				var color = RGB.double2rgb(colR, colG, colB);
-				var x = c * size;
-				var y = r * size;
+				var x = c * sizec;
+				var y = r * sizer;
 				tabs2.graphic("xz").setFillColor(color);
-				var w = 1.1 * size;
-				var h = 1.1 * size;
+				var w = 1.2 * sizec;
+				var h = 1.2 * sizer;
 				tabs2.graphic("xz").fillRect(x, y, w, h);
 			}
 		}
@@ -186,8 +201,8 @@ function setLayout() {
 	
 	// Define second Tabs
 	tabs2 = new Tabs("tabs2");
-	tabs2.setWidth("300px");
-	tabs2.setHeight("300px");
+	tabs2.setWidth("250px");
+	tabs2.setHeight("250px");
 	tabs2.addTab("xy", 1);
 	tabs2.addTab("yz", 1);
 	tabs2.addTab("xz", 1);
@@ -220,10 +235,12 @@ function setLayout() {
 
 // Load parameters
 function loadParameters() {
-	tabs1.text("Params").push("GEOMET 2");
+	tabs1.text("Params").push("GEOMET 3");
 	tabs1.text("Params").push("DIMENX 50"); //50
 	tabs1.text("Params").push("DIMENY 50"); //50
 	tabs1.text("Params").push("DIMENZ 50"); //50
+	tabs1.text("Params").push("DIMEXH 20");
+	tabs1.text("Params").push("DIMEYH 20");
 	tabs1.text("Params").push("MAXVAL 1000"); //1000
 	tabs1.text("Params").push();
 	tabs1.text("Params").push("TSTEP 1");
@@ -244,6 +261,8 @@ function readParameters() {
 	Nx = Parse.getFrom(text).valueOf("DIMENX");
 	Ny = Parse.getFrom(text).valueOf("DIMENY");
 	Nz = Parse.getFrom(text).valueOf("DIMENZ");
+	Nxh = Parse.getFrom(text).valueOf("DIMEXH");
+	Nyh = Parse.getFrom(text).valueOf("DIMEYH");
 	maxValue = Parse.getFrom(text).valueOf("MAXVAL");
 	tbeg = Parse.getFrom(text).valueOf("TBEG");
 	tend = Parse.getFrom(text).valueOf("TEND");
@@ -259,6 +278,9 @@ function readParameters() {
 		tablet = createEllipsoidTablet(Nx, Nx, Nx);
 	} else if(geomet == 2) {
 		tablet = createCylinderTablet(Nx, Nx, Nx);
+	} else if(geomet == 3) {
+		tablet = createHollowCylinderTablet(Nx, Nx, Nx,
+			Nxh, Nxh);
 	}
 	setMaxValue(tablet, maxValue);
 	initial = getRemains(tablet);
@@ -297,7 +319,7 @@ function log() {
 				{
 					app: "tdsbgm",
 					date: "20180620",
-					after: "0800",
+					after: "1000",
 				}
 			)
 		);
