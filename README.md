@@ -16,10 +16,10 @@ and use it as usual
 ## CDN of application
 
 **opsebf** | One particle in static electric and magnetic field \
-https://cdn.rawgit.com/dudung/butiran/1ca3168a/app/opsebf.html
+https://cdn.rawgit.com/dudung/butiran/bb06397c/app/opsebf.html
 
 **tdsbgm** | Table dissolution simulation based on grid model \
-https://cdn.rawgit.com/dudung/butiran/8a2e2afc/app/tdsbgm.html
+https://cdn.rawgit.com/dudung/butiran/bb06397c/app/tdsbgm.html
 
 **sasbgm** | Sandpile avalanche simulation based on grid model \
-https://cdn.rawgit.com/dudung/butiran/bb06397c/app/tdsbgm.html
+https://cdn.rawgit.com/dudung/butiran/bb06397c/app/sasbgm.html
