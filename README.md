@@ -1,6 +1,7 @@
 # butiran
 Simulation of physical system based on granular particles (en: granular particles, id: butiran).
 
+
 ## Distribution
 For client side HTML file please download
 
@@ -12,6 +13,13 @@ and use it as usual
 ```html
 <script src="butiran.js"></script>
 ```
+
+or remotely
+
+```html
+<script src="https://cdn.rawgit.com/dudung/butiran/099cd8e2/dist/butiran.js"></script>
+```
+
 
 ## CDN of application
 
