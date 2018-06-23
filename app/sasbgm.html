@@ -1,24 +1,16 @@
 <!doctype html>
 <!--
-	opsebf.js
-	One particle in static electric and magnetic field
+	sasbgm.js
+	Sandpile avalanche simulation based on grid model
 	
 	Sparisoma Viridi | dudung@gmail.com
-	Siti Nurul Khotimah | nurul@fi.itb.ac.id
+	Zahrotul Firdaus Tri Wahyu Lestari | firdauszahrotul@gmail.com
 	
-	20180619
-	Create this based on gstd.js application.
-	Show the right images of xy, yz, xz.
-	20180620
-	Modify layout of the script, minor only, column < 64.
-	Add CDN.
 	20180623
-	Apply revision from Siti Nurul Khotimah about clear, which
-	should clear all as written in the help. Modify About menu
-	and add second author.
+	Create this based on tdsbgm.js application as template.
 	
 	CDN
-	https://rawgit.com/dudung/butiran/master/app/opsebf.html
+	https://rawgit.com/dudung/butiran/master/app/sasbgm.html
 -->
 <html>
 <head>
@@ -41,13 +33,7 @@
 <body>
 <script>
 // Define some global variables
-var m, q, r, v;
-var EField, BField, GField;
-var t, dt, tbeg, tend;
-var Tdata, sample;
-var proc;
-var tabs1, tabs2, bgroup;
-var coordMin, coordMax;
+var L0, L1, L2, H;
 
 // Call main function
 main()
@@ -69,35 +55,12 @@ function simulate() {
 	// Format time t
 	t = +t.toFixed(10);
 	
-	// Calculate all forces
-	var FE = Vect3.mul(q, EField);
-	var FB = Vect3.cross(Vect3.mul(q, v), BField);
-	var FG = Vect3.mul(m, GField);
-	
-	// Apply Newton second law of motion
-	var F = Vect3.add(FE, FB, FG);
-	var a = Vect3.div(F, m);
-	
-	// Integrate using Euler algorithm
-	v = Vect3.add(v, Vect3.mul(a, dt));
-	r = Vect3.add(r, Vect3.mul(v, dt));
-
-	v.x = +v.x.toFixed(10);
-	v.y = +v.y.toFixed(10);
-	v.z = +v.z.toFixed(10);
-	r.x = +r.x.toFixed(10);
-	r.y = +r.y.toFixed(10);
-	r.z = +r.z.toFixed(10);
-	
 	// Display result in certain period of time
 	if(sample.sampling()) {
-		var data = t + " "
-			+ r.x.toExponential(2) + " "
-			+ r.y.toExponential(2) + " "
-			+ r.z.toExponential(2) + " "
-			+ v.x.toExponential(2) + " "
-			+ v.y.toExponential(2) + " "
-			+ v.z.toExponential(2);
+		var tt = ((t - tbeg) / (tend - tbeg));
+		tt = +tt.toFixed(10);
+		var data = tt + " "
+			+ "";
 		tabs1.text("Results").push(data);
 		var textarea = tabs1.element("Results");
 		textarea.scrollTop = textarea.scrollHeight;
@@ -121,14 +84,13 @@ function simulate() {
 function setLayout() {
 	// Create title page
 	var p = document.createElement("p");
-	p.innerHTML = "One particle in static electric and " +
-		"magnetic field";
+	p.innerHTML = "Sandpile avalanche simulation based on grid model";
 	p.style.fontWeight = "bold";
 	document.body.append(p);
 
 	// Define first Tabs
 	tabs1 = new Tabs("tabs1");
-	tabs1.setWidth("450px");
+	tabs1.setWidth("400px");
 	tabs1.setHeight("240px");
 	tabs1.addTab("Log", 0);
 	tabs1.addTab("Params", 0);
@@ -136,21 +98,15 @@ function setLayout() {
 	
 	// Define second Tabs
 	tabs2 = new Tabs("tabs2");
-	tabs2.setWidth("300px");
+	tabs2.setWidth("250px");
 	tabs2.setHeight("300px");
 	tabs2.addTab("xy", 1);
-	tabs2.addTab("yz", 1);
-	tabs2.addTab("xz", 1);
-	tabs2.addTab("xyz", 1);
 	
 	// Clear all tabs
 	tabs1.text("Params").clear();
 	tabs1.text("Results").clear();
 	tabs1.text("Log").clear();
 	tabs2.graphic("xy").clear();
-	tabs2.graphic("yz").clear();
-	tabs2.graphic("xz").clear();
-	tabs2.graphic("xyz").clear();
 
 	// Define bgroup
 	bgroup = new Bgroup("bgroup");
@@ -170,23 +126,17 @@ function setLayout() {
 
 // Load parameters
 function loadParameters() {
-	tabs1.text("Params").push("MASS 1");
-	tabs1.text("Params").push("CHARGE 1");
-	tabs1.text("Params").push("VELOCITY 1 0 0");
-	tabs1.text("Params").push("POSITION 0 0 0");
+	tabs1.text("Params").push("FLOORW 200");
+	tabs1.text("Params").push("BOTTOW 100");
+	tabs1.text("Params").push("TOPW 90");
 	tabs1.text("Params").push();
-	tabs1.text("Params").push("MAGNFIELD 0 0 1");
-	tabs1.text("Params").push("ELECFIELD 0 0 0.1");
-	tabs1.text("Params").push("GRAVFIELD 0 0 0");
-	tabs1.text("Params").push("MOMEFIELD 0 0 0");
-	tabs1.text("Params").push();
-	tabs1.text("Params").push("TSTEP 1E-3");
-	tabs1.text("Params").push("TDATA 1E-1");
+	tabs1.text("Params").push("TSTEP 1");
+	tabs1.text("Params").push("TDATA 100");
 	tabs1.text("Params").push("TBEG 0");
-	tabs1.text("Params").push("TEND 10");
+	tabs1.text("Params").push("TEND 1000");
 	tabs1.text("Params").push();
-	tabs1.text("Params").push("COORDMIN -2 -3 -0.5");
-	tabs1.text("Params").push("COORDMAX 2 1 5.5");
+	tabs1.text("Params").push("COORDMIN -2 -2 -2");
+	tabs1.text("Params").push("COORDMAX 2 2 2");
 	var ta = tabs1.element("Params");
 	ta.scrollTop = ta.scrollHeight;
 }
@@ -217,10 +167,6 @@ function readParameters() {
 	// Set coordinate ranges
 	tabs2.graphic("xy").setCoord(
 		[coordMin.x, coordMin.y, coordMax.x, coordMax.y]);
-	tabs2.graphic("yz").setCoord(
-		[coordMin.y, coordMin.z, coordMax.y, coordMax.z]);
-	tabs2.graphic("xz").setCoord(
-		[coordMin.x, coordMin.z, coordMax.x, coordMax.z]);
 }	
 
 // Log something and show manually	
@@ -229,7 +175,7 @@ function log() {
 		console.log(
 			showOnly(logjs).forFilter(
 				{
-					app: "opsebf",
+					app: "sasbgm",
 					date: "20180623",
 					after: "1900",
 				}
@@ -237,7 +183,7 @@ function log() {
 		);
 	}
 	catch(err) {
-		var msg = "opsebf logs only in development stage";
+		var msg = "sasbgp logs only in development stage";
 		console.warn(msg);
 	}
 }
@@ -266,18 +212,19 @@ function buttonClick(event) {
 	
 	if(target.innerHTML == "About") {
 		alert(
-			"opsebf | "
-			+ "One particle in static electric and magnetic field"
+			"sasbgm | "
+			+ "Sandpile avalanche simulation based on grid model"
 			+ "\n"
 			+ "Version 20180623"
 			+ "\n"
 			+ "Sparisoma Viridi | dudung@gmail.com"
 			+ "\n"
-			+ "Siti Nurul Khotimah | nurul@fi.itb.ac.id"
+			+ "Zahrotul Firdaus Tri Wahyu Lestari | "
+			+ "firdauszahrotul@gmail.com"
 			+ "\n"
 			+ "\n"
 			+ "Based on butiran "
-			+ "| https://github.com/dudung/butiran"
+			+ " | https://github.com/dudung/butiran"
 			+ "\n"
 			+ "MIT License | "
 			+ "Copyright (c) 2018 Sparisoma Viridi"
@@ -328,14 +275,10 @@ function buttonClick(event) {
 		tabs1.text("Results").clear();
 		tabs1.text("Log").clear();
 		tabs2.graphic("xy").clear();
-		tabs2.graphic("yz").clear();
-		tabs2.graphic("xz").clear();
-		tabs2.graphic("xyz").clear();
 		var ts = Timer.ts() + "|";
 		tabs1.text("Log").push(ts + "Parameters, Results, "
 			+ "and Log are cleared");
-		tabs1.text("Log").push(ts + "xy, yz, xz, and xyz "
-			+ "are cleared");
+		tabs1.text("Log").push(ts + "xy is cleared");
 		var ta = tabs1.element("Log");
 		ta.scrollTop = ta.scrollHeight;
 		bgroup.disable("Read");
@@ -356,23 +299,10 @@ function drawResults() {
 	// Get results
 	var text = tabs1.element("Results").value;
 	var tt = Parse.getFrom(text).column(0);
-	var rx = Parse.getFrom(text).column(1);
-	var ry = Parse.getFrom(text).column(2);
-	var rz = Parse.getFrom(text).column(3);
-	var vx = Parse.getFrom(text).column(4);
-	var vy = Parse.getFrom(text).column(5);
-	var vz = Parse.getFrom(text).column(6);
 	
 	// Draw on related chart
 	tabs2.graphic("xy").clear();
 	tabs2.graphic("xy").setLineColor("#f00");	
-	tabs2.graphic("xy").lines(rx, ry);
-	tabs2.graphic("yz").clear();
-	tabs2.graphic("yz").setLineColor("#0f0");	
-	tabs2.graphic("yz").lines(ry, rz);
-	tabs2.graphic("xz").clear();
-	tabs2.graphic("xz").setLineColor("#00f");	
-	tabs2.graphic("xz").lines(rx, rz);
 }
 
 </script>
