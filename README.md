@@ -4,8 +4,8 @@ Simulation of physical system based on granular particles (en: granular particle
 ## Distribution
 For client side HTML file please download
 
-* [dist/butiran.js](https://github.com/dudung/butiran/blob/master/dist/butiran.js)  83 KB
-* [dist/butiran.min.js](https://github.com/dudung/butiran/blob/master/dist/butiran.min.js) 35 KB
+* [dist/butiran.js](https://github.com/dudung/butiran/blob/master/dist/butiran.js) (83 KB)
+* [dist/butiran.min.js](https://github.com/dudung/butiran/blob/master/dist/butiran.min.js) (35 KB)
 
 and use it as usual
 
