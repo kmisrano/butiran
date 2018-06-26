@@ -41,7 +41,9 @@
 var tabs1, tabs2, bgroup;
 var proc, tbeg, tend, dt, Tdata, tt;
 var coordMin, coordMax;
-var pile, phase;
+var pile;
+var phase, probL, probR, probU, probD;
+var clear = true;
 
 // Call main function
 main()
@@ -72,6 +74,8 @@ function simulate() {
 		manipulate(pile).as("solid");
 	} else if(phase == 3) {
 		manipulate(pile).as("granular");
+	} else if(phase == 4){
+		manipulate(pile).as("granular2");
 	}
 
 	// Display result in certain period of time
@@ -114,6 +118,8 @@ function manipulate(p) {
 				algorithmSolid(p);
 			} else if(state == "granular") {
 				algorithmGranular(p);
+			} else if(state == "granular2") {
+				algorithmGranular2(p);
 			}
 		}
 	};
@@ -190,7 +196,70 @@ function algorithmSolid(p) {
 
 // Define algorithm for different state -- only for 2-d -- granular
 function algorithmGranular(p) {
+	// Preapare value of Pile
+	var Ndir = 8;
+	var Nx = p.Nx;
+	var Ny = p.Ny;
+	var grid = p.value;
 
+	// Move grid of grain
+	for(var iy = 0; iy < Ny; iy++) {
+		for(var ix = 0; ix < Nx; ix++) {
+			var grain = grid[iy][ix];
+			if(grain == 1) {
+
+
+				var mag = Random.randInt(0, 1);
+				var dx = Random.randInt(-0.5 * Ndir, +0.5 * Ndir);
+				var dy = Random.randInt(-Ndir, -0.5 * Ndir);
+
+
+				var newix = ix + dx * mag;
+				var newiy = iy + dy * mag;
+				var wallX = (newix < 0) || (newix > Nx - 1);
+				var wallY = (newiy < 0) || (newiy > Ny - 1);
+				if(!wallX && !wallY) {
+					var newgrain = grid[newiy][newix];
+					if(newgrain == 0) {
+						grid[newiy][newix] = grid[iy][ix];
+						grid[iy][ix] = 0;
+					}
+				}
+			}
+		}
+	}
+}
+
+// Define algorithm for different state -- only for 2-d -- granular
+function algorithmGranular2(p) {
+	// Preapare value of Pile
+	var Ndir = 8;
+	var Nx = p.Nx;
+	var Ny = p.Ny;
+	var grid = p.value;
+
+	// Move grid of grain
+	for(var iy = 0; iy < Ny; iy++) {
+		for(var ix = 0; ix < Nx; ix++) {
+			var grain = grid[iy][ix];
+			if(grain == 1) {
+				var mag = Random.randInt(0, 1);
+				var dx = Random.randInt(probL * Ndir, probR * Ndir);
+				var dy = Random.randInt(probD * Ndir, probU * Ndir);
+				var newix = ix + dx * mag;
+				var newiy = iy + dy * mag;
+				var wallX = (newix < 0) || (newix > Nx - 1);
+				var wallY = (newiy < 0) || (newiy > Ny - 1);
+				if(!wallX && !wallY) {
+					var newgrain = grid[newiy][newix];
+					if(newgrain == 0) {
+						grid[newiy][newix] = grid[iy][ix];
+						grid[iy][ix] = 0;
+					}
+				}
+			}
+		}
+	}
 }
 
 // Draw Pile
@@ -227,7 +296,7 @@ function setLayout() {
 	// Define first Tabs
 	tabs1 = new Tabs("tabs1");
 	tabs1.setWidth("300px");
-	tabs1.setHeight("240px");
+	tabs1.setHeight("300px");
 	tabs1.addTab("Log", 0);
 	tabs1.addTab("Params", 0);
 	tabs1.addTab("Results", 0);
@@ -267,7 +336,11 @@ function loadParameters() {
 	tabs1.text("Params").push("BXBEG 100 0 0");
 	tabs1.text("Params").push("BXEND 199 199 0");
 	tabs1.text("Params").push();
-	tabs1.text("Params").push("PHASE 0");
+	tabs1.text("Params").push("PHASE 4");
+	tabs1.text("Params").push("PROBL -1");
+	tabs1.text("Params").push("PROBR +1");
+	tabs1.text("Params").push("PROBU +1");
+	tabs1.text("Params").push("PROBD -1");
 	tabs1.text("Params").push();
 	tabs1.text("Params").push("TSTEP 1");
 	tabs1.text("Params").push("TDATA 100");
@@ -298,15 +371,24 @@ function readParameters() {
 	coordMin = Parse.getFrom(text).valueOf("COORDMIN");
 	coordMax = Parse.getFrom(text).valueOf("COORDMAX");
 
-	// Define pile with parameters
-	pile = new Pile(Nx, Ny);
-	pile.fillGrid([xbeg, xend], [ybeg, yend]);
+	if(phase == 4) {
+		probL = Parse.getFrom(text).valueOf("PROBL");
+		probR = Parse.getFrom(text).valueOf("PROBR");
+		probU = Parse.getFrom(text).valueOf("PROBU");
+		probD = Parse.getFrom(text).valueOf("PROBD");
+	}
 
-	// Initiate time
-	t = tbeg;
+	if(clear) {
+		// Define pile with parameters
+		pile = new Pile(Nx, Ny);
+		pile.fillGrid([xbeg, xend], [ybeg, yend]);
 
-	// Set sampling
-	sample = new Sample(Tdata, dt);
+		// Initiate time
+		t = tbeg;
+
+		// Set sampling
+		sample = new Sample(Tdata, dt);
+	}
 
 	// Set coordinate ranges
 	tabs2.graphic("xy").setCoord(
@@ -352,6 +434,7 @@ function buttonClick(event) {
 		var ta = tabs1.element("Log");
 		ta.scrollTop = ta.scrollHeight;
 		bgroup.enable("Draw");
+		clear = false;
 	}
 
 	if(target.innerHTML == "About") {
@@ -427,6 +510,7 @@ function buttonClick(event) {
 		ta.scrollTop = ta.scrollHeight;
 		bgroup.disable("Read");
 		bgroup.disable("Start");
+		clear = true;
 	}
 
 	if(target.innerHTML == "Draw") {
