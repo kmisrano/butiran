@@ -1,5 +1,6 @@
 [20180626]
-Try edit git using MacOS in Morikawa-sensei and update it.
+Try edit git using MacOS in Morikawa-sensei and update it. Fail 1040.
+Forget git init.
 
 
 [20180618]
