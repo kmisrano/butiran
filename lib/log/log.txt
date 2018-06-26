@@ -1,3 +1,7 @@
+[20180626]
+Try edit git using MacOS in Morikawa-sensei and update it.
+
+
 [20180618]
 Add element(label) for alternative to textarea(label) and canvas(label).
 Update and move test from app/js to app.
