@@ -39,9 +39,9 @@
 <script>
 // Define some global variables
 var tabs1, tabs2, bgroup;
-var proc, tbeg, tend, dt, Tdata;
+var proc, tbeg, tend, dt, Tdata, tt;
 var coordMin, coordMax;
-var pile;
+var pile, phase;
 
 // Call main function
 main()
@@ -64,11 +64,19 @@ function simulate() {
 	t = +t.toFixed(10);
 
 	// Manipulate Pile
-	manipulate(pile).as("gas");
+	if(phase == 0) {
+		manipulate(pile).as("gas");
+	} else if(phase == 1) {
+		manipulate(pile).as("fluid");
+	} else if(phase == 2){
+		manipulate(pile).as("solid");
+	} else if(phase == 3) {
+		manipulate(pile).as("granular");
+	}
 
 	// Display result in certain period of time
 	if(sample.sampling()) {
-		var tt = ((t - tbeg) / (tend - tbeg));
+		tt = ((t - tbeg) / (tend - tbeg));
 		tt = +tt.toFixed(10);
 		var data = tt + " "
 			+ "";
@@ -104,20 +112,18 @@ function manipulate(p) {
 				algorithmFluid(p);
 			} else if(state == "solid") {
 				algorithmSolid(p);
+			} else if(state == "granular") {
+				algorithmGranular(p);
 			}
 		}
 	};
 	return retval;
 }
 
-// Define algorithm for different state -- only for 2-d
+// Define algorithm for different state -- only for 2-d -- gas
 function algorithmGas(p) {
-	// Define    N, NE,  E, SE,  S, SW,  W, NW
-	var dirx = [ 0, +1, +1, +1,  0, -1, -1, -1];
-	var diry = [+1, +1,  0, -1, -1, -1,  0, +1];
-	var Ndir = Math.min(dirx.length, diry.length);
-
 	// Preapare value of Pile
+	var Ndir = 8;
 	var Nx = p.Nx;
 	var Ny = p.Ny;
 	var grid = p.value;
@@ -127,11 +133,9 @@ function algorithmGas(p) {
 		for(var ix = 0; ix < Nx; ix++) {
 			var grain = grid[iy][ix];
 			if(grain == 1) {
-
-				var dir = Random.randInt(0, Ndir - 1);
 				var mag = Random.randInt(0, 1);
-				var dx = Random.randInt(-Ndir, +Ndir) % Ndir;
-				var dy = Random.randInt(-Ndir, +Ndir) % Ndir;
+				var dx = Random.randInt(-Ndir, +Ndir);
+				var dy = Random.randInt(-Ndir, +Ndir);
 				var newix = ix + dx * mag;
 				var newiy = iy + dy * mag;
 				var wallX = (newix < 0) || (newix > Nx - 1);
@@ -143,14 +147,50 @@ function algorithmGas(p) {
 						grid[iy][ix] = 0;
 					}
 				}
-
 			}
 		}
 	}
 }
+
+// Define algorithm for different state -- only for 2-d -- fluid
 function algorithmFluid(p) {
+	// Preapare value of Pile
+	var Ndir = 8;
+	var Nx = p.Nx;
+	var Ny = p.Ny;
+	var grid = p.value;
+
+	// Move grid of grain
+	for(var iy = 0; iy < Ny; iy++) {
+		for(var ix = 0; ix < Nx; ix++) {
+			var grain = grid[iy][ix];
+			if(grain == 1) {
+				var mag = Random.randInt(0, 1);
+				var dx = Random.randInt(-Ndir, +Ndir);
+				var dy = Random.randInt(-Ndir, 0.5 * Ndir);
+				var newix = ix + dx * mag;
+				var newiy = iy + dy * mag;
+				var wallX = (newix < 0) || (newix > Nx - 1);
+				var wallY = (newiy < 0) || (newiy > Ny - 1);
+				if(!wallX && !wallY) {
+					var newgrain = grid[newiy][newix];
+					if(newgrain == 0) {
+						grid[newiy][newix] = grid[iy][ix];
+						grid[iy][ix] = 0;
+					}
+				}
+			}
+		}
+	}
 }
+
+// Define algorithm for different state -- only for 2-d -- solid
 function algorithmSolid(p) {
+}
+
+// Define algorithm for different state -- only for 2-d -- granular
+function algorithmGranular(p) {
+
 }
 
 // Draw Pile
@@ -227,10 +267,12 @@ function loadParameters() {
 	tabs1.text("Params").push("BXBEG 100 0 0");
 	tabs1.text("Params").push("BXEND 199 199 0");
 	tabs1.text("Params").push();
+	tabs1.text("Params").push("PHASE 0");
+	tabs1.text("Params").push();
 	tabs1.text("Params").push("TSTEP 1");
 	tabs1.text("Params").push("TDATA 100");
 	tabs1.text("Params").push("TBEG 0");
-	tabs1.text("Params").push("TEND 100000");
+	tabs1.text("Params").push("TEND 10000");
 	tabs1.text("Params").push();
 	tabs1.text("Params").push("COORDMIN 0 0 0");
 	tabs1.text("Params").push("COORDMAX 300 300 1");
@@ -248,6 +290,7 @@ function readParameters() {
 	var xend = Parse.getFrom(text).valueOf("BXEND").x;
 	var ybeg = Parse.getFrom(text).valueOf("BXBEG").y;
 	var yend = Parse.getFrom(text).valueOf("BXEND").y;
+	phase = Parse.getFrom(text).valueOf("PHASE");
 	tbeg = Parse.getFrom(text).valueOf("TBEG");
 	tend = Parse.getFrom(text).valueOf("TEND");
 	dt = Parse.getFrom(text).valueOf("TSTEP");
