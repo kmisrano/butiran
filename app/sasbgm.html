@@ -8,6 +8,10 @@
 	
 	20180623
 	Create this based on tdsbgm.js application as template.
+	20180625
+	Continue this in RCNP, Osaka University, Osaka, Japan.
+	20180626
+	Continue from room in RCNP to lab.
 	
 	CDN
 	https://rawgit.com/dudung/butiran/master/app/sasbgm.html
@@ -23,6 +27,7 @@
 </script>
 -->
 <script src="butiran.js"></script>
+<script src="pile.js"></script>
 
 <!-- remove this when deploy openly in distribution -->
 <!-- since 20180619.0300                            -->
@@ -33,7 +38,10 @@
 <body>
 <script>
 // Define some global variables
-var L0, L1, L2, H;
+var tabs1, tabs2, bgroup;
+var proc, tbeg, tend, dt, Tdata;
+var coordMin, coordMax;
+var pile;
 
 // Call main function
 main()
@@ -55,6 +63,9 @@ function simulate() {
 	// Format time t
 	t = +t.toFixed(10);
 	
+	// Manipulate Pile
+	manipulate(pile).as("gas");
+	
 	// Display result in certain period of time
 	if(sample.sampling()) {
 		var tt = ((t - tbeg) / (tend - tbeg));
@@ -64,6 +75,8 @@ function simulate() {
 		tabs1.text("Results").push(data);
 		var textarea = tabs1.element("Results");
 		textarea.scrollTop = textarea.scrollHeight;
+		
+		drawPile(pile).on("xy");
 	}
 	
 	// Terminate simulation when end time is reached
@@ -80,6 +93,98 @@ function simulate() {
 	t += dt;
 }
 
+// Manipulate Pile
+function manipulate(p) {
+	var retval = {
+		as: function(state) {
+			var msg;
+			if(state == "gas") {
+				algorithmGas(p);
+			} else if(state == "fluid") {
+				algorithmFluid(p);
+			} else if(state == "solid") {
+				algorithmSolid(p);
+			}
+		}
+	};
+	return retval;
+}
+
+// Define algorithm for different state -- only for 2-d
+function algorithmGas(p) {
+	// Define  N, NE,  E, SE,  S, SW,  W, NW
+	var dirx = [ 0, +1, +1, +1,  0, -1, -1, -1];
+	var diry = [+1, +1,  0, -1, -1, -1,  0, +1];
+	var Ndir = Math.min(dirx.length, diry.length);
+	
+	// Preapare value of Pile
+	var Nx = p.Nx;
+	var Ny = p.Ny;
+	var grid = p.value;
+	
+	// Move grid of grain
+	for(var iy = 0; iy < Ny; iy++) {
+		for(var ix = 0; ix < Nx; ix++) {
+			var grain = grid[iy][ix];
+			if(grain == 1) {
+				var moved = false;
+				
+				do {
+					console.log("d");
+					moved = true;
+				} while (!moved);
+/*
+				while(!wallX && !wallY) {
+
+					var dir = Random.randInt(0, Ndir - 1);
+					var dx = dirx[dir];
+					var dy = diry[dir];
+					var newix = ix + dx;
+					var newiy = iy + dy;
+					var wallX = (newix < 0) || (newix > Nx - 1);
+					var wallY = (newiy < 0) || (newiy > Ny - 1);
+					if(!wallX && !wallY) {
+						var newgrain = grid[newiy][newix];
+						if(newgrain == 0) {
+							grid[newiy][newix] = grid[iy][ix];
+							grid[iy][ix] = 0;
+						}
+						break;
+					}
+				}
+*/
+			}
+		}
+	}
+}
+function algorithmFluid(p) {
+}
+function algorithmSolid(p) {
+}
+
+// Draw Pile
+function drawPile(p) {
+	var isPile = p instanceof Pile;
+	if(isPile) {
+		var retval = {
+			on: function(label) {
+				tabs2.graphic(label).clear();
+				for(var iy = 0; iy < p.Ny; iy++) {
+					for(var ix = 0; ix < p.Nx; ix++) {
+						var cR = 1 - p.value[iy][ix];
+						var cG = 1 - p.value[iy][ix];
+						var cB = 1 - p.value[iy][ix];
+						var col = RGB.double2rgb(cR, cG, cB);
+						tabs2.graphic(label).setFillColor(col);
+						tabs2.graphic(label).fillRect(ix, iy, 1.07, 1.07);
+					}
+				}
+			}
+		}
+		return retval;
+	}
+}
+
 // Set layout of elements
 function setLayout() {
 	// Create title page
@@ -90,7 +195,7 @@ function setLayout() {
 
 	// Define first Tabs
 	tabs1 = new Tabs("tabs1");
-	tabs1.setWidth("400px");
+	tabs1.setWidth("300px");
 	tabs1.setHeight("240px");
 	tabs1.addTab("Log", 0);
 	tabs1.addTab("Params", 0);
@@ -98,7 +203,7 @@ function setLayout() {
 	
 	// Define second Tabs
 	tabs2 = new Tabs("tabs2");
-	tabs2.setWidth("250px");
+	tabs2.setWidth("300px");
 	tabs2.setHeight("300px");
 	tabs2.addTab("xy", 1);
 	
@@ -126,17 +231,18 @@ function setLayout() {
 
 // Load parameters
 function loadParameters() {
-	tabs1.text("Params").push("FLOORW 200");
-	tabs1.text("Params").push("BOTTOW 100");
-	tabs1.text("Params").push("TOPW 90");
+	tabs1.text("Params").push("SIZEX 100");
+	tabs1.text("Params").push("SIZEY 100");
+	tabs1.text("Params").push("BXBEG 40 0 0");
+	tabs1.text("Params").push("BXEND 59 19 0");
 	tabs1.text("Params").push();
 	tabs1.text("Params").push("TSTEP 1");
 	tabs1.text("Params").push("TDATA 100");
 	tabs1.text("Params").push("TBEG 0");
-	tabs1.text("Params").push("TEND 1000");
+	tabs1.text("Params").push("TEND 10000");
 	tabs1.text("Params").push();
-	tabs1.text("Params").push("COORDMIN -2 -2 -2");
-	tabs1.text("Params").push("COORDMAX 2 2 2");
+	tabs1.text("Params").push("COORDMIN 0 0 0");
+	tabs1.text("Params").push("COORDMAX 100 100 30");
 	var ta = tabs1.element("Params");
 	ta.scrollTop = ta.scrollHeight;
 }
@@ -144,13 +250,13 @@ function loadParameters() {
 // Get parameters
 function readParameters() {
 	var text = tabs1.element("Params").value;
-	m = Parse.getFrom(text).valueOf("MASS");
-	q = Parse.getFrom(text).valueOf("CHARGE");
-	r = Parse.getFrom(text).valueOf("POSITION");
-	v = Parse.getFrom(text).valueOf("VELOCITY");
-	EField = Parse.getFrom(text).valueOf("ELECFIELD");
-	BField = Parse.getFrom(text).valueOf("MAGNFIELD");
-	GField = Parse.getFrom(text).valueOf("GRAVFIELD");
+	var Nx = Parse.getFrom(text).valueOf("SIZEX");
+	var Ny = Parse.getFrom(text).valueOf("SIZEY");
+	var Nz = Parse.getFrom(text).valueOf("SIZEZ");
+	var xbeg = Parse.getFrom(text).valueOf("BXBEG").x;
+	var xend = Parse.getFrom(text).valueOf("BXEND").x;
+	var ybeg = Parse.getFrom(text).valueOf("BXBEG").y;
+	var yend = Parse.getFrom(text).valueOf("BXEND").y;
 	tbeg = Parse.getFrom(text).valueOf("TBEG");
 	tend = Parse.getFrom(text).valueOf("TEND");
 	dt = Parse.getFrom(text).valueOf("TSTEP");
@@ -158,6 +264,11 @@ function readParameters() {
 	coordMin = Parse.getFrom(text).valueOf("COORDMIN");
 	coordMax = Parse.getFrom(text).valueOf("COORDMAX");
 	
+	// Define pile with parameters
+	pile = new Pile(Nx, Ny);
+	pile.fillGrid([xbeg, xend], [ybeg, yend]);
+	console.log(pile);
+
 	// Initiate time
 	t = tbeg;
 	
@@ -176,8 +287,8 @@ function log() {
 			showOnly(logjs).forFilter(
 				{
 					app: "sasbgm",
-					date: "20180623",
-					after: "1900",
+					date: "20180626",
+					after: "0700",
 				}
 			)
 		);
@@ -302,7 +413,7 @@ function drawResults() {
 	
 	// Draw on related chart
 	tabs2.graphic("xy").clear();
-	tabs2.graphic("xy").setLineColor("#f00");	
+	tabs2.graphic("xy").setLineColor("#f00");
 }
 
 </script>
