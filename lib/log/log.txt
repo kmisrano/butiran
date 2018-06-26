@@ -1,7 +1,7 @@
 [20180626]
 Try edit git using MacOS in Morikawa-sensei and update it. Fail 1040.
 Forget git init. Still fail 1047.
-Try change —-global user.email and user.name.
+Try change —-global user.email and user.name. Fail 1049.
 
 
 [20180618]
