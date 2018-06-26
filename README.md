@@ -24,10 +24,10 @@ or remotely
 ## CDN of application
 
 **opsebf** | One particle in static electric and magnetic field \
-https://cdn.rawgit.com/dudung/butiran/bb06397c/app/opsebf.html
+https://cdn.rawgit.com/dudung/butiran/e756305a/app/opsebf.html
 
 **tdsbgm** | Table dissolution simulation based on grid model \
-https://cdn.rawgit.com/dudung/butiran/bb06397c/app/tdsbgm.html
+https://cdn.rawgit.com/dudung/butiran/e756305a/app/tdsbgm.html
 
 **sasbgm** | Sandpile avalanche simulation based on grid model \
-https://cdn.rawgit.com/dudung/butiran/bb06397c/app/sasbgm.html
+https://cdn.rawgit.com/dudung/butiran/e756305a/app/sasbgm.html
