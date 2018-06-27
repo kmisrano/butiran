@@ -1895,6 +1895,7 @@ module.exports = {
 	staying in room 113 at RCNP.
 	20180627
 	Add to butiran.js library.
+	Add value of to be filled.
 */
 
 class Pile {
@@ -1943,6 +1944,11 @@ class Pile {
 		this.dimension = D;
 	}
 	
+	// Adjust filler
+	setFill(type) {
+		this.fillType = type;
+	}
+	
 	// Create pile
 	fillGrid() {
 		var D = arguments.length;
@@ -1956,7 +1962,11 @@ class Pile {
 			var xmin = arguments[0][0];
 			var xmax = arguments[0][1];
 			for(var ix = xmin; ix <= xmax; ix++) {
-				this.value[ix] = 1;
+				if(this.fillType == undefined) {
+					this.value[ix] = 1;
+				} else {
+					this.value[ix] = this.fillType;
+				}
 			}
 		} else if(D == 2) {
 			var xmin = arguments[0][0];
@@ -1965,7 +1975,11 @@ class Pile {
 			var ymax = arguments[1][1];
 			for(var iy = ymin; iy <= ymax; iy++) {
 				for(var ix = xmin; ix <= xmax; ix++) {
-					this.value[iy][ix] = 1;
+					if(this.fillType == undefined) {
+						this.value[iy][ix] = 1;
+					} else {
+						this.value[iy][ix] = this.fillType;
+					}
 				}
 			}
 		} else if(D == 3) {
@@ -1978,7 +1992,11 @@ class Pile {
 			for(var iz = zmin; iz <= zmax; iz++) {
 				for(var iy = ymin; iy <= ymax; iy++) {
 					for(var ix = xmin; ix <= xmax; ix++) {
-						this.value[iz][iy][ix] = 1;
+						if(this.fillType == undefined) {
+							this.value[iz][iy][ix] = 1;
+						} else {
+							this.value[iz][iy][ix] = this.fillType;
+						}
 					}
 				}
 			}

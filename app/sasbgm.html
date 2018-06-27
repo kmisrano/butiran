@@ -284,9 +284,15 @@ function algorithmGranularSolid(p) {
 				var inSolid = true;
 				for(diy = -thickness; diy <= thickness; diy++) {
 					for(dix = -thickness; dix <= thickness; dix++) {
-						var neighbour = grid[ix + dix][iy + diy];
-						var notEmpty = (neighbour == 1) ? true : false;
-						inSolid = inSolid && notEmpty;
+						var newix = ix + dix;
+						var newiy = iy + diy;
+						var wallX = (newix < 0) || (newix > Nx - 1);
+						var wallY = (newiy < 0) || (newiy > Ny - 1);
+						if(!wallX && !wallY) {
+							var neighbour = grid[newiy][newix];
+							var notEmpty = (neighbour == 1) ? true : false;
+							inSolid = inSolid && notEmpty;
+						}
 					}
 				}
 				
@@ -396,7 +402,7 @@ function loadParameters() {
 	tabs1.text("Params").push("BXBEG 100 0 0");
 	tabs1.text("Params").push("BXEND 199 199 0");
 	tabs1.text("Params").push();
-	tabs1.text("Params").push("PHASE 4");
+	tabs1.text("Params").push("PHASE 5");
 	tabs1.text("Params").push("PROBL -1");
 	tabs1.text("Params").push("PROBR +1");
 	tabs1.text("Params").push("PROBU +1");
@@ -405,7 +411,7 @@ function loadParameters() {
 	tabs1.text("Params").push("PROBSOL 0 0 0 0");
 	tabs1.text("Params").push("PROBLIQ -1 1 0.5 -1");
 	tabs1.text("Params").push("PROBGAS -1 1 1 -1");
-	tabs1.text("Params").push("PROBGRA -0.5 0.5 -0.5 -0.5");
+	tabs1.text("Params").push("PROBGRA -0.5 0.5 -0.5 -1");
 	tabs1.text("Params").push("THICKNESS 2");
 	tabs1.text("Params").push();
 	tabs1.text("Params").push("TSTEP 1");
@@ -453,7 +459,6 @@ function readParameters() {
 		probGas = Parse.getFrom(text).valueOf("PROBGAS");
 		probGra = Parse.getFrom(text).valueOf("PROBGRA");
 		thickness = Parse.getFrom(text).valueOf("THICKNESS");
-		console.log(probGra);
 	}
 
 	if(clear) {
