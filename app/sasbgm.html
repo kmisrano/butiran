@@ -12,6 +12,9 @@
 	Continue this in RCNP, Osaka University, Osaka, Japan.
 	20180626
 	Continue from room in RCNP to lab.
+	20180627
+	Integrate Pile to butiran.js and add phase 5 for mimicing
+	experiment results.
 
 	CDN
 	https://rawgit.com/dudung/butiran/master/app/sasbgm.html
@@ -27,7 +30,6 @@
 </script>
 -->
 <script src="butiran.js"></script>
-<!--script src="pile.js"></script-->
 
 <!-- remove this when deploy openly in distribution -->
 <!-- since 20180619.0300                            -->
@@ -43,6 +45,7 @@ var proc, tbeg, tend, dt, Tdata, tt;
 var coordMin, coordMax;
 var pile;
 var phase, probL, probR, probU, probD;
+var probSol, probLiq, probGas, probGra, thickness;
 var clear = true;
 
 // Call main function
@@ -76,6 +79,8 @@ function simulate() {
 		manipulate(pile).as("granular");
 	} else if(phase == 4){
 		manipulate(pile).as("granular2");
+	} else if(phase == 5){
+		manipulate(pile).as("granular-solid");
 	}
 
 	// Display result in certain period of time
@@ -120,6 +125,8 @@ function manipulate(p) {
 				algorithmGranular(p);
 			} else if(state == "granular2") {
 				algorithmGranular2(p);
+			} else if(state == "granular-solid") {
+				algorithmGranularSolid(p);
 			}
 		}
 	};
@@ -208,11 +215,9 @@ function algorithmGranular(p) {
 			var grain = grid[iy][ix];
 			if(grain == 1) {
 
-
 				var mag = Random.randInt(0, 1);
 				var dx = Random.randInt(-0.5 * Ndir, +0.5 * Ndir);
 				var dy = Random.randInt(-Ndir, -0.5 * Ndir);
-
 
 				var newix = ix + dx * mag;
 				var newiy = iy + dy * mag;
@@ -243,6 +248,61 @@ function algorithmGranular2(p) {
 		for(var ix = 0; ix < Nx; ix++) {
 			var grain = grid[iy][ix];
 			if(grain == 1) {
+				var mag = Random.randInt(0, 1);
+				var dx = Random.randInt(probL * Ndir, probR * Ndir);
+				var dy = Random.randInt(probD * Ndir, probU * Ndir);
+				var newix = ix + dx * mag;
+				var newiy = iy + dy * mag;
+				var wallX = (newix < 0) || (newix > Nx - 1);
+				var wallY = (newiy < 0) || (newiy > Ny - 1);
+				if(!wallX && !wallY) {
+					var newgrain = grid[newiy][newix];
+					if(newgrain == 0) {
+						grid[newiy][newix] = grid[iy][ix];
+						grid[iy][ix] = 0;
+					}
+				}
+			}
+		}
+	}
+}
+
+// Define algorithm for granular-solid
+function algorithmGranularSolid(p) {
+	// Preapare value of Pile
+	var Ndir = 8;
+	var Nx = p.Nx;
+	var Ny = p.Ny;
+	var grid = p.value;
+	
+	// Move grid of grain
+	for(var iy = 0; iy < Ny; iy++) {
+		for(var ix = 0; ix < Nx; ix++) {
+			var grain = grid[iy][ix];
+			if(grain == 1) {
+				
+				var inSolid = true;
+				for(diy = -thickness; diy <= thickness; diy++) {
+					for(dix = -thickness; dix <= thickness; dix++) {
+						var neighbour = grid[ix + dix][iy + diy];
+						var notEmpty = (neighbour == 1) ? true : false;
+						inSolid = inSolid && notEmpty;
+					}
+				}
+				
+				var probL, probR, probU, probD;
+				if(inSolid) {
+					probL = probSol[0];
+					probR = probSol[1];
+					probU = probSol[2];
+					probD = probSol[3];
+				} else {
+					probL = probGra[0];
+					probR = probGra[1];
+					probU = probGra[2];
+					probD = probGra[3];
+				}
+				
 				var mag = Random.randInt(0, 1);
 				var dx = Random.randInt(probL * Ndir, probR * Ndir);
 				var dy = Random.randInt(probD * Ndir, probU * Ndir);
@@ -342,6 +402,12 @@ function loadParameters() {
 	tabs1.text("Params").push("PROBU +1");
 	tabs1.text("Params").push("PROBD -1");
 	tabs1.text("Params").push();
+	tabs1.text("Params").push("PROBSOL 0 0 0 0");
+	tabs1.text("Params").push("PROBLIQ -1 1 0.5 -1");
+	tabs1.text("Params").push("PROBGAS -1 1 1 -1");
+	tabs1.text("Params").push("PROBGRA -0.5 0.5 -0.5 -0.5");
+	tabs1.text("Params").push("THICKNESS 2");
+	tabs1.text("Params").push();
 	tabs1.text("Params").push("TSTEP 1");
 	tabs1.text("Params").push("TDATA 100");
 	tabs1.text("Params").push("TBEG 0");
@@ -377,6 +443,18 @@ function readParameters() {
 		probU = Parse.getFrom(text).valueOf("PROBU");
 		probD = Parse.getFrom(text).valueOf("PROBD");
 	}
+	
+	// Add additional parameters for nonuniform rate of
+	// evaporation (probL, probR, propU, probD are now
+	// time and space dependent)
+	if(phase == 5) {
+		probSol = Parse.getFrom(text).valueOf("PROBSOL");
+		probLiq = Parse.getFrom(text).valueOf("PROBLIQ");
+		probGas = Parse.getFrom(text).valueOf("PROBGAS");
+		probGra = Parse.getFrom(text).valueOf("PROBGRA");
+		thickness = Parse.getFrom(text).valueOf("THICKNESS");
+		console.log(probGra);
+	}
 
 	if(clear) {
 		// Define pile with parameters
@@ -402,8 +480,8 @@ function log() {
 			showOnly(logjs).forFilter(
 				{
 					app: "sasbgm",
-					date: "20180626",
-					after: "1400",
+					date: "20180627",
+					after: "1100",
 				}
 			)
 		);
