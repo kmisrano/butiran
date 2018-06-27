@@ -41,11 +41,12 @@
 <script>
 // Define some global variables
 var tabs1, tabs2, bgroup;
-var proc, tbeg, tend, dt, Tdata, tt;
+var proc, tbeg, tend, dt, Tdata, tt, sample;
 var coordMin, coordMax;
-var pile;
+var pile, pilePhase;
 var phase, probL, probR, probU, probD;
-var probSol, probLiq, probGas, probGra, thickness;
+var probSol, probLiq, probGas, probGra;
+var dryLayer, dryPeriod, nextLayer, thickness;
 var clear = true;
 
 // Call main function
@@ -94,6 +95,10 @@ function simulate() {
 		textarea.scrollTop = textarea.scrollHeight;
 
 		drawPile(pile).on("xy");
+	}
+	
+	if(nextLayer.sampling()) {
+		evolveDryLayer();
 	}
 
 	// Terminate simulation when end time is reached
@@ -281,20 +286,8 @@ function algorithmGranularSolid(p) {
 			var grain = grid[iy][ix];
 			if(grain == 1) {
 				
-				var inSolid = true;
-				for(diy = -thickness; diy <= thickness; diy++) {
-					for(dix = -thickness; dix <= thickness; dix++) {
-						var newix = ix + dix;
-						var newiy = iy + diy;
-						var wallX = (newix < 0) || (newix > Nx - 1);
-						var wallY = (newiy < 0) || (newiy > Ny - 1);
-						if(!wallX && !wallY) {
-							var neighbour = grid[newiy][newix];
-							var notEmpty = (neighbour == 1) ? true : false;
-							inSolid = inSolid && notEmpty;
-						}
-					}
-				}
+				var cellPhase = pilePhase.value[iy][ix];
+				var inSolid = (cellPhase == 2) ? true : false;
 				
 				var probL, probR, probU, probD;
 				if(inSolid) {
@@ -328,6 +321,25 @@ function algorithmGranularSolid(p) {
 	}
 }
 
+// Evolve dry layer
+function evolveDryLayer() {
+	var text = tabs1.element("Params").value;
+	var Nx = Parse.getFrom(text).valueOf("SIZEX");
+	var Ny = Parse.getFrom(text).valueOf("SIZEY");
+	var xbeg = Parse.getFrom(text).valueOf("BXBEG").x;
+	var xend = Parse.getFrom(text).valueOf("BXEND").x;
+	var ybeg = Parse.getFrom(text).valueOf("BXBEG").y;
+	var yend = Parse.getFrom(text).valueOf("BXEND").y;
+	
+	// Pile for storing probSol and probGra
+	pilePhase.setFill(3); // granular
+	pilePhase.fillGrid([0, Nx-1], [0, Ny-1]);
+	pilePhase.setFill(2); // solid
+	thickness += dryLayer;
+	var th = thickness;
+	pilePhase.fillGrid([xbeg+th, xend-th], [ybeg, yend-th]);
+}
+
 // Draw Pile
 function drawPile(p) {
 	var isPile = p instanceof Pile;
@@ -337,10 +349,37 @@ function drawPile(p) {
 				tabs2.graphic(label).clear();
 				for(var iy = 0; iy < p.Ny; iy++) {
 					for(var ix = 0; ix < p.Nx; ix++) {
-						var cR = 1 - p.value[iy][ix];
-						var cG = 1 - p.value[iy][ix];
-						var cB = 1 - p.value[iy][ix];
+						var cR, cG, cB;
+						var state = pilePhase.value[iy][ix];
+						if(state == 0) {
+							// Set color of gas
+							cR = 1;
+							cG = 0;
+							cB = 0;
+						} else if(state == 1) {
+							// Set color of fluid
+							cR = 0;
+							cG = 0;
+							cB = 1;
+						} else if(state == 2) {
+							// Set color of solid
+							cR = 0;
+							cG = 0;
+							cB = 0;
+						} else if(state == 3) {
+							// Set color of granular
+							cR = 0.5;
+							cG = 0.5;
+							cB = 0.5;
+						}
+						
+						// Set color
 						var col = RGB.double2rgb(cR, cG, cB);
+						
+						// Omit empty grid
+						if(p.value[iy][ix] == 0) {
+							col = RGB.double2rgb(1, 1, 1);
+						}
 						tabs2.graphic(label).setFillColor(col);
 						tabs2.graphic(label).fillRect(ix, iy, 1.07, 1.07);
 					}
@@ -411,11 +450,12 @@ function loadParameters() {
 	tabs1.text("Params").push("PROBSOL 0 0 0 0");
 	tabs1.text("Params").push("PROBLIQ -1 1 0.5 -1");
 	tabs1.text("Params").push("PROBGAS -1 1 1 -1");
-	tabs1.text("Params").push("PROBGRA -0.5 0.5 -0.5 -1");
-	tabs1.text("Params").push("THICKNESS 2");
+	tabs1.text("Params").push("PROBGRA -0.5 0.5 0 -1");
+	tabs1.text("Params").push("DRYLAYER 10");
+	tabs1.text("Params").push("DRYPERIOD 500");
 	tabs1.text("Params").push();
 	tabs1.text("Params").push("TSTEP 1");
-	tabs1.text("Params").push("TDATA 100");
+	tabs1.text("Params").push("TDATA 10");
 	tabs1.text("Params").push("TBEG 0");
 	tabs1.text("Params").push("TEND 10000");
 	tabs1.text("Params").push();
@@ -458,19 +498,25 @@ function readParameters() {
 		probLiq = Parse.getFrom(text).valueOf("PROBLIQ");
 		probGas = Parse.getFrom(text).valueOf("PROBGAS");
 		probGra = Parse.getFrom(text).valueOf("PROBGRA");
-		thickness = Parse.getFrom(text).valueOf("THICKNESS");
+		dryLayer = Parse.getFrom(text).valueOf("DRYLAYER");
+		dryPeriod = Parse.getFrom(text).valueOf("DRYPERIOD");
 	}
 
 	if(clear) {
 		// Define pile with parameters
 		pile = new Pile(Nx, Ny);
 		pile.fillGrid([xbeg, xend], [ybeg, yend]);
-
+		pilePhase = new Pile(Nx, Ny);
+		thickness = -dryLayer;
+		evolveDryLayer();
+		
 		// Initiate time
 		t = tbeg;
 
 		// Set sampling
 		sample = new Sample(Tdata, dt);
+		nextLayer = new Sample(dryPeriod, dt);
+		
 	}
 
 	// Set coordinate ranges
