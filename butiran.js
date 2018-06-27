@@ -45,6 +45,8 @@
 	Add math/transformation.js for drawing in tab.js class.
 	20180619
 	Add tabs and bgroup from app to lib/ui folder.
+	20180627
+	Add pile from lib/grid folder.
 */
 
 // lib
@@ -76,6 +78,7 @@ var Sample = require('./lib/generator/sample')();
 
 // lib/grid
 var Tablet = require('./lib/grid/tablet');
+var Pile = require('./lib/grid/pile')();
 
 // lib/math
 var Integration = require('./lib/math/integration');
@@ -118,4 +121,5 @@ if(typeof window !== 'undefined') {
 	window["Sample"] = Sample;
 	window["Tabs"] = Tabs;
 	window["Bgroup"] = Bgroup;
+	window["Pile"] = Pile;
 }
