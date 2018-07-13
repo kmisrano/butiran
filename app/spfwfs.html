@@ -124,7 +124,7 @@ function setLayout() {
 	// Define first Tabs
 	tabs1 = new Tabs("tabs1");
 	tabs1.setWidth("450px");
-	tabs1.setHeight("240px");
+	tabs1.setHeight("300px");
 	tabs1.addTab("Log", 0);
 	tabs1.addTab("Params", 0);
 	tabs1.addTab("Results", 0);
@@ -165,23 +165,37 @@ function setLayout() {
 
 // Load parameters
 function loadParameters() {
-	tabs1.text("Params").push("MASS 1");
-	tabs1.text("Params").push("CHARGE 1");
+	tabs1.text("Params").push("# Spherical particle");
+	tabs1.text("Params").push("DENSITY 800");
+	tabs1.text("Params").push("DIAMETER 0.05");
 	tabs1.text("Params").push("VELOCITY 1 0 0");
 	tabs1.text("Params").push("POSITION 0 0 0");
 	tabs1.text("Params").push();
-	tabs1.text("Params").push("MAGNFIELD 0 0 1");
-	tabs1.text("Params").push("ELECFIELD 0 0 0.1");
-	tabs1.text("Params").push("GRAVFIELD 0 0 0");
-	tabs1.text("Params").push("MOMEFIELD 0 0 0");
+	
+	tabs1.text("Params").push("# Fluids");
+	tabs1.text("Params").push("DENSITY 1000");
+	tabs1.text("Params").push("AMPLITUDE 0.01");
+	tabs1.text("Params").push("FREQUENCY 0.5");
+	tabs1.text("Params").push("WAVELENGTH 2");
+	tabs1.text("Params").push("PHASE0 0");
+	tabs1.text("Params").push("TEMPERATURE 293");
+	tabs1.text("Params").push("VISCOSITY 0.001");
 	tabs1.text("Params").push();
+	
+	tabs1.text("Params").push("# Environment");
+	tabs1.text("Params").push("GRAVFIELD 0 -9.81 0");
+	tabs1.text("Params").push();
+	
+	tabs1.text("Params").push("# Simulation");
 	tabs1.text("Params").push("TSTEP 1E-3");
 	tabs1.text("Params").push("TDATA 1E-1");
 	tabs1.text("Params").push("TBEG 0");
 	tabs1.text("Params").push("TEND 10");
 	tabs1.text("Params").push();
-	tabs1.text("Params").push("COORDMIN -2 -3 -0.5");
-	tabs1.text("Params").push("COORDMAX 2 1 5.5");
+	
+	tabs1.text("Params").push("# Visualization");
+	tabs1.text("Params").push("COORDMIN -2 -2 -2");
+	tabs1.text("Params").push("COORDMAX 2 2 2");
 	var ta = tabs1.element("Params");
 	ta.scrollTop = ta.scrollHeight;
 }
@@ -226,7 +240,7 @@ function log() {
 				{
 					app: "spfwfs",
 					date: "20180713",
-					after: "1700",
+					after: "2200",
 				}
 			)
 		);
