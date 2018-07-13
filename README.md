@@ -31,3 +31,7 @@ https://cdn.rawgit.com/dudung/butiran/64357018/app/tdsbgm.html
 
 **sasbgm** | Sandpile avalanche simulation based on grid model \
 https://cdn.rawgit.com/dudung/butiran/64357018/app/sasbgm.html
+
+**spfwfs** | Spherical particle floating on waving fluid surface \
+https://cdn.rawgit.com/dudung/butiran/64357018/app/spfwfs.html
+
