@@ -65,6 +65,15 @@ function main() {
 
 // Perform simulation
 function simulate() {
+
+	// Define fluid surface function
+	function yFluid(x, t) {
+		var omega = 2 * Math.PI * freq;
+		var k = 2 * Math.PI / lambda;
+		var y = Amp * Math.sin(omega * t - k * x + phi0);
+		return y;
+	}
+	
 	// Format time t
 	t = +t.toFixed(10);
 	
@@ -73,9 +82,13 @@ function simulate() {
 	var V = (4 * Math.PI / 3) * R * R * R;
 	var m = rhop * V;
 	
-	// Calculate all forces
+	// Calculate gravitational force
 	var FG = Vect3.mul(m, GField);
+	
+	// Calculate buoyant force
 	var FB = Vect3.mul(m, GField);
+	
+	// Calculate drag force
 	var FD = Vect3.mul(m, GField);
 	
 	// Apply Newton second law of motion
@@ -103,8 +116,7 @@ function simulate() {
 		tabs1.text("Results").push(data);
 		var textarea = tabs1.element("Results");
 		textarea.scrollTop = textarea.scrollHeight;
-		
-		
+			
 		// Generate waving fluid surface
 		xf = [];
 		yf = [];
@@ -118,18 +130,16 @@ function simulate() {
 			yf.push(y);
 		}
 		
-		// Draw waving fluid surface
+		// Clear drawing area
 		tabs2.graphic("xy").clear();
+		
+		// Draw waving fluid surface
 		tabs2.graphic("xy").setLineColor("#00f");	
 		tabs2.graphic("xy").lines(xf, yf);
-
 		
-		function yFluid(x, t) {
-			var omega = 2 * Math.PI * freq;
-			var k = 2 * Math.PI / lambda;
-			var y = Amp * Math.sin(omega * t - k * x + phi0);
-			return y;
-		}
+		// Draw spherical particle
+		tabs2.graphic("xy").setLineColor("#f00");	
+		tabs2.graphic("xy").strokeCircle(r.x, r.y, 0.5 * D);
 	}
 	
 	// Terminate simulation when end time is reached
@@ -410,7 +420,7 @@ function drawResults() {
 	// Draw on related chart
 	tabs2.graphic("xy").clear();
 	tabs2.graphic("xy").setLineColor("#f00");	
-	tabs2.graphic("xy").lines(xf, yf);
+	tabs2.graphic("xy").lines(rxp, ryp);
 }
 
 </script>
