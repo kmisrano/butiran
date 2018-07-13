@@ -2991,6 +2991,8 @@ module.exports = {
 	20180618
 	Add element(label) for alternative to textarea(label) and
 	canvas(label).
+	20180714
+	Remove a line in arch outputting to console.
 */
 
 // Define class of Tabs
@@ -3512,7 +3514,6 @@ class Tabs {
 				},
 				arc: function(x, y, r, sAngle, eAngle) {
 					var tc = this.trect(x, y, r, r);
-					console.log(tc);
 					ctx.beginPath();
 					ctx.arc(tc[0], tc[1], tc[2], sAngle, eAngle);
 					ctx.stroke();
