@@ -14,8 +14,10 @@
 	20180714
 	Continue creating the application.
 	20180802
-	Fix water viscosity value from 1 Pa.s to 1 mPa.s.
-	
+	Fix water viscosity value from 1 Pa.s to 1 mPa.s and it does not work. Still use the previous value.
+	Add direction of fluid surface wave with dirf.
+	Modify fluid velocity, whose components is from vibration and traveling wave.
+		
 	CDN
 	https://rawgit.com/dudung/butiran/master/app/spfwfs.html
 -->
@@ -41,7 +43,7 @@
 <script>
 // Define some global variables
 var rhop, D, r, v;
-var rhof, Amp, freq, lamda, phi0, Tempf, etaf
+var rhof, Amp, freq, lamda, phi0, Tempf, etaf, dirf;
 var GField;
 var t, dt, tbeg, tend;
 var Tdata, sample;
@@ -71,8 +73,16 @@ function simulate() {
 	// Define fluid surface function
 	function yFluid(x, t) {
 		var omega = 2 * Math.PI * freq;
-		var k = 2 * Math.PI / lambda;
+		var k = 2 * Math.PI / lambda * dirf;
 		var y = Amp * Math.sin(omega * t - k * x + phi0);
+		return y;
+	}
+	
+	// Define time derivation of fluid surface
+	function vyFluid(x, t) {
+		var omega = 2 * Math.PI * freq;
+		var k = 2 * Math.PI / lambda * dirf;
+		var y = omega * Amp * Math.cos(omega * t - k * x + phi0);
 		return y;
 	}
 	
@@ -114,8 +124,23 @@ function simulate() {
 	var FB = Vect3.mul(fB, nGaccent);
 	
 	// Calculate drag force
-	var b = 3 * Math.PI * etaf * D;
-	var FD = Vect3.mul(-b, v);
+	var Db;
+	if(r.y < yff) {
+		Db = D;
+	} else if(yff <= r.y && r.y <= yff + 0.5 * D) {
+		var RR = 0.5 * D;
+		var R2 = RR * RR - (r.y - yff) * (r.y - yff);
+		Db = 2 * Math.sqrt(R2);
+	} else {
+		Db = 0;
+	}
+	var b = 3 * Math.PI * etaf * Db;
+	var omega = 2 * Math.PI * freq;
+	var k = 2 * Math.PI / lambda * dirf;
+	var vfx = omega / k * 0;
+	var vfy = vyFluid(r.x, t);
+	var vf = new Vect3(vfx, vfy, 0);
+	var FD = Vect3.mul(-b, Vect3.sub(v, vf));
 	
 	// Apply Newton second law of motion
 	var F = Vect3.add(FG, FB, FD);
@@ -249,6 +274,7 @@ function loadParameters() {
 	tabs1.text("Params").push("AMPLITUDE 0.05");
 	tabs1.text("Params").push("FREQUENCY 0.5");
 	tabs1.text("Params").push("WAVELENGTH 1");
+	tabs1.text("Params").push("DIRECTION 1");
 	tabs1.text("Params").push("PHASE0 0");
 	tabs1.text("Params").push("TEMPERATURE 293");
 	tabs1.text("Params").push("VISCOSITY 0.001");
@@ -289,6 +315,7 @@ function readParameters() {
 	phi0 = Parse.getFrom(text).valueOf("PHASE0");
 	Tempf = Parse.getFrom(text).valueOf("TEMPERATURE");
 	etaf = Parse.getFrom(text).valueOf("VISCOSITY");
+	dirf = Parse.getFrom(text).valueOf("DIRECTION");
 	Nf = Parse.getFrom(text).valueOf("NDATAF");
 	
 	GField = Parse.getFrom(text).valueOf("GRAVFIELD");
