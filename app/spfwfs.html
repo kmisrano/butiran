@@ -150,12 +150,16 @@ function simulate() {
 	v = Vect3.add(v, Vect3.mul(a, dt));
 	r = Vect3.add(r, Vect3.mul(v, dt));
 	
+	
 	// Set periodic boundary condition
-	if(r.x > coordMax.x) {
-		r.x = coordMin.x + (r.x - coordMax.x);
-	}
-	if(r.x < coordMin.x) {
-		r.x = coordMax.x + (r.x - coordMin.x);
+	var PERIODIC_BC = false;
+	if(PERIODIC_BC) {
+		if(r.x > coordMax.x) {
+			r.x = coordMin.x + (r.x - coordMax.x);
+		}
+		if(r.x < coordMin.x) {
+			r.x = coordMax.x + (r.x - coordMin.x);
+		}
 	}
 
 	v.x = +v.x.toFixed(10);
