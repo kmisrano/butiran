@@ -85,4 +85,12 @@ class Polynomial {
 		var newp = new Polynomial(newcs);
 		return newp;
 	}
+	
+	// Add two polynomials
+	static add() {
+		var p1 = arguments[0];
+		var N1 = p1.length;
+		var p2 = arguments[1];
+		var N2 = p2.length;
+	}
 }

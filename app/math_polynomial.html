@@ -1,0 +1,23 @@
+<!doctype html>
+<html>
+<head><script src="butiran.js"></script></head>
+<body>
+<script>
+var p1 = new Polynomial([0, 6, -5, 1]);
+console.log(p1.coefs);
+
+var p2 = Polynomial.dif(p1);
+console.log(p2.coefs);
+
+var p3 = Polynomial.int(p2, 80)
+console.log(p3.coefs);
+
+var p4 = Polynomial.mul(p3, 2)
+console.log(p4.coefs);
+
+var p5 = Polynomial.div(p4, 2)
+console.log(p5.coefs);
+
+</script>
+</body>
+</html>
