@@ -12,3 +12,7 @@
 	in order to simplify maintenance.
 */
 
+// Matrix
+function btZeroMatrix(ROW, COL) {
+	
+}
