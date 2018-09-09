@@ -418,13 +418,14 @@ class DistDiscIntReciprocal {
 	
 	20180909
 	Create this functions for AMB simulation (ICGAB 2018).
-	Functions GrowTemp is tested.
+	Functions GrowTemp, GrowWater, Sigmoid, and dSigmoid
+	are tested.
 */
 
+// Define temperature dependece growing factor
 function GrowTemp(T, TL, TO, TH, c2) {
 	var TLO = TL + Math.sqrt((TO - TL)*(TO - TL) + 1/c2);
 	var THO = TH - Math.sqrt((TH - TO)*(TH - TO) + 1/c2);
-	console.log(TLO, THO);
 	var val;
 	if(T < TL) {
 		val = 0
@@ -446,3 +447,103 @@ function GrowTemp(T, TL, TO, TH, c2) {
 	return val;
 }
 
+// Define water dependece growing factor
+function GrowWater(H, HL, HH) {
+	var val;
+	if(H < HL) {
+		val = 0
+	} else if((HL <= H) && (H < HH)) {
+		val = (H - HL) / (HH - HL);
+	} else {
+		val = 1;
+	}
+	return val;
+}
+
+// Define sigmoid function
+function Sigmoid(t, A, b, t0) {
+	var B = Math.exp(-b * (t - t0));
+	var val = A / (1 + B);
+	return val;
+}
+
+// Define derivative of sigmoid function
+function dSigmoid(t, A, b, t0) {
+	var s = Sigmoid(t, A, b, t0);
+	var val = s * (1 - s);
+	return val;
+}
+
+class Plant {
+	// Constructor
+	constructor() {
+		this.tem = arguments[0];
+		this.wat = arguments[1];
+		this.sig = arguments[2];
+		this.maxAge = arguments[3];
+		this.lagTime = arguments[4]
+		this.size = 0;
+		this.age = 0;
+		this.tlag = 0;
+		this.idle = false;
+	}
+	
+	// Grow plant
+	grow() {
+		var T = arguments[0];
+		var H = arguments[1];
+		
+		if(this.age < this.maxAge) {
+			var tem = this.tem;
+			var fT = GrowTemp(T, tem.TL, tem.TO, tem.TH, tem.c2);
+			
+			var wat = this.wat;
+			var fH = GrowWater(H, wat.HL, wat.HH);
+			
+			var sig = this.sig;
+			var fS = dSigmoid(this.age, sig.A, sig.b, sig.t0);
+			var dsize = fT * fH * fS;
+			
+			this.age++;
+			this.size += dsize;
+		} else {
+			if(this.tlag < this.lagTime) {
+				this.idle = true;
+				this.tlag++
+			} else {
+				this.replant();
+			}
+		}
+	}
+	
+	// Replant
+	replant() {
+		this.age = 0;
+		this.size = 0;
+		this.tlag = 0;
+		this.idle = false;
+		console.log("replant");
+	}
+	
+	// Get age
+	getAge() {
+		var val;
+		if(!this.idle) {
+			val = this.age;
+		} else {
+			val = 0;
+		}
+		return val;
+	}
+	
+	// Get size
+	getSize() {
+		var val;
+		if(!this.idle) {
+			val = this.size;
+		} else {
+			val = 0;
+		}
+		return val;
+	}
+}

@@ -13,7 +13,6 @@ var ipre = new DistDiscIntReciprocal(-3,
 );
 
 
-
 var tatemp = document.createElement("textarea");
 document.body.append(tatemp);
 var N = 365;
@@ -34,7 +33,6 @@ for(var i = 0; i < N; i++) {
 }
 taipre.value = content;
 
-
 var tagrowtemp = document.createElement("textarea");
 document.body.append(tagrowtemp);
 var N = 40;
@@ -42,13 +40,77 @@ var content = "";
 var TL = 10;
 var TO = 27;
 var TH = 38;
-var c2 = -0.008403;
+var c2 = -0.0084;
 for(var i = 0; i <= N; i++) {
 	var line = i + "\t" + GrowTemp(i, TL, TO, TH, c2) + "\n";
 	content += line;
 }
 tagrowtemp.value = content;
 
+var tagrowwater = document.createElement("textarea");
+document.body.append(tagrowwater);
+var N = 50;
+var content = "";
+var HL = 20;
+var HH = 40;
+for(var i = 0; i <= N; i++) {
+	var line = i + "\t" + GrowWater(i, HL, HH) + "\n";
+	content += line;
+}
+tagrowwater.value = content;
+
+var tasig = document.createElement("textarea");
+document.body.append(tasig);
+var N = 50;
+var content = "";
+var A = 1;
+var b = 0.4;
+var t0 = 15
+for(var i = 0; i <= N; i++) {
+	var line = i + "\t" + Sigmoid(i, A, b, t0) + "\n";
+	content += line;
+}
+tasig.value = content;
+
+var tadsig = document.createElement("textarea");
+document.body.append(tadsig);
+var N = 50;
+var content = "";
+var A = 1;
+var b = 0.4;
+var t0 = 15
+for(var i = 0; i <= N; i++) {
+	var line = i + "\t" + dSigmoid(i, A, b, t0) + "\n";
+	content += line;
+}
+tadsig.value = content;
+
+
+var plant1 = new Plant(
+	{TL: 10, TO: 27, TH: 38, c2: -0.0084},
+	{HL: 20, HH: 40},
+	{A: 1, b: 0.4, t0: 15},
+	30, 10
+);
+
+var taplants = document.createElement("textarea");
+taplants.style.width = "400px";
+taplants.style.height = "200px";
+document.body.append(taplants);
+var content = "";
+var tmin = 0;
+var tmax = 365;
+for(var t = tmin; t < tmax; t++) {
+	var T = temp.getValue();
+	var H = ipre.getValue() * 1;
+	plant1.grow(T, H);
+	
+	var s1 = plant1.getSize();
+	var a1 = plant1.getAge();
+	var line = t + "\t" + a1 + "\t" + s1 + "\n";
+	content += line;
+}
+taplants.value = content;
 
 </script>
 </body>
