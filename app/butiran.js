@@ -200,7 +200,7 @@ function randIntN(min, max, N) {
 
 
 /*
-	Discrete integer Gaussian distribution
+	Discrete integer Gaussian distribution (DIGD)
 	
 	20180909
 	Prepare number generator for AMB simulation (ICGAB 2018).
@@ -306,10 +306,13 @@ class DistDiscIntGaussian {
 
 
 /*
-	Discrete integer reciprocal distribution
+	Discrete integer reciprocal distribution (DIRD)
 	
 	20180909
 	Create distribution for AMB simulation (ICGAB 2018).
+	Functions generateNumber, correctNumber, generateSequence,
+	randomizeSequence, getValue are tested.
+	Implement different correction procedure as in DIGD.
 */
 
 class DistDiscIntReciprocal {
@@ -409,3 +412,37 @@ class DistDiscIntReciprocal {
 		return value;
 	}
 }
+
+/*
+	Plantation growth function (PGF)
+	
+	20180909
+	Create this functions for AMB simulation (ICGAB 2018).
+	Functions GrowTemp is tested.
+*/
+
+function GrowTemp(T, TL, TO, TH, c2) {
+	var TLO = TL + Math.sqrt((TO - TL)*(TO - TL) + 1/c2);
+	var THO = TH - Math.sqrt((TH - TO)*(TH - TO) + 1/c2);
+	console.log(TLO, THO);
+	var val;
+	if(T < TL) {
+		val = 0
+	} else if((TL <= T) && (T < TLO)) {
+		var a = c2 * (TLO - TO)*(TLO - TO) + 1;
+		var b = T - TL;
+		var c = TLO - TL;
+		val = a * b / c;
+	} else if((TLO <= T) && (T <= THO)) {
+		val = 1 + c2 * (T - TO)*(T - TO);
+	} else if((THO < T) && (T <= TH)) {
+		var a = c2 * (THO - TO)*(THO - TO) + 1;
+		var b = T - TH;
+		var c = THO - TH;
+		val = a * b / c;		
+	} else {
+		val = 0;
+	}
+	return val;
+}
+

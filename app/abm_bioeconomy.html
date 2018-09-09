@@ -3,6 +3,7 @@
 <head><script src="butiran.js"></script></head>
 <body>
 <script>
+
 var temp = new DistDiscIntGaussian(20, 4, 
 	{min: 0, max: 40, step: 1, N: 365}
 );
@@ -11,16 +12,43 @@ var ipre = new DistDiscIntReciprocal(-3,
 	{min: 0, max: 50, step: 1, N: 365}
 );
 
-var ta = document.createElement("textarea");
-document.body.append(ta);
 
+
+var tatemp = document.createElement("textarea");
+document.body.append(tatemp);
+var N = 365;
+var content = "";
+for(var i = 0; i < N; i++) {
+	var line = (i + 1) + "\t" + temp.getValue() + "\n";
+	content += line;
+}
+tatemp.value = content;
+
+var taipre = document.createElement("textarea");
+document.body.append(taipre);
 var N = 365;
 var content = "";
 for(var i = 0; i < N; i++) {
 	var line = (i + 1) + "\t" + ipre.getValue() + "\n";
 	content += line;
 }
-ta.value = content;
+taipre.value = content;
+
+
+var tagrowtemp = document.createElement("textarea");
+document.body.append(tagrowtemp);
+var N = 40;
+var content = "";
+var TL = 10;
+var TO = 27;
+var TH = 38;
+var c2 = -0.008403;
+for(var i = 0; i <= N; i++) {
+	var line = i + "\t" + GrowTemp(i, TL, TO, TH, c2) + "\n";
+	content += line;
+}
+tagrowtemp.value = content;
+
 
 </script>
 </body>
