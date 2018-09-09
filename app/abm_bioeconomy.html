@@ -3,9 +3,15 @@
 <head><script src="butiran.js"></script></head>
 <body>
 <script>
-var distTemp = new DistDiscIntGaussian(20, 4, 
+var temp = new DistDiscIntGaussian(20, 4, 
 	{min: 0, max: 40, step: 1, N: 365}
 );
+
+var N = 10;
+for(var i = 0; i < N; i++) {
+	console.log(temp.getValue());
+}
+
 </script>
 </body>
 </html>

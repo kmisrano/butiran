@@ -204,6 +204,8 @@ function randIntN(min, max, N) {
 	
 	20180909
 	Prepare number generator for AMB simulation (ICGAB 2018).
+	Functions generateNumber, correctNumber, generateSequence,
+	randomizeSequence, getValue are tested.
 */
 
 class DistDiscIntGaussian {
@@ -219,8 +221,12 @@ class DistDiscIntGaussian {
 		this.y = [];
 		this.n = [];
 		this.sequence = [];
+		this.pos = 0;
 		
-		this.generateData();
+		this.generateNumber();
+		this.correctNumber();
+		this.generateSequence();
+		this.randomizeSequence();
 	}
 	
 	// Define Gaussian distribution function
@@ -235,8 +241,8 @@ class DistDiscIntGaussian {
 		return y;
 	}
 	
-	// Generate data
-	generateData() {
+	// Generate number of data
+	generateNumber() {
 		var imin = this.min;
 		var imax = this.max;
 		var di = this.step;
@@ -248,19 +254,15 @@ class DistDiscIntGaussian {
 			this.y.push(yy);
 			this.n.push(nn);
 		}
+	}
 		
 	// Correct number of data
-	correctDataNumber() {
+	correctNumber() {
 		var imin = this.min;
 		var imax = this.max;
 		var NN = 0;
 		for(var i = 0; i < (imax - imin); i++) {
-			var xx = i;
-			var yy = this.func(xx);
-			var nn = Math.round(this.N * yy);
-			this.x.push(xx);
-			this.y.push(yy);
-			this.n.push(nn);
+			var nn = this.n[i];
 			NN += nn;
 		}
 		var imid = Math.round((imin + imax) / 2);
@@ -268,5 +270,36 @@ class DistDiscIntGaussian {
 		this.n[imid] += dn;
 	}
 	
+	// Generate sequence
+	generateSequence() {
+		this.sequence = [];
+		var Ni = this.x.length;
+		for(var i = 0; i < Ni; i++) {
+			var Nj = this.n[i];
+			for(var j = 0; j < Nj; j++) {
+				this.sequence.push(this.x[i]);
+			}
+		}
+	}
 	
+	// Randomize sequence
+	randomizeSequence() {
+		var seq = this.sequence;
+		var N = seq.length;
+		for(var i = 0; i < N; i++) {
+			var src = randInt(0, N - 1);
+			var dest = randInt(0, N - 1);
+			[seq[src], seq[dest]] = [seq[dest], seq[src]];
+		}
+	}
+	
+	// Get value of sequence
+	getValue() {
+		var value = this.sequence[this.pos];
+		this.pos++;
+		if(this.pos == this.N) {
+			this.pos = 0;
+		}
+		return value;
+	}
 }
