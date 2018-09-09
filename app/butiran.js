@@ -303,3 +303,109 @@ class DistDiscIntGaussian {
 		return value;
 	}
 }
+
+
+/*
+	Discrete integer reciprocal distribution
+	
+	20180909
+	Create distribution for AMB simulation (ICGAB 2018).
+*/
+
+class DistDiscIntReciprocal {
+	// Constructor
+	constructor() {
+		this.infinity = arguments[0];
+		this.min = arguments[1].min;
+		this.max = arguments[1].max;
+		this.step = arguments[1].step;
+		this.N = arguments[1].N;
+		this.x = [];
+		this.y = [];
+		this.n = [];
+		this.sequence = [];
+		this.pos = 0;
+		
+		this.generateNumber();
+		this.correctNumber();
+		this.generateSequence();
+		this.randomizeSequence();
+	}
+	
+	// Define Gaussian distribution function
+	func(x) {
+		var inf = this.infinity;
+		var min = this.min;
+		var max = this.max;
+		var ln1 = Math.log(min - inf);
+		var ln2 = Math.log(max - inf);
+		var A = 1 / (ln2 - ln1);
+		var y = A / (x - inf);
+		return y;
+	}
+	
+	// Generate number of data
+	generateNumber() {
+		var imin = this.min;
+		var imax = this.max;
+		var di = this.step;
+		for(var i = imin; i <= imax; i += di) {
+			var xx = i;
+			var yy = this.func(xx);
+			var nn = Math.round(this.N * yy);
+			this.x.push(xx);
+			this.y.push(yy);
+			this.n.push(nn);
+		}
+	}
+		
+	// Correct number of data
+	correctNumber() {
+		var imin = this.min;
+		var imax = this.max;
+		var NN = 0;
+		for(var i = 0; i < (imax - imin); i++) {
+			var nn = this.n[i];
+			NN += nn;
+		}
+		var imid = Math.round((imin + imax) / 2);
+		var dn = this.N - NN;
+		var Ni = Math.abs(dn);
+		for(var i = 0; i < Ni; i++) {
+			this.n[i] += Math.sign(dn)
+		}
+	}
+	
+	// Generate sequence
+	generateSequence() {
+		this.sequence = [];
+		var Ni = this.x.length;
+		for(var i = 0; i < Ni; i++) {
+			var Nj = this.n[i];
+			for(var j = 0; j < Nj; j++) {
+				this.sequence.push(this.x[i]);
+			}
+		}
+	}
+	
+	// Randomize sequence
+	randomizeSequence() {
+		var seq = this.sequence;
+		var N = seq.length;
+		for(var i = 0; i < N; i++) {
+			var src = randInt(0, N - 1);
+			var dest = randInt(0, N - 1);
+			[seq[src], seq[dest]] = [seq[dest], seq[src]];
+		}
+	}
+	
+	// Get value of sequence
+	getValue() {
+		var value = this.sequence[this.pos];
+		this.pos++;
+		if(this.pos == this.N) {
+			this.pos = 0;
+		}
+		return value;
+	}
+}

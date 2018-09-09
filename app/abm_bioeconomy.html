@@ -7,10 +7,20 @@ var temp = new DistDiscIntGaussian(20, 4,
 	{min: 0, max: 40, step: 1, N: 365}
 );
 
-var N = 10;
+var ipre = new DistDiscIntReciprocal(-3,
+	{min: 0, max: 50, step: 1, N: 365}
+);
+
+var ta = document.createElement("textarea");
+document.body.append(ta);
+
+var N = 365;
+var content = "";
 for(var i = 0; i < N; i++) {
-	console.log(temp.getValue());
+	var line = (i + 1) + "\t" + ipre.getValue() + "\n";
+	content += line;
 }
+ta.value = content;
 
 </script>
 </body>
