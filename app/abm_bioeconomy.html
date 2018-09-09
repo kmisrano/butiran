@@ -86,12 +86,36 @@ for(var i = 0; i <= N; i++) {
 tadsig.value = content;
 
 
-var plant1 = new Plant(
+var plantCF = new Plant(
 	{TL: 10, TO: 27, TH: 38, c2: -0.0084},
 	{HL: 20, HH: 40},
 	{A: 1, b: 0.4, t0: 15},
-	30, 10
+	30, 10, 180, false, 2.4875
 );
+
+var plantOF = new Plant(
+	{TL: 10, TO: 27, TH: 38, c2: -0.0084},
+	{HL: 20, HH: 40},
+	{A: 1, b: 0.4, t0: 15},
+	30, 10, 180, true, 2.4875
+);
+
+var plantSF = new Plant(
+	{TL: 10, TO: 27, TH: 38, c2: -0.0084},
+	{HL: 20, HH: 40},
+	{A: 1, b: 0.4, t0: 15},
+	30, 10, 180, true, 2.4875
+);
+
+var plantSF2 = new Plant(
+	{TL: 10, TO: 27, TH: 38, c2: -0.0084},
+	{HL: 20, HH: 40},
+	{A: 1, b: 0.4, t0: 15},
+	30, 10, 180, false, 2.4875
+);
+
+var TO = 27;
+var HH = 40;
 
 var taplants = document.createElement("textarea");
 taplants.style.width = "400px";
@@ -103,11 +127,28 @@ var tmax = 365;
 for(var t = tmin; t < tmax; t++) {
 	var T = temp.getValue();
 	var H = ipre.getValue() * 1;
-	plant1.grow(T, H);
 	
-	var s1 = plant1.getSize();
-	var a1 = plant1.getAge();
-	var line = t + "\t" + a1 + "\t" + s1 + "\n";
+	plantCF.grow(T, H, t);
+	var aCF = plantCF.getAge();
+	var sCF = plantCF.getSize();
+
+	plantOF.grow(T, H, t);
+	var aOF = plantOF.getAge();
+	var sOF = plantOF.getSize();
+
+	plantSF.grow(TO, HH, t);
+	var aSF = plantSF.getAge();
+	var sSF = plantSF.getSize();
+	
+	plantSF2.grow(TO, HH, t);
+	var aSF2 = plantSF2.getAge();
+	var sSF2 = plantSF2.getSize();
+	
+	var line = t + "\t"
+		+ aCF + "\t" + sCF + "\t"
+		+ aOF + "\t" + sOF + "\t"
+		+ aSF + "\t" + sSF + "\t"
+		+ aSF2 + "\t" + sSF2 + "\n";
 	content += line;
 }
 taplants.value = content;

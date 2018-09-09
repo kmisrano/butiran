@@ -481,17 +481,23 @@ class Plant {
 		this.wat = arguments[1];
 		this.sig = arguments[2];
 		this.maxAge = arguments[3];
-		this.lagTime = arguments[4]
+		this.lagTime = arguments[4];
+		this.tauSoil = arguments[5];
+		this.isResoil = arguments[6];
+		this.Acorr = arguments[7];
+		this.tSoil = 0;
 		this.size = 0;
 		this.age = 0;
 		this.tlag = 0;
 		this.idle = false;
+		this.t = 0;
 	}
 	
 	// Grow plant
 	grow() {
 		var T = arguments[0];
 		var H = arguments[1];
+		this.t = arguments[2];
 		
 		if(this.age < this.maxAge) {
 			var tem = this.tem;
@@ -504,6 +510,10 @@ class Plant {
 			var fS = dSigmoid(this.age, sig.A, sig.b, sig.t0);
 			var dsize = fT * fH * fS;
 			
+			var aa = 1 / this.tauSoil;
+			var fSO = Math.exp(-aa*(this.t - this.tSoil));
+			dsize *= fSO / this.Acorr;
+			
 			this.age++;
 			this.size += dsize;
 		} else {
@@ -512,6 +522,7 @@ class Plant {
 				this.tlag++
 			} else {
 				this.replant();
+				if(this.isResoil) this.resoil();
 			}
 		}
 	}
@@ -522,12 +533,16 @@ class Plant {
 		this.size = 0;
 		this.tlag = 0;
 		this.idle = false;
-		console.log("replant");
+	}
+	
+	// Resoil
+	resoil() {
+		this.tSoil = this.t;
 	}
 	
 	// Get age
 	getAge() {
-		var val;
+		var val = 0;
 		if(!this.idle) {
 			val = this.age;
 		} else {
@@ -538,7 +553,7 @@ class Plant {
 	
 	// Get size
 	getSize() {
-		var val;
+		var val = 0;
 		if(!this.idle) {
 			val = this.size;
 		} else {
