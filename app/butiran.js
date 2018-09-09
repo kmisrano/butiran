@@ -13,6 +13,8 @@
 	20180906
 	Confuse in naming convention of variables, functions, and
 	filenames.
+	20180909
+	Start the ABM with designing number generator.
 */
 
 /*
@@ -167,4 +169,104 @@ class Polynomial {
 			return fx;
 		}
 	}
+}
+
+
+/*
+	Random number generator
+	
+	20180302
+	Create this library of functions.
+	20180909
+	Integrate randInt and randIntN functions, which is
+	previously in random.js, into butiran.js file.
+*/
+
+// Generate int \in [min, max]
+function randInt(min, max) {
+	var x = Math.random() * (max - min) + min;
+	x = Math.round(x);
+	return x;
+}
+
+// Generate array of N number of int
+function randIntN(min, max, N) {
+	var x = [];
+	for(var i = 0; i < N; i++) {
+		x.push(randInt(min, max));
+	}
+	return x;
+}
+
+
+/*
+	Discrete integer Gaussian distribution
+	
+	20180909
+	Prepare number generator for AMB simulation (ICGAB 2018).
+*/
+
+class DistDiscIntGaussian {
+	// Constructor
+	constructor() {
+		this.mu = arguments[0];
+		this.sigma = arguments[1];
+		this.min = arguments[2].min;
+		this.max = arguments[2].max;
+		this.step = arguments[2].step;
+		this.N = arguments[2].N;
+		this.x = [];
+		this.y = [];
+		this.n = [];
+		this.sequence = [];
+		
+		this.generateData();
+	}
+	
+	// Define Gaussian distribution function
+	func(x) {
+		var m = this.mu;
+		var s = this.sigma;
+		var sp = Math.sqrt(2 * Math.PI);
+		var A = 1 / (s * sp);
+		var x_m2 = (x - m) * (x - m);
+		var b = 2 * s * s;
+		var y = A * Math.exp(-x_m2 / b);
+		return y;
+	}
+	
+	// Generate data
+	generateData() {
+		var imin = this.min;
+		var imax = this.max;
+		var di = this.step;
+		for(var i = imin; i <= imax; i += di) {
+			var xx = i;
+			var yy = this.func(xx);
+			var nn = Math.round(this.N * yy);
+			this.x.push(xx);
+			this.y.push(yy);
+			this.n.push(nn);
+		}
+		
+	// Correct number of data
+	correctDataNumber() {
+		var imin = this.min;
+		var imax = this.max;
+		var NN = 0;
+		for(var i = 0; i < (imax - imin); i++) {
+			var xx = i;
+			var yy = this.func(xx);
+			var nn = Math.round(this.N * yy);
+			this.x.push(xx);
+			this.y.push(yy);
+			this.n.push(nn);
+			NN += nn;
+		}
+		var imid = Math.round((imin + imax) / 2);
+		var dn = this.N - NN;
+		this.n[imid] += dn;
+	}
+	
+	
 }
