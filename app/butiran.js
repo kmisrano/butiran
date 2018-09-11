@@ -17,6 +17,7 @@
 	Start the ABM with designing number generator.
 */
 
+
 /*
 	Polynomial
 	
@@ -27,6 +28,7 @@
 	Fix int without explicit boundary condition,
 	continue add, sub, mul (and der Uni).
 */
+
 class Polynomial {
 	// Constructor
 	constructor() {
@@ -474,6 +476,18 @@ function dSigmoid(t, A, b, t0) {
 	return val;
 }
 
+/*
+	Plant
+	
+	20180909
+	Create this class using features from PGF, DIGD, DIRD.
+	20180910
+	Test and start simulation.
+	20180911
+	Add feature in recording final size for several replanting
+	process.
+*/
+
 class Plant {
 	// Constructor
 	constructor() {
@@ -491,6 +505,8 @@ class Plant {
 		this.tlag = 0;
 		this.idle = false;
 		this.t = 0;
+		this.finalSize = [];
+		this.f
 	}
 	
 	// Grow plant
@@ -517,6 +533,10 @@ class Plant {
 			this.age++;
 			this.size += dsize;
 		} else {
+			if(!this.idle) {
+				this.finalSize.push(this.size);
+			}
+			
 			if(this.tlag < this.lagTime) {
 				this.idle = true;
 				this.tlag++
@@ -528,7 +548,7 @@ class Plant {
 	}
 	
 	// Replant
-	replant() {
+	replant() {		
 		this.age = 0;
 		this.size = 0;
 		this.tlag = 0;
@@ -561,4 +581,46 @@ class Plant {
 		}
 		return val;
 	}
+}
+
+
+/*
+	Simple statistics
+	
+	20180911
+	Create sum, avg, and dev for array. All are tested in web
+	browser JS console.
+*/
+
+// Calculate sum of terms
+function sum(x) {
+	var N = x.length;
+	var Sx = 0;
+	for(var i = 0; i < N; i++) {
+		Sx += x[i];
+	}
+	return Sx;
+}
+
+// Calculate average of terms
+function avg(x) {
+	var N = x.length;
+	var Sx = sum(x);
+	var avgx = Sx / N;
+	return avgx;
+}
+
+// Calculate standard deviation
+function dev(x) {
+	var N = x.length;
+	var avgx = avg(x);
+	var s2 = 0;
+	for(var i = 0; i < N; i++) {
+		var x_avgx = x[i] - avgx;
+		var x_avgx2 = x_avgx * x_avgx;
+		s2 += x_avgx2;
+	}
+	s2 /= N;
+	var devx = Math.sqrt(s2);
+	return devx;
 }
