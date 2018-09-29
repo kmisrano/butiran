@@ -1,4 +1,5 @@
-/*
+<!doctype html>
+<!--
 	md_fsgdods.html
 	Floating spherical grain dynamics in one-dimension
 	
@@ -17,18 +18,16 @@
 	20180604
 	Run this application after some correction.
 	20180929
-	Change name according to new naming convention.
+	Change name according to new naming convention and port to
+	html.
 	
 	CDN
 	https://rawgit.com/dudung/butiran/master/app/md_fsgdods.html
-*/
-
-// Require classes
-var Vect3 = require('../lib/vect3')();
-var Grain = require('../lib/grain')();
-var Buoyant = require('../lib/force/buoyant')();
-var Gravitational = require('../lib/force/gravitational')();
-var Drag = require('../lib/force/drag')();
+-->
+<html>
+<head><script src="_butiran.js"></script></head>
+<body>
+<script>
 
 // Execute main function in development stage
 main();
@@ -46,7 +45,7 @@ function main() {
 	var appname = "fsgd";
 	
 	// Get command line arguments
-	var args = process.argv.slice(2);
+	//var args = process.argv.slice(2);
 	
 	// Create spherical grain
 	var rho = rhob;
@@ -183,6 +182,7 @@ function main() {
 	console.log(outstr);
 	
 	// Write to file
+	/*
 	if(args[0] != undefined) {
 		var fname = args[0];
 		const fs = require('fs');
@@ -191,4 +191,9 @@ function main() {
 			console.log(appname + ": " + fname + " saved");
 		});		
 	}
+	*/
 }
+
+</script>
+</body>
+</html>

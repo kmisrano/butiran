@@ -1,4 +1,5 @@
-/*
+<!doctype html>
+<!--
 	fd_fcbsbcm.html
 	Fast charging battery simulation based on capacitor model
 	
@@ -20,16 +21,16 @@
 	app/butiran/app/fast_charging_battery.js as part of
 	butiran.js project, and move the old one into sandbox.
 	20180929
-	Change name according to new naming convention.
+	Change name according to new naming convention and port italic
+	to html.
 	
 	CDN
 	https://rawgit.com/dudung/butiran/master/app/fd_fcbsbcm.html
-*/
-
-// Require classes
-var Sequence = require('../lib/sequence')();
-var Generator = require('../lib/generator')();
-var Resistor = require('../lib/resistor')();
+-->
+<html>
+<head><script src="_butiran.js"></script></head>
+<body>
+<script>
 
 // Execute main function in development stage
 main();
@@ -121,13 +122,19 @@ function main() {
 		outstr += linestr;
 		t += dt;
 	}
-	//console.log(outstr);
+	console.log(outstr);
 	
 	// Write to file
+	/*
 	var fname = "data.txt";
 	const fs = require('fs');
 	fs.writeFile(fname, outstr, function(err) {
 		if(err) throw err;
 		console.log(appname + ": " + fname + " saved");
 	});
+	*/
 }
+
+</script>
+</body>
+</html>
