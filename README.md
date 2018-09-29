@@ -1,5 +1,5 @@
 # butiran
-Simulation of physical system based on granular particles (en: granular particle, id: butiran).
+Simulation of physical system based on granular particles (en: granular particle, id: butiran) or granular-like particles, e.g. unphysical entity such as an agent.
 
 
 ## Distribution
