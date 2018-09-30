@@ -7,10 +7,10 @@
 	Felix Pasila | felix@petra.ac.id
 	Hendro | hendro@fi.itb.ac.id
 	
-	Execute: node fcbs.js
+	Execute: node fcbs.js -- not for html version
 	
 	Version info:
-		Node.js	v10.1.0
+		Node.js	v10.1.0  -- not for html version
 	
 	20180512
 	Create this application as empty HTML file.
@@ -40,9 +40,7 @@
 // Define some global variables
 var t, dt, tbeg, tend;
 var digit;
-var ptn1, ptn2;
-var seq1, seq2;
-var amp1, amp2;
+var ptn, seq, amp;
 var R, C, T, Tint, Rmin, Rmax, Rint, q;
 var SG;
 
@@ -178,6 +176,14 @@ function loadParameters() {
 	tabs1.text("Params").push("RMAX 1000");
 	tabs1.text("Params").push();
 	
+	tabs1.text("Params").push("# Signal");
+	tabs1.text("Params").push("AMP 10");
+	tabs1.text("Params").push("SEQBEG");
+	tabs1.text("Params").push("0 0 1 1 0 0 1 1 0 0");	
+	tabs1.text("Params").push("1 1 1 1 1 0 0 0 0 0");	
+	tabs1.text("Params").push("SEQEND");
+	tabs1.text("Params").push();
+	
 	tabs1.text("Params").push("# Simulation");
 	tabs1.text("Params").push("TSTEP 0.001");
 	tabs1.text("Params").push("TDATA 1E-1");
@@ -211,11 +217,12 @@ function readParameters() {
 	tend = Parse.getFrom(text).valueOf("TEND");
 	t = tbeg;
 	
-	// -------------------- manually set --------------------
 	// Define significant digit
 	digit = -Math.floor(Math.log(dt) / Math.exp(1));
 
+	// -------------------- manually set --------------------
 	// Define pattern for sequence as voltage source
+	/*
 	ptn1 = [
 		0, 0, 0, 0, 0,
 		1, 1, 1, 1, 1,
@@ -232,8 +239,7 @@ function readParameters() {
 		0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 		1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
 	]; // 100 ms
-	/*
-	var ptn2 = [
+	var ptn3 = [
 		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 		0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -241,20 +247,30 @@ function readParameters() {
 		1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
 		1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
 	]; // 100 ms
-	*/
 	
 	// Define sequences
 	seq1 = new Sequence(ptn1);
 	seq2 = new Sequence(ptn2);
+	seq3 = new Sequence(ptn3);
 
 	// Define signal amplitudo
 	amp1 = 10; // V
 	amp2 = 20; // V
+	amp3 = 30; // V
 	
 	// Create a signal generator with two output signals
-	SG = new Generator(dt, [seq1, seq2], [amp1, amp2]);
+	SG = new Generator(dt,
+		[seq1, seq2, seq3],
+		[amp1, amp2, amp3]
+	);
+	*/
 	// ------------------------------------------------------
-
+	
+	amp = Parse.getFrom(text).valueOf("AMP");
+	ptn = Parse.getFrom(text).valueBetween("SEQBEG", "SEQEND");
+	seq = new Sequence(ptn);
+	SG = new Generator(dt, [seq], [amp]);
+	
 	coordMin = Parse.getFrom(text).valueOf("COORDMIN");
 	coordMax = Parse.getFrom(text).valueOf("COORDMAX");
 	

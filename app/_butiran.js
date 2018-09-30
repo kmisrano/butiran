@@ -2989,6 +2989,8 @@ function push(line) {
 	20180929
 	Integrate it manually to butiran.js the new single file
 	library.
+	20180930
+	Add valueBetween function.
 */
 
 class Parse {
@@ -3032,6 +3034,30 @@ class Parse {
 					val.push(parseFloat(cols[jcol]));
 				}
 				return val;
+			},
+			valueBetween: function(beg, end) {
+				
+				var lines = text.split('\n');
+				var N = lines.length;
+				var val;
+				var ibeg = -1;
+				var iend = -1;
+				for(var i = 0; i < N; i++) {
+					var jbeg = lines[i].indexOf(beg);
+					if(jbeg != -1) {
+						ibeg = i;
+					}
+					var jend = lines[i].indexOf(end);
+					if(jend != -1) {
+						iend = i;
+					}
+				}
+				var pattern = "";
+				for(var i = ibeg + 1; i < iend; i++) {
+					var line = lines[i];
+					pattern += " " + line;
+				}
+				return pattern;
 			},
 		};
 		return par;
