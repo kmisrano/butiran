@@ -71,7 +71,7 @@ function simulate() {
 	
 	// Show data header in Results tab
 	if(t < tbeg + dt) {
-		tabs1.text("Results").push("# t\tVS\tRC\tVC");
+		tabs1.text("Results").push("#t VS RC VC");
 	}
 	
 	// Perform simulation
@@ -240,7 +240,7 @@ function loadParameters() {
 	tabs1.text("Params").push("TSTEP 0.001");
 	tabs1.text("Params").push("TDATA 1E-1");
 	tabs1.text("Params").push("TBEG 0");
-	tabs1.text("Params").push("TEND 5");
+	tabs1.text("Params").push("TEND 3");
 	tabs1.text("Params").push();
 	
 	tabs1.text("Params").push("# Visualization");
