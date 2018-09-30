@@ -24,26 +24,26 @@ or remotely
 ## CDN of applications
 
 1. **fd_fcbsbcm** | Fast charging battery simulation based on capacitor model \
-https://cdn.rawgit.com/dudung/butiran/8163ee9e/app/fd_fcbsbcm.html
+https://cdn.rawgit.com/dudung/butiran/ae8b1983/app/fd_fcbsbcm.html
 
 2. **md_fsgdods** | Floating spherical grain dynamics in one-dimension \
-https://cdn.rawgit.com/dudung/butiran/8163ee9e/app/md_fsgdods.html
+https://cdn.rawgit.com/dudung/butiran/ae8b1983/app/md_fsgdods.html
 
 3. **md_opsebfs** | One particle in static electric and magnetic field \
-https://cdn.rawgit.com/dudung/butiran/8163ee9e/app/md_opsebfs.html
+https://cdn.rawgit.com/dudung/butiran/ae8b1983/app/md_opsebfs.html
 
 4. **gb_tabdiss** | Tablet dissolution simulation based on grid model \
-https://cdn.rawgit.com/dudung/butiran/8163ee9e/app/gb_tabdiss.html
+https://cdn.rawgit.com/dudung/butiran/ae8b1983/app/gb_tabdiss.html
 
 5. **gb_sandavl** | Sandpile avalanche simulation based on grid model \
-https://cdn.rawgit.com/dudung/butiran/8163ee9e/app/gb_sandavl.html
+https://cdn.rawgit.com/dudung/butiran/ae8b1983/app/gb_sandavl.html
 
 6. **md_spfwfss** | Spherical particle floating on waving fluid surface \
-https://cdn.rawgit.com/dudung/butiran/8163ee9e/app/md_spfwfss.html
+https://cdn.rawgit.com/dudung/butiran/ae8b1983/app/md_spfwfss.html
 
 7. **ma_polynom** | Example how to use Polynomial class \
-https://cdn.rawgit.com/dudung/butiran/8163ee9e/app/ma_polynom.html
+https://cdn.rawgit.com/dudung/butiran/ae8b1983/app/ma_polynom.html
 
 8. **ab_bioecon** | Simulation of plantation in bioeconomy based on ABM \
-https://cdn.rawgit.com/dudung/butiran/8163ee9e/app/ab_bioecon.html
+https://cdn.rawgit.com/dudung/butiran/ae8b1983/app/ab_bioecon.html
 
