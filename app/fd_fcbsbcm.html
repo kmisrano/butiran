@@ -238,53 +238,8 @@ function readParameters() {
 	
 	// Define significant digit
 	digit = -Math.floor(Math.log(dt) / Math.exp(1));
-
-	// -------------------- manually set --------------------
-	// Define pattern for sequence as voltage source
-	/*
-	ptn1 = [
-		0, 0, 0, 0, 0,
-		1, 1, 1, 1, 1,
-	]; // 10 ms
-	ptn2 = [
-		0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-		0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-		0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-		0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-		0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-		0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-		0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-		0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-		0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-		1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-	]; // 100 ms
-	var ptn3 = [
-		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-		0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-		1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-		1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-		1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-	]; // 100 ms
 	
-	// Define sequences
-	seq1 = new Sequence(ptn1);
-	seq2 = new Sequence(ptn2);
-	seq3 = new Sequence(ptn3);
-
-	// Define signal amplitudo
-	amp1 = 10; // V
-	amp2 = 20; // V
-	amp3 = 30; // V
-	
-	// Create a signal generator with two output signals
-	SG = new Generator(dt,
-		[seq1, seq2, seq3],
-		[amp1, amp2, amp3]
-	);
-	*/
-	// ------------------------------------------------------
-	
+	// Get signal information and define generator
 	amp = Parse.getFrom(text).valueOf("AMP");
 	ptn = Parse.getFrom(text).valueBetween("SEQBEG", "SEQEND");
 	seq = new Sequence(ptn);
