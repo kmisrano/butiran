@@ -44,6 +44,7 @@ var digit;
 var ptn, seq, amp;
 var R, C, T, Tint, Rmin, Rmax, Rint, q;
 var SG;
+var tdata, VSdata, RCdata, VCdata;
 
 var Tdata, sample;
 var proc;
@@ -70,23 +71,23 @@ function simulate() {
 	
 	// Show data header in Results tab
 	if(t < tbeg + dt) {
-		tabs1.text("Results").push("# t\tVs\tRC\tVC");
+		tabs1.text("Results").push("# t\tVS\tRC\tVC");
 	}
 	
 	// Perform simulation
 	var signal = SG.ping();
-	var V = signal[2];
-	var r = Rint.ping(dt, V);
+	var VS = signal[1];
+	var r = Rint.ping(dt, VS);
 	
 	var q1 = q * (1 - dt / (C * (R + r)));
-	var q2 = (C * V * dt) / (C * (R + r));
+	var q2 = (C * VS * dt) / (C * (R + r));
 	q = q1 + q2;
 	
 	var VC = C * q;
 	
-	var linestr = t.toFixed(digit) + "\t";
-	linestr += V + "\t";
-	linestr += r.toFixed(digit) + "\t";
+	var linestr = t.toFixed(digit) + " ";
+	linestr += VS + " ";
+	linestr += r.toFixed(digit) + " ";
 	linestr += VC.toExponential(digit);
 	
 	tabs1.text("Results").push(linestr);
@@ -95,17 +96,27 @@ function simulate() {
 	
 	// Display result in certain period of time
 	if(sample.sampling()) {
+		tdata.push(t);
+		VSdata.push(VS);
+		RCdata.push(r);
+		VCdata.push(VC);
 		
 		// Clear drawing area
-		tabs2.graphic("xy").clear();
+		tabs2.graphic("tVS").clear();
+		tabs2.graphic("tRC").clear();
+		tabs2.graphic("tVC").clear();
 		
-		// Draw waving fluid surface
-		tabs2.graphic("xy").setLineColor("#00f");	
-		//tabs2.graphic("xy").lines(xf, yf);
+		// Draw curve of source voltage
+		tabs2.graphic("tVS").setLineColor("#00f");	
+		tabs2.graphic("tVS").lines(tdata, VSdata);
 		
-		// Draw spherical particle
-		tabs2.graphic("xy").setLineColor("#f00");	
-		//tabs2.graphic("xy").strokeCircle(r.x, r.y, 0.5 * D);
+		// Draw curve of source voltage
+		tabs2.graphic("tRC").setLineColor("#0f0");	
+		tabs2.graphic("tRC").lines(tdata, RCdata);
+		
+		// Draw curve of capacitor voltage
+		tabs2.graphic("tVC").setLineColor("#f00");	
+		tabs2.graphic("tVC").lines(tdata, VCdata);
 	}
 	
 	// Terminate simulation when end time is reached
@@ -143,13 +154,17 @@ function setLayout() {
 	tabs2 = new Tabs("tabs2", "document.body");
 	tabs2.setWidth("300px");
 	tabs2.setHeight("300px");
-	tabs2.addTab("xy", 1);
+	tabs2.addTab("tVS", 1);
+	tabs2.addTab("tRC", 1);
+	tabs2.addTab("tVC", 1);
 	
-	// Clear all tabs --add "document.body" to avoid warning
+	// Clear all tabs
 	tabs1.text("Params").clear();
 	tabs1.text("Results").clear();
 	tabs1.text("Log").clear();
-	tabs2.graphic("xy").clear();
+	tabs2.graphic("tVS").clear();
+	tabs2.graphic("tRC").clear();
+	tabs2.graphic("tVC").clear();
 
 	// Define bgroup
 	bgroup = new Bgroup("bgroup", "document.body");
@@ -189,7 +204,7 @@ function loadParameters() {
 	tabs1.text("Params").push("TSTEP 0.001");
 	tabs1.text("Params").push("TDATA 1E-3");
 	tabs1.text("Params").push("TBEG 0");
-	tabs1.text("Params").push("TEND 20E-3");
+	tabs1.text("Params").push("TEND 2E-1");
 	tabs1.text("Params").push();
 	
 	tabs1.text("Params").push("# Visualization");
@@ -278,12 +293,19 @@ function readParameters() {
 	// Initiate time
 	t = tbeg;
 	
+	// Initialize data
+	tdata = [];
+	VSdata = [];
+	RCdata = [];
+	VCdata = [];
+	
 	// Set sampling
 	sample = new Sample(Tdata, dt);
 	
 	// Set coordinate ranges
-	tabs2.graphic("xy").setCoord(
-		[coordMin.x, coordMin.y, coordMax.x, coordMax.y]);
+	tabs2.graphic("tVS").setCoord([tbeg, 0, tend, amp]);
+	tabs2.graphic("tRC").setCoord([tbeg, Rmin, tend, Rmax]);
+	tabs2.graphic("tVC").setCoord([tbeg, 0, tend, amp]);	
 }	
 
 // Log something and show manually	
@@ -393,7 +415,9 @@ function buttonClick(event) {
 		tabs1.text("Params").clear();
 		tabs1.text("Results").clear();
 		tabs1.text("Log").clear();
-		tabs2.graphic("xy").clear();
+		tabs2.graphic("tVS").clear();
+		tabs2.graphic("tRC").clear();
+		tabs2.graphic("tVC").clear();
 		var ts = Timer.ts() + "|";
 		tabs1.text("Log").push(ts + "Parameters, Results, "
 			+ "and Log are cleared");
@@ -418,14 +442,28 @@ function buttonClick(event) {
 function drawResults() {
 	// Get results
 	var text = tabs1.element("Results").value;
+	var lines = text.split("\n");
+	if(lines[0].indexOf("#") != -1) {
+		lines.shift();
+	}
+	text = lines.join("\n");
 	var tt = Parse.getFrom(text).column(0);
-	var RC = Parse.getFrom(text).column(1);
-	var VC = Parse.getFrom(text).column(1);
+	var vs = Parse.getFrom(text).column(1);
+	var rc = Parse.getFrom(text).column(2);
+	var vc = Parse.getFrom(text).column(3);
 	
 	// Draw on related chart
-	tabs2.graphic("xy").clear();
-	tabs2.graphic("xy").setLineColor("#f00");	
-	tabs2.graphic("xy").lines(tt, RC);
+	tabs2.graphic("tVS").clear();
+	tabs2.graphic("tVS").setLineColor("#00f");	
+	tabs2.graphic("tVS").lines(tt, vs);
+	
+	tabs2.graphic("tRC").clear();
+	tabs2.graphic("tRC").setLineColor("#0f0");	
+	tabs2.graphic("tRC").lines(tt, rc);
+	
+	tabs2.graphic("tVC").clear();
+	tabs2.graphic("tVC").setLineColor("#f00");	
+	tabs2.graphic("tVC").lines(tt, vc);
 }
 
 </script>
