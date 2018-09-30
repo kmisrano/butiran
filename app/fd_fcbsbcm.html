@@ -27,6 +27,7 @@
 	to html.
 	20180930
 	Do some adjustment while porting it to html version.
+	Use valueBetween function from text tab.
 	
 	CDN
 	https://rawgit.com/dudung/butiran/master/app/fd_fcbsbcm.html
@@ -69,7 +70,7 @@ function simulate() {
 	
 	// Show data header in Results tab
 	if(t < tbeg + dt) {
-		tabs1.text("Results").push("# t\tVs\tRC\tVC\n");
+		tabs1.text("Results").push("# t\tVs\tRC\tVC");
 	}
 	
 	// Perform simulation
@@ -186,9 +187,9 @@ function loadParameters() {
 	
 	tabs1.text("Params").push("# Simulation");
 	tabs1.text("Params").push("TSTEP 0.001");
-	tabs1.text("Params").push("TDATA 1E-1");
+	tabs1.text("Params").push("TDATA 1E-3");
 	tabs1.text("Params").push("TBEG 0");
-	tabs1.text("Params").push("TEND 10");
+	tabs1.text("Params").push("TEND 20E-3");
 	tabs1.text("Params").push();
 	
 	tabs1.text("Params").push("# Visualization");

@@ -3036,7 +3036,6 @@ class Parse {
 				return val;
 			},
 			valueBetween: function(beg, end) {
-				
 				var lines = text.split('\n');
 				var N = lines.length;
 				var val;
@@ -3055,9 +3054,13 @@ class Parse {
 				var pattern = "";
 				for(var i = ibeg + 1; i < iend; i++) {
 					var line = lines[i];
-					pattern += " " + line;
+					if(i > ibeg + 1) {
+						pattern += " " + line;
+					} else {
+						pattern += line;
+					}
 				}
-				return pattern;
+				return pattern.split(" ").map(Number);
 			},
 		};
 		return par;
