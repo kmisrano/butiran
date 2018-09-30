@@ -105,6 +105,9 @@ function simulate() {
 		tabs2.graphic("tVS").clear();
 		tabs2.graphic("tRC").clear();
 		tabs2.graphic("tVC").clear();
+		tabs2.graphic("tVC").setCoord(
+			[tbeg, 0, tend, Math.max(...VCdata)]
+		);	
 		
 		// Draw curve of source voltage
 		tabs2.graphic("tVS").setLineColor("#00f");	
@@ -202,9 +205,9 @@ function loadParameters() {
 	
 	tabs1.text("Params").push("# Simulation");
 	tabs1.text("Params").push("TSTEP 0.001");
-	tabs1.text("Params").push("TDATA 1E-3");
+	tabs1.text("Params").push("TDATA 1E-1");
 	tabs1.text("Params").push("TBEG 0");
-	tabs1.text("Params").push("TEND 2E-1");
+	tabs1.text("Params").push("TEND 1");
 	tabs1.text("Params").push();
 	
 	tabs1.text("Params").push("# Visualization");
@@ -382,7 +385,7 @@ function buttonClick(event) {
 			+ "[Load]     load default parameters\n"
 			+ "[Read]     read parameters from text\n"
 			+ "[Start]     start simulation\n"
-			+ "[Draw]     draw results\n"
+			+ "[Draw]     draw final results\n"
 			+ "[Help]     show this help\n"
 			+ "[About]   describe this application\n"
 		);
@@ -462,6 +465,9 @@ function drawResults() {
 	tabs2.graphic("tRC").lines(tt, rc);
 	
 	tabs2.graphic("tVC").clear();
+	tabs2.graphic("tVC").setCoord(
+		[tbeg, 0, tend, Math.max(...vc)]
+	);	
 	tabs2.graphic("tVC").setLineColor("#f00");	
 	tabs2.graphic("tVC").lines(tt, vc);
 }
