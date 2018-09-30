@@ -44,7 +44,7 @@ var digit;
 var ptn, seq, amp;
 var R, C, T, Tint, Rmin, Rmax, Rint, q;
 var SG;
-var tdata, VSdata, RCdata, VCdata;
+var tdata, VSdata, RCdata, VCdata, UCdata;
 
 var Tdata, sample;
 var proc;
@@ -84,11 +84,13 @@ function simulate() {
 	q = q1 + q2;
 	
 	var VC = C * q;
+	var UC = 0.5 * C * VC * VC;
 	
 	var linestr = t.toFixed(digit) + " ";
 	linestr += VS + " ";
 	linestr += r.toFixed(digit) + " ";
-	linestr += VC.toExponential(digit);
+	linestr += VC.toExponential(digit) + " ";
+	linestr += UC.toExponential(digit);
 	
 	tabs1.text("Results").push(linestr);
 	var taRes = tabs1.element("Results");
@@ -100,13 +102,20 @@ function simulate() {
 		VSdata.push(VS);
 		RCdata.push(r);
 		VCdata.push(VC);
+		UCdata.push(UC);
 		
 		// Clear drawing area
 		tabs2.graphic("tVS").clear();
 		tabs2.graphic("tRC").clear();
 		tabs2.graphic("tVC").clear();
+		tabs2.graphic("tUC").clear();
+		
+		// Set range dynamically
 		tabs2.graphic("tVC").setCoord(
 			[tbeg, 0, tend, Math.max(...VCdata)]
+		);	
+		tabs2.graphic("tUC").setCoord(
+			[tbeg, 0, tend, Math.max(...UCdata)]
 		);	
 		
 		// Draw curve of source voltage
@@ -120,6 +129,10 @@ function simulate() {
 		// Draw curve of capacitor voltage
 		tabs2.graphic("tVC").setLineColor("#f00");	
 		tabs2.graphic("tVC").lines(tdata, VCdata);
+		
+		// Draw curve of capacitor voltage
+		tabs2.graphic("tUC").setLineColor("#0ff");	
+		tabs2.graphic("tUC").lines(tdata, UCdata);
 	}
 	
 	// Terminate simulation when end time is reached
@@ -160,6 +173,7 @@ function setLayout() {
 	tabs2.addTab("tVS", 1);
 	tabs2.addTab("tRC", 1);
 	tabs2.addTab("tVC", 1);
+	tabs2.addTab("tUC", 1);
 	
 	// Clear all tabs
 	tabs1.text("Params").clear();
@@ -168,6 +182,7 @@ function setLayout() {
 	tabs2.graphic("tVS").clear();
 	tabs2.graphic("tRC").clear();
 	tabs2.graphic("tVC").clear();
+	tabs2.graphic("tUC").clear();
 
 	// Define bgroup
 	bgroup = new Bgroup("bgroup", "document.body");
@@ -191,23 +206,41 @@ function loadParameters() {
 	tabs1.text("Params").push("RESISTOR 10");
 	tabs1.text("Params").push("CAPACITOR 0.001");
 	tabs1.text("Params").push("TINT 0.2");
-	tabs1.text("Params").push("RMIN 100");
+	tabs1.text("Params").push("RMIN 10");
 	tabs1.text("Params").push("RMAX 1000");
 	tabs1.text("Params").push();
 	
 	tabs1.text("Params").push("# Signal");
-	tabs1.text("Params").push("AMP 10");
+	tabs1.text("Params").push("AMP 100");
 	tabs1.text("Params").push("SEQBEG");
-	tabs1.text("Params").push("1 1 1 1 1 1 1 1 1 1");	
-	tabs1.text("Params").push("0 0 0 0 0 0 0 0 0 0");	
+	tabs1.text("Params").push("0 0 0 0 0 0 0 0 0 1 1 0 0 0 0 0 0 0 0 0");
+	tabs1.text("Params").push("0 0 0 0 0 0 0 0 1 1 1 1 0 0 0 0 0 0 0 0");
+	tabs1.text("Params").push("0 0 0 0 0 0 0 1 1 1 1 1 1 0 0 0 0 0 0 0");
+	tabs1.text("Params").push("0 0 0 0 0 0 1 1 1 1 1 1 1 1 0 0 0 0 0 0");
+	tabs1.text("Params").push("0 0 0 0 0 1 1 1 1 1 1 1 1 1 1 0 0 0 0 0");
+	tabs1.text("Params").push("0 0 0 0 1 1 1 1 1 1 1 1 1 1 1 1 0 0 0 0");
+	tabs1.text("Params").push("0 0 0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 0 0");
+	tabs1.text("Params").push("0 0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 0");
+	tabs1.text("Params").push("0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0");
+	tabs1.text("Params").push("0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0");
+	tabs1.text("Params").push("0 0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 0");
+	tabs1.text("Params").push("0 0 0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 0 0");
+	tabs1.text("Params").push("0 0 0 0 1 1 1 1 1 1 1 1 1 1 1 1 0 0 0 0");
+	tabs1.text("Params").push("0 0 0 0 0 1 1 1 1 1 1 1 1 1 1 0 0 0 0 0");
+	tabs1.text("Params").push("0 0 0 0 0 0 1 1 1 1 1 1 1 1 0 0 0 0 0 0");
+	tabs1.text("Params").push("0 0 0 0 0 0 0 1 1 1 1 1 1 0 0 0 0 0 0 0");
+	tabs1.text("Params").push("0 0 0 0 0 0 0 0 1 1 1 1 0 0 0 0 0 0 0 0");
+	tabs1.text("Params").push("0 0 0 0 0 0 0 0 0 1 1 0 0 0 0 0 0 0 0 0");
+	tabs1.text("Params").push("0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0");
+	tabs1.text("Params").push("0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0");
 	tabs1.text("Params").push("SEQEND");
 	tabs1.text("Params").push();
-	
+
 	tabs1.text("Params").push("# Simulation");
 	tabs1.text("Params").push("TSTEP 0.001");
 	tabs1.text("Params").push("TDATA 1E-1");
 	tabs1.text("Params").push("TBEG 0");
-	tabs1.text("Params").push("TEND 10");
+	tabs1.text("Params").push("TEND 5");
 	tabs1.text("Params").push();
 	
 	tabs1.text("Params").push("# Visualization");
@@ -256,6 +289,7 @@ function readParameters() {
 	VSdata = [];
 	RCdata = [];
 	VCdata = [];
+	UCdata = [];
 	
 	// Set sampling
 	sample = new Sample(Tdata, dt);
@@ -264,6 +298,7 @@ function readParameters() {
 	tabs2.graphic("tVS").setCoord([tbeg, 0, tend, amp]);
 	tabs2.graphic("tRC").setCoord([tbeg, Rmin, tend, Rmax]);
 	tabs2.graphic("tVC").setCoord([tbeg, 0, tend, amp]);	
+	tabs2.graphic("tUC").setCoord([tbeg, 0, tend, amp]);	
 }	
 
 // Log something and show manually	
@@ -409,6 +444,7 @@ function drawResults() {
 	var vs = Parse.getFrom(text).column(1);
 	var rc = Parse.getFrom(text).column(2);
 	var vc = Parse.getFrom(text).column(3);
+	var uc = Parse.getFrom(text).column(4);
 	
 	// Draw on related chart
 	tabs2.graphic("tVS").clear();
@@ -425,6 +461,13 @@ function drawResults() {
 	);	
 	tabs2.graphic("tVC").setLineColor("#f00");	
 	tabs2.graphic("tVC").lines(tt, vc);
+	
+	tabs2.graphic("tUC").clear();
+	tabs2.graphic("tUC").setCoord(
+		[tbeg, 0, tend, Math.max(...uc)]
+	);	
+	tabs2.graphic("tUC").setLineColor("#0ff");	
+	tabs2.graphic("tUC").lines(tt, uc);
 }
 
 </script>
