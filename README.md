@@ -47,3 +47,6 @@ https://cdn.rawgit.com/dudung/butiran/ae8b1983/app/ma_polynom.html
 8. **ab_bioecon** | Simulation of plantation in bioeconomy based on ABM \
 https://cdn.rawgit.com/dudung/butiran/ae8b1983/app/ab_bioecon.html
 
+9. **md_sslssgm.html** | Simulation of snake-like swimming system
+	based on granular model \
+https://cdn.rawgit.com/dudung/butiran/ae8b1983/app/md_sslssgm.html
