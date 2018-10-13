@@ -8,41 +8,36 @@
 	
 	20181012
 	Start this project for tomorrow presentation.
+	20181013
+	Change CDN from https://rawgit.com/ to
+	https://raw.githack.com/
+	Remove log.
+	Finish initial parameters but length at 0757.
+	Create fake simulation for testing result visualization
+	at 0837.
+	Can produce zero motion since spring force is tested
+	manually.
 
 	CDN
 	https://raw.githack.com/dudung/butiran/master/app/md_sslssgm.html
+	
 -->
 <html>
 <head>
-<!--
-<script
-	src="https://raw.githack.com\
-	/dudung/butiran/\
-	master/dist/butiran.js"
-	>
-</script>
--->
 <script src="_butiran.js"></script>
-
-<!-- remove this when deploy openly in distribution -->
-<!-- since 20180619.0300                            -->
-<!--script src="../lib/log/log.js"></script-->
-<!-- ---------------------------------------------- -->
-
 </head>
 <body>
 <script>
 
 // Define some global variables
-var rhop, D, r, v;
-var rhof, Amp, freq, lamda, phi0, Tempf, etaf, dirf;
-var GField;
+var gacc, rhof, etaf;
+var rhob, Db, kb, boneb, muscleb, Ab, Tb;
+var N, r, v;
 var t, dt, tbeg, tend;
 var Tdata, sample;
 var proc;
 var tabs1, tabs2, bgroup;
 var coordMin, coordMax;
-var xf, yf, Nf;
 
 // Call main function
 main()
@@ -52,149 +47,145 @@ function main() {
 	// Set layout of elements
 	setLayout();
 	
-	// Log something
-	log();
-		
 	// Set timer for processing simulation
 	proc = new Timer(simulate, 1);
 }
 
 // Perform simulation
 function simulate() {
-
-	// Define fluid surface function
-	function yFluid(x, t) {
-		var omega = 2 * Math.PI * freq;
-		var k = 2 * Math.PI / lambda * dirf;
-		var y = Amp * Math.sin(omega * t - k * x + phi0);
-		return y;
-	}
 	
-	// Define time derivation of fluid surface
-	function vyFluid(x, t) {
-		var omega = 2 * Math.PI * freq;
-		var k = 2 * Math.PI / lambda * dirf;
-		var y = omega * Amp * Math.cos(omega * t - k * x + phi0);
-		return y;
-	}
-	
-	// Format time t
-	t = +t.toFixed(10);
-	
-	// Calculate mass
-	var R = 0.5 * D;
-	var V = (4 * Math.PI / 3) * R * R * R;
-	var m = rhop * V;
-	
-	// Calculate gravitational force
-	var FG = Vect3.mul(m, GField);
-	
-	// Calculate buoyant force
-	var xA = r.x + 0.5 * D;
-	var yA = yFluid(xA, t);
-	var xB = r.x - 0.5 * D;
-	var yB = yFluid(xB, t);
-	var rA = new Vect3(xA, yA, 0);
-	var rB = new Vect3(xB, yB, 0);
-	var rAB = Vect3.sub(rA, rB);
-	var nAB = rAB.unit();
-	var nG = GField.unit();
-	var nGaccent = Vect3.cross(Vect3.cross(nG, nAB), nAB);
-	var fB;
-	var yff = yFluid(r.x, t);
-	if(r.y < yff - 0.5 * D) {
-		fB = (Math.PI / 6) * rhof * D * D * D * GField.len();
-		nGaccent = Vect3.mul(-1, nG);
-	} else if(yff - 0.5 * D <= r.y && r.y <= yff + 0.5 * D) {
-		var dy = yff - r.y;
-		var term1 = 0.25 * D * D * (dy + 0.5 * D);
-		var term2 = -(1/3) * (dy * dy * dy + D * D * D / 8);
-		fB = Math.PI * rhof * (term1 + term2) * GField.len();
-	} else {
-		fB = 0;
-	}
-	var FB = Vect3.mul(fB, nGaccent);
-	
-	// Calculate drag force
-	var Db;
-	if(r.y < yff) {
-		Db = D;
-	} else if(yff <= r.y && r.y <= yff + 0.5 * D) {
-		var RR = 0.5 * D;
-		var R2 = RR * RR - (r.y - yff) * (r.y - yff);
-		Db = 2 * Math.sqrt(R2);
-	} else {
-		Db = 0;
-	}
-	var b = 3 * Math.PI * etaf * Db;
-	var omega = 2 * Math.PI * freq;
-	var k = 2 * Math.PI / lambda * dirf;
-	var vfx = omega / k * 0;
-	var vfy = vyFluid(r.x, t);
-	var vf = new Vect3(vfx, vfy, 0);
-	var FD = Vect3.mul(-b, Vect3.sub(v, vf));
-	
-	// Apply Newton second law of motion
-	var F = Vect3.add(FG, FB, FD);
-	var a = Vect3.div(F, m);
-	
-	// Integrate using Euler algorithm
-	v = Vect3.add(v, Vect3.mul(a, dt));
-	r = Vect3.add(r, Vect3.mul(v, dt));
-	
-	
-	// Set periodic boundary condition
-	var PERIODIC_BC = false;
-	if(PERIODIC_BC) {
-		if(r.x > coordMax.x) {
-			r.x = coordMin.x + (r.x - coordMax.x);
+	var TESTING = false;
+	if(TESTING) {
+		// -------------- Fake simulation ------------------
+		for(var i = 0; i < N; i++) {
+			r[i].x += 0.001;
+			var A = 0.1;
+			var x0 = 5 * Db;
+			var y0 = 0.5;
+			var x = r[i].x;
+			var lambda = 0.5;
+			var k = 2 * Math.PI / lambda;
+			var y = (y0 + A * Math.sin(k * (x - x0))).toFixed(4);
+			r[i].y = y;
 		}
-		if(r.x < coordMin.x) {
-			r.x = coordMax.x + (r.x - coordMin.x);
-		}
+		// -------------------------------------------------
 	}
-
-	v.x = +v.x.toFixed(10);
-	v.y = +v.y.toFixed(10);
-	v.z = +v.z.toFixed(10);
-	r.x = +r.x.toFixed(10);
-	r.y = +r.y.toFixed(10);
-	r.z = +r.z.toFixed(10);
+	
+	// Change muscle
+	for(var i = 0; i < N - 2; i++) {
+		var omega = 2 * Math.PI / Tb;
+		var dl = Ab * Math.sin(omega * t);
+		muscleb[i] += dl;
+	}
+	
+	var SoF = [];
+	
+	for(var i = 0; i < N; i++) {
+		var neigh = [];
+		if(i == 0) {
+			neigh = [+1, +2];
+		} else if(i == 1) {
+			neigh = [-1, +1, +2];
+		} else if(i == N - 2) {
+			neigh = [-2, -1, +1];
+		} else if(i == N - 1) {
+			neigh = [-2, -1];
+		} else {
+			neigh = [-2, -1, +1, +2];
+		}
+		
+		var F = new Vect3;
+		
+		for(var ne = 0; ne < neigh.length; ne++ ) {
+			var j = i + neigh[ne];
+			var rij = Vect3.sub(r[i], r[j]);
+			var lij = rij.len();
+			var nij = rij.unit();
+			var l0 = 0;
+			
+			if(Math.abs(neigh[ne]) < 2) {
+				// Interact through bone
+				l0 = (i < j) ? boneb[i] : boneb[j];
+			} else {
+				// Interact through muscle
+				l0 = (i < j) ? muscleb[i] : muscleb[j];
+			}
+			var dl = lij - l0;
+			var Fij = Vect3.mul(-kb * dl, nij);
+			
+			F = Vect3.add(F, Fij);
+		}
+		
+		SoF.push(F);
+	}
+	
+	// Calculate viscos force
+	for(var i = 0; i < N; i++) {
+		var f = Vect3.mul(-3 * Math.PI * etaf * Db, v[i]);
+		
+		// Make correction due to direction
+		var nf = f.unit();
+		if(0 < i && i < N - 1) {
+			var nn = (Vect3.sub(r[i -1], r[i + 1])).unit();
+			var frac = Math.abs(Vect3.dot(nf, nn));
+			f = Vect3.mul(f, frac);
+		}
+		
+		SoF[i] = Vect3.add(SoF[i], f);
+	}
+		
+	var Rb = 0.5 * Db;
+	var Rb3 = Rb * Rb * Rb;
+	var Vb = 4 * Math.PI * Rb3 / 3;
+	var mb = rhob * Vb;
+	
+	// Calculate acceleration
+	var a =[];
+	
+	for(var i = 0; i < N; i++) {
+		a[i] = Vect3.div(SoF[i], mb);
+	}
+	
+	// Calculate velocity
+	for(var i = 0; i < N; i++) {
+		v[i] = Vect3.add(v[i], Vect3.mul(a[i], dt));
+	}
+	
+	// Calculate position
+	for(var i = 0; i < N; i++) {
+		r[i] = Vect3.add(r[i], Vect3.mul(v[i], dt));
+	}
 	
 	// Display result in certain period of time
 	if(sample.sampling()) {
-		var data = t + " "
-			+ r.x.toExponential(2) + " "
-			+ r.y.toExponential(2) + " "
-			+ v.x.toExponential(2) + " "
-			+ v.y.toExponential(2);
-		tabs1.text("Results").push(data);
-		var textarea = tabs1.element("Results");
-		textarea.scrollTop = textarea.scrollHeight;
-			
-		// Generate waving fluid surface
-		xf = [];
-		yf = [];
-		var xmin = coordMin.x;
-		var xmax = coordMax.x;
-		var dx = (xmax - xmin) / Nf; 
-		for(var i = 0; i <= Nf; i++) {
-			var x = xmin + i * dx;
-			var y = yFluid(x, t);
-			xf.push(x);
-			yf.push(y);
+		// Calculate average position
+		var xavg = 0;
+		var yavg = 0;
+		for(var i = 0; i < N; i++) {
+			xavg += r[i].x;
+			yavg += r[i].y;
 		}
+		xavg /= N;
+		yavg /= N;
+		
+		var data = t.toFixed(3) + " "
+			+ xavg.toFixed(5) + " "
+			+ yavg.toFixed(5);
+		tabs1.text("Results").push(data)
+		var ta = tabs1.element("Results");
+		ta.scrollTop = ta.scrollHeight;
 		
 		// Clear drawing area
 		tabs2.graphic("xy").clear();
 		
-		// Draw waving fluid surface
-		tabs2.graphic("xy").setLineColor("#00f");	
-		tabs2.graphic("xy").lines(xf, yf);
-		
 		// Draw spherical particle
-		tabs2.graphic("xy").setLineColor("#f00");	
-		tabs2.graphic("xy").strokeCircle(r.x, r.y, 0.5 * D);
+		tabs2.graphic("xy").setLineColor("#f00");
+		for(var i = 0; i < N; i++) {
+			var xx = r[i].x;
+			var yy = r[i].y;
+			var RR = 0.5 * Db;
+			tabs2.graphic("xy").strokeCircle(xx, yy, RR);
+		}
 	}
 	
 	// Terminate simulation when end time is reached
@@ -222,7 +213,7 @@ function setLayout() {
 
 	// Define first Tabs
 	tabs1 = new Tabs("tabs1");
-	tabs1.setWidth("450px");
+	tabs1.setWidth("300px");
 	tabs1.setHeight("300px");
 	tabs1.addTab("Log", 0);
 	tabs1.addTab("Params", 0);
@@ -258,27 +249,35 @@ function setLayout() {
 
 // Load parameters
 function loadParameters() {
-	tabs1.text("Params").push("# Spherical particle");
-	tabs1.text("Params").push("DENSITYP 800");
-	tabs1.text("Params").push("DIAMETER 0.05");
-	tabs1.text("Params").push("POSITION -0.5 0 0");
-	tabs1.text("Params").push("VELOCITY 0 0 0");
-	tabs1.text("Params").push();
-	
-	tabs1.text("Params").push("# Fluids");
-	tabs1.text("Params").push("DENSITYF 1000");
-	tabs1.text("Params").push("AMPLITUDE 0.05");
-	tabs1.text("Params").push("FREQUENCY 0.5");
-	tabs1.text("Params").push("WAVELENGTH 1");
-	tabs1.text("Params").push("DIRECTION 1");
-	tabs1.text("Params").push("PHASE0 0");
-	tabs1.text("Params").push("TEMPERATURE 293");
-	tabs1.text("Params").push("VISCOSITY 1");
-	tabs1.text("Params").push("NDATAF 100");
-	tabs1.text("Params").push();
-	
 	tabs1.text("Params").push("# Environment");
-	tabs1.text("Params").push("GRAVFIELD 0 -9.81 0");
+	tabs1.text("Params").push("GRAVFIELD 0 0 -10");
+	tabs1.text("Params").push("DENSITYF 1000");
+	tabs1.text("Params").push("VISCOSITYF 0.01");
+	tabs1.text("Params").push();
+	
+	tabs1.text("Params").push("# Balls");
+	tabs1.text("Params").push("DENSITYB 500");
+	tabs1.text("Params").push("DIAMETERB 0.025");
+	tabs1.text("Params").push("SPRINGB 100");
+	tabs1.text("Params").push("AMPLITB 1E-5");
+	tabs1.text("Params").push("PERIODB 1");
+	tabs1.text("Params").push("GRAINBEG");
+	// -------------- Generated value ------------------
+	var N = 21;
+	var lambda = 0.5;
+	var A = 0.1;
+	var k = 2 * Math.PI / lambda;
+	var D = lambda / (N - 1);
+	var x0 = 5 * D;
+	var y0 = 0.5;
+	for(var i = 0; i < N; i++) {
+		var x = (x0 + (i - 1) * D).toFixed(2);
+		var y = (y0 + A * Math.sin(k * (x - x0))).toFixed(4);
+		var z = 0;
+		tabs1.text("Params").push(x + " " + y + " " + z);
+	}
+	// -------------------------------------------------
+	tabs1.text("Params").push("GRAINEND");
 	tabs1.text("Params").push();
 	
 	tabs1.text("Params").push("# Simulation");
@@ -289,7 +288,7 @@ function loadParameters() {
 	tabs1.text("Params").push();
 	
 	tabs1.text("Params").push("# Visualization");
-	tabs1.text("Params").push("COORDMIN -1 -1 -1");
+	tabs1.text("Params").push("COORDMIN 0 0 0");
 	tabs1.text("Params").push("COORDMAX 1 1 1");
 	var ta = tabs1.element("Params");
 	ta.scrollTop = ta.scrollHeight;
@@ -299,22 +298,46 @@ function loadParameters() {
 function readParameters() {
 	var text = tabs1.element("Params").value;
 	
-	rhop = Parse.getFrom(text).valueOf("DENSITYP");
-	D = Parse.getFrom(text).valueOf("DIAMETER");
-	r = Parse.getFrom(text).valueOf("POSITION");
-	v = Parse.getFrom(text).valueOf("VELOCITY");
-	
+	gacc = Parse.getFrom(text).valueOf("GRAVFIELD");
 	rhof = Parse.getFrom(text).valueOf("DENSITYF");
-	Amp = Parse.getFrom(text).valueOf("AMPLITUDE");
-	freq = Parse.getFrom(text).valueOf("FREQUENCY");
-	lambda = Parse.getFrom(text).valueOf("WAVELENGTH");
-	phi0 = Parse.getFrom(text).valueOf("PHASE0");
-	Tempf = Parse.getFrom(text).valueOf("TEMPERATURE");
 	etaf = Parse.getFrom(text).valueOf("VISCOSITY");
-	dirf = Parse.getFrom(text).valueOf("DIRECTION");
-	Nf = Parse.getFrom(text).valueOf("NDATAF");
+	rhob = Parse.getFrom(text).valueOf("DENSITYB");
+	Db = Parse.getFrom(text).valueOf("DIAMETERB");
+	kb = Parse.getFrom(text).valueOf("SPRINGB");
+	Ab = Parse.getFrom(text).valueOf("AMPLITB");
+	Tb = Parse.getFrom(text).valueOf("PERIODB");
 	
-	GField = Parse.getFrom(text).valueOf("GRAVFIELD");
+	var seq = Parse.getFrom(text).valueBetween(
+		"GRAINBEG", "GRAINEND");
+	N = seq.length / 3;
+	r = [];
+	v = [];
+	for(var i = 0; i < N; i++) {
+		var xx = seq[i * 3 + 0];
+		var yy = seq[i * 3 + 1];
+		var zz = seq[i * 3 + 2];
+		var rr = new Vect3(xx, yy, zz);
+		r.push(rr);
+		
+		var vv = new Vect3;
+		v.push(vv);
+	}
+	
+	boneb = [];
+	for(var i = 0; i < N - 1; i++) {
+		var dx = r[i].x - r[i + 1].x;
+		var dy = r[i].y - r[i + 1].y;
+		var dl = Math.sqrt(dx * dx + dy * dy);
+		boneb[i] = dl;
+	}
+	
+	muscleb = [];
+	for(var i = 0; i < N - 2; i++) {
+		var dx = r[i].x - r[i + 2].x;
+		var dy = r[i].y - r[i + 2].y;
+		var dl = Math.sqrt(dx * dx + dy * dy);
+		muscleb[i] = dl;
+	}
 	
 	dt = Parse.getFrom(text).valueOf("TSTEP");
 	Tdata = Parse.getFrom(text).valueOf("TDATA");
@@ -334,25 +357,6 @@ function readParameters() {
 	tabs2.graphic("xy").setCoord(
 		[coordMin.x, coordMin.y, coordMax.x, coordMax.y]);
 }	
-
-// Log something and show manually	
-function log() {
-	try { 
-		console.log(
-			showOnly(logjs).forFilter(
-				{
-					app: "spfwfs",
-					date: "20180714",
-					after: "0500",
-				}
-			)
-		);
-	}
-	catch(err) {
-		var msg = "opsebf logs only in development stage";
-		console.warn(msg);
-	}
-}
 
 // Do something when buttons clicked
 function buttonClick(event) {
@@ -463,16 +467,20 @@ function buttonClick(event) {
 function drawResults() {
 	// Get results
 	var text = tabs1.element("Results").value;
+	/*
 	var tt = Parse.getFrom(text).column(0);
 	var rxp = Parse.getFrom(text).column(1);
 	var ryp = Parse.getFrom(text).column(2);
 	var vxp = Parse.getFrom(text).column(3);
 	var vyp = Parse.getFrom(text).column(4);
+	*/
 	
 	// Draw on related chart
 	tabs2.graphic("xy").clear();
 	tabs2.graphic("xy").setLineColor("#f00");	
+	/*
 	tabs2.graphic("xy").lines(rxp, ryp);
+	*/
 }
 
 </script>
