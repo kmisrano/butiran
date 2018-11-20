@@ -1,6 +1,6 @@
 /*
 	md_s3sgbrot.js
-	Simulation of thress spherical growing body rotation
+	Simulation of three spherical growing body rotation
 	
 	Sparisoma Viridi | dudung@gmail.compile
 	Sinta Nurhia Dewi | sintanurhiadewi@gmail.com

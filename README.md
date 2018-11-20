@@ -19,7 +19,7 @@ https://raw.githack.com/dudung/butiran/x/app/vd_vdbneimg.html
 2. **vd_ta2ca** | Visualisation of data from textarea to canvas \
 https://raw.githack.com/dudung/butiran/x/app/vd_ta2ca.js
 
-3. **md_s3sgbrot** | Simulation of thress spherical growing body rotation \
+3. **md_s3sgbrot** | Simulation of three spherical growing body rotation \
 https://raw.githack.com/dudung/butiran/x/app/md_s3sgbrot.js
 
 4. **fd_fcbsbcm** | Fast charging battery simulation based on capacitor model \
