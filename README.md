@@ -17,7 +17,7 @@ and use it as usual
 or remotely
 
 ```html
-<script src="https://cdn.rawgit.com/dudung/butiran/4345a4db/app/_butiran.js"></script>
+<script src="https://raw.githack.com/dudung/butiran/master/app/_butiran.js"></script>
 ```
 
 
@@ -62,7 +62,7 @@ https://raw.githack.com/dudung/butiran/master/app/ab_ssltfs.js
 Use the application, e.g. ab_ssltfs.js
 
 ```html
-<script src="https://cdn.rawgit.com/dudung/butiran/4345a4db/app/ab_ssltfs.js"></script>
+<script src="https://raw.githack.com/dudung/butiran/master/app/ab_ssltfs.js"></script>
 ```
 
 in HTML file after the use of _butiran.js library.
