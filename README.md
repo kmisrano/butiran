@@ -24,39 +24,38 @@ or remotely
 ## CDN of Applications
 
 1. **fd_fcbsbcm** | Fast charging battery simulation based on capacitor model \
-https://raw.githack.com/dudung/butiran/blob/master/app/fd_fcbsbcm.js
+https://raw.githack.com/dudung/butiran/master/app/fd_fcbsbcm.js
 
 2. **md_fsgdods** | Floating spherical grain dynamics in one-dimension \
-https://raw.githack.com/dudung/butiran/blob/master/app/md_fsgdods.js
+https://raw.githack.com/dudung/butiran/master/app/md_fsgdods.js
 
 3. **md_opsebfs** | One particle in static electric and magnetic field \
-https://raw.githack.com/dudung/butiran/blob/master/app/md_opsebfs.js
+https://raw.githack.com/dudung/butiran/master/app/md_opsebfs.js
 
 4. **gb_tabdiss** | Tablet dissolution simulation based on grid model \
-https://raw.githack.com/dudung/butiran/blob/master/app/gb_tabdiss.js
+https://raw.githack.com/dudung/butiran/master/app/gb_tabdiss.js
 
 5. **gb_sandavl** | Sandpile avalanche simulation based on grid model \
-https://raw.githack.com/dudung/butiran/blob/master/app/gb_sandavl.js
+https://raw.githack.com/dudung/butiran/master/app/gb_sandavl.js
 
 6. **th_simlttcg.js** | Simulation of laser through transparent cylindrical grain \
-https://raw.githack.com/dudung/butiran/blob/master/app/th_simlttcg.js.js
+https://raw.githack.com/dudung/butiran/master/app/th_simlttcg.js.js
 
 7. **md_spfwfss** | Spherical particle floating on waving fluid surface \
-https://raw.githack.com/dudung/butiran/blob/master/app/md_spfwfss.js
+https://raw.githack.com/dudung/butiran/master/app/md_spfwfss.js
 
 8. **ma_polynom** | Example how to use Polynomial class \
-https://raw.githack.com/dudung/butiran/blob/master/app/ma_polynom.js
+https://raw.githack.com/dudung/butiran/master/app/ma_polynom.js
 
 9. **ab_bioecon** | Simulation of plantation in bioeconomy based on ABM \
-https://raw.githack.com/dudung/butiran/blob/master/app/ab_bioecon.js
+https://raw.githack.com/dudung/butiran/master/app/ab_bioecon.js
 
 10. **md_sslssgm** | Simulation of snake-like swimming system
 	based on granular model \
-https://raw.githack.com/dudung/butiran/blob/master/app/md_sslssgm.js
+https://raw.githack.com/dudung/butiran/master/app/md_sslssgm.js
 
-11. **ab_phasemat** | Simulation of snake-like swimming system
-	based on granular model \
-https://raw.githack.com/dudung/butiran/blob/master/app/ab_phasemat.js
+11. **ab_phasemat** | Simulation of phase change of materials using ABM \
+https://raw.githack.com/dudung/butiran/master/app/ab_phasemat.js
 
 12. **ab_ssltfs** | Simulation of simple single lane traffic flow \
 https://raw.githack.com/dudung/butiran/master/app/ab_ssltfs.js
