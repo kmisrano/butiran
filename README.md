@@ -21,39 +21,48 @@ or remotely
 ```
 
 
-## Applications
+## CDN of Applications
 
 1. **fd_fcbsbcm** | Fast charging battery simulation based on capacitor model \
-https://github.com/dudung/butiran/blob/master/app/fd_fcbsbcm.js
+https://raw.githack.com/dudung/butiran/blob/master/app/fd_fcbsbcm.js
 
 2. **md_fsgdods** | Floating spherical grain dynamics in one-dimension \
-https://github.com/dudung/butiran/blob/master/app/md_fsgdods.js
+https://raw.githack.com/dudung/butiran/blob/master/app/md_fsgdods.js
 
 3. **md_opsebfs** | One particle in static electric and magnetic field \
-https://github.com/dudung/butiran/blob/master/app/md_opsebfs.js
+https://raw.githack.com/dudung/butiran/blob/master/app/md_opsebfs.js
 
 4. **gb_tabdiss** | Tablet dissolution simulation based on grid model \
-https://github.com/dudung/butiran/blob/master/app/gb_tabdiss.js
+https://raw.githack.com/dudung/butiran/blob/master/app/gb_tabdiss.js
 
 5. **gb_sandavl** | Sandpile avalanche simulation based on grid model \
-https://github.com/dudung/butiran/blob/master/app/gb_sandavl.js
+https://raw.githack.com/dudung/butiran/blob/master/app/gb_sandavl.js
 
 6. **md_spfwfss** | Spherical particle floating on waving fluid surface \
-https://github.com/dudung/butiran/blob/master/app/md_spfwfss.js
+https://raw.githack.com/dudung/butiran/blob/master/app/md_spfwfss.js
 
 7. **ma_polynom** | Example how to use Polynomial class \
-https://github.com/dudung/butiran/blob/master/app/ma_polynom.js
+https://raw.githack.com/dudung/butiran/blob/master/app/ma_polynom.js
 
 8. **ab_bioecon** | Simulation of plantation in bioeconomy based on ABM \
-https://github.com/dudung/butiran/blob/master/app/ab_bioecon.js
+https://raw.githack.com/dudung/butiran/blob/master/app/ab_bioecon.js
 
 9. **md_sslssgm** | Simulation of snake-like swimming system
 	based on granular model \
-https://github.com/dudung/butiran/blob/master/app/md_sslssgm.js
+https://raw.githack.com/dudung/butiran/blob/master/app/md_sslssgm.js
 
 10. **ab_phasemat** | Simulation of snake-like swimming system
 	based on granular model \
-https://github.com/dudung/butiran/blob/master/app/ab_phasemat.js
+https://raw.githack.com/dudung/butiran/blob/master/app/ab_phasemat.js
 
 11. **ab_ssltfs** | Simulation of simple single lane traffic flow \
-https://github.com/dudung/butiran/blob/master/app/ab_ssltfs.js
+https://raw.githack.com/dudung/butiran/master/app/ab_ssltfs.js
+
+
+Use the application, e.g. ab_ssltfs.js
+
+```html
+<script src="https://cdn.rawgit.com/dudung/butiran/4345a4db/app/ab_ssltfs.js"></script>
+```
+
+in HTML file after the use of _butiran.js library.
