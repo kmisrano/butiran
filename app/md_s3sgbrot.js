@@ -9,6 +9,7 @@
 	Final version.
 	20181120
 	Merge into butiran project.
+	Update with final parameters.
 */
 
 
@@ -633,13 +634,27 @@ setWorldCoordinates(-30, -30, 30, 30);
 	
 // Define initial densities
 var fluidDensity = 1.000;
-var headDensity = 1.056;
+var xDensity = 1.000; 
+var headDensity = 1.500;
 var stomachDensity = 1.000;
-var xDensity = 0.862;
 
-// Define rate of change
-var headMassChange = 7.0; // g / day
-var stomachMassChange = 4.0; // g/day
+// Define model for head mass
+// 0 linear
+// 1 exponential
+var headMassModel = 1;
+// For linear model
+var headMassChange = 4; // g / day
+// For exponential model
+var headMassExp =  0.03;
+
+// Define rate model for stomach mass
+// 0 linear
+// 1 exponential
+var stomachMassModel = 0;
+// For liner model
+var stomachMassChange = 5; // g/day
+// For exponential model
+var stomachMassExp = 0.0114;
 
 var timer1;
 var N = 3;
@@ -673,20 +688,20 @@ function totalMass(t) {
 
 // Define function for head size
 function headRadius(t) {
-	var R = (0.0173 * t) + 3.2483;
+	var R = 0.0173 * t + 3.2483; 
 	return R;
 }
 
 // Define function for stomach size
 function stomachRadius(t) {
-	var R = (0.0423 * t) + 5.7766;
+	var R = 0.0412 * t + 5.6296; 
 	return R;
 }
 
 // Define function for third object
 function xRadius(t) {
-	// Force density to 1
-	var rho = 1;
+	// Force total density to 1
+	var rho = 1.000;
 	
 	var R1 = headRadius(t);
 	var R2 = stomachRadius(t);
@@ -696,11 +711,8 @@ function xRadius(t) {
 	var V1 = (4 * Math.PI / 3) * R1 * R1 * R1;
 	var V2 = (4 * Math.PI / 3) * R2 * R2 * R2;
 	
-	var Vx = m * rho - V1 - V2;
+	var Vx = (m /rho )- V1 - V2;
 	var Rx = Math.pow(Vx / (4 * Math.PI / 3), (1/3));
-	
-	var R3 = 1.8897 * Math.exp (0.013 * t);
-	// Rx = R3
 	
 	return Rx;
 }
@@ -712,15 +724,34 @@ function headMass(t) {
 	var V = (4 * Math.PI / 3) * R * R * R;
 	var m0 = headDensity * V;
 	
-	// Define head mass change
-	var dmdt = headMassChange;
+	// Choose model:
+	// 0 linear
+	// 1 exponential
+	var model = headMassModel;
 	
-	// Calculate mass
-	var tt = t; // week
-	var m = dmdt * tt + m0; // g
-
-	var m1 = (3.6575 * t) + 133.92;
-	//m = m1;
+	// Calculate mass according to chosen model
+	var m = 0;
+	if(model == 0) {
+		// Define head mass change for linier model
+		var dmdt = headMassChange;
+		
+		// Calculate mass
+		var tt = t; // week
+		m = dmdt * tt + m0; // g
+	} else if(model == 1) {
+		// Define initial condition A as t = 0 and B
+		// for exponential model
+		var A = m0;
+		var B = headMassExp;
+		
+		// Calculate mass
+		var tt = t; // week
+		m = A * Math.exp(B * t); // g		
+	} else {
+		// Define unknown model
+		var m1 = 209.65 * Math.exp (0.0132 * t); 
+		m = m1;
+	}
 	
 	return m;
 }
@@ -732,16 +763,35 @@ function stomachMass(t) {
 	var V = (4 * Math.PI / 3) * R * R * R;
 	var m0 = stomachDensity * V;
 	
-	// Define head mass change
-	var dmdt = stomachMassChange;
+	// Choose model:
+	// 0 linear
+	// 1 exponential
+	var model = stomachMassModel;
 	
-	// Calculate mass
-	var tt = t; // week
-	var m = dmdt * tt + m0; // g
+	// Calculate mass according to chosen model
+	var m = 0;
+	if(model == 0) {
+		// Define stomach mass change for linier model
+		var dmdt = stomachMassChange;
+		
+		// Calculate mass
+		var tt = t; // week
+		m = dmdt * tt + m0; // g
+	} else if(model == 1) {
+		// Define initial condition A as t = 0 and B
+		// for exponential model
+		var A = m0;
+		var B = stomachMassExp;
+		
+		// Calculate mass
+		var tt = t; // week
+		m = A * Math.exp(B * t); // g		
+	} else {
+		// Define unknown model
+		var m2 = 777.34 * Math.exp (0.0164 * t); 
+		m = m2;
+	}
 	
-	var m2 = 817.59 * Math.exp (0.0157 * t);
-	//m = m2;
-
 	return m;
 }
 
@@ -749,7 +799,7 @@ function stomachMass(t) {
 function xMass(t) {
 	var m = totalMass(t);
 	
-	var m3 =  62.583 * Math.exp (0.037 * t);
+	//var m3 =  11.055 * Math.exp (0.0569 * t); 
 	//m = m3;
 	
 	return m3;	
@@ -968,7 +1018,6 @@ function run() {
 	}
 	Mdynamics.inct();
 }
-
 
 // below are not used
 
