@@ -26,6 +26,9 @@ or remotely
 0. **vd_ta2ca** | Visualisation of data from textarea to canvas \
 https://raw.githack.com/dudung/butiran/master/app/vd_ta2ca.js
 
+1. **md_s3sgbrot** | Simulation of thress spherical growing body rotation \
+https://raw.githack.com/dudung/butiran/master/app/md_s3sgbrot.js
+
 1. **fd_fcbsbcm** | Fast charging battery simulation based on capacitor model \
 https://raw.githack.com/dudung/butiran/master/app/fd_fcbsbcm.js
 
