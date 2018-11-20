@@ -516,3 +516,6 @@ function main() {
 	// Start simulation
 	start();
 }
+
+// Call main function
+main();
