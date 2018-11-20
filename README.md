@@ -39,7 +39,7 @@ https://raw.githack.com/dudung/butiran/master/app/gb_tabdiss.js
 https://raw.githack.com/dudung/butiran/master/app/gb_sandavl.js
 
 6. **th_simlttcg.js** | Simulation of laser through transparent cylindrical grain \
-https://raw.githack.com/dudung/butiran/master/app/th_simlttcg.js.js
+https://raw.githack.com/dudung/butiran/master/app/th_simlttcg.js
 
 7. **md_spfwfss** | Spherical particle floating on waving fluid surface \
 https://raw.githack.com/dudung/butiran/master/app/md_spfwfss.js
