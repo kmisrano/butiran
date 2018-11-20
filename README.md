@@ -4,21 +4,9 @@ Simulation of physical system based on granular particles (en: granular particle
 
 ## Distribution
 
-For client side HTML file please download
+Library of butiran can be downloaded from
 
 * [app/_butiran.js](https://github.com/dudung/butiran/blob/master/app/_butiran.js) (87 KB)
-
-and use it as usual
-
-```html
-<script src="_butiran.js"></script>
-```
-
-or remotely
-
-```html
-<script src="https://raw.githack.com/dudung/butiran/x/app/_butiran.js"></script>
-```
 
 
 ## CDN of Applications
@@ -69,10 +57,18 @@ https://raw.githack.com/dudung/butiran/x/app/ab_phasemat.js
 https://raw.githack.com/dudung/butiran/x/app/ab_ssltfs.js
 
 
+## How to use
+
 Use the application, e.g. ab_ssltfs.js
 
 ```html
 <script src="https://raw.githack.com/dudung/butiran/x/app/ab_ssltfs.js"></script>
 ```
 
-in HTML file after the use of `_butiran.js` library.
+in HTML file after the use of `_butiran.js` library
+
+```html
+<script src="https://raw.githack.com/dudung/butiran/x/app/_butiran.js"></script>
+```
+
+or download both files and use them locally.
