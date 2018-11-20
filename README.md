@@ -65,4 +65,4 @@ Use the application, e.g. ab_ssltfs.js
 <script src="https://raw.githack.com/dudung/butiran/master/app/ab_ssltfs.js"></script>
 ```
 
-in HTML file after the use of _butiran.js library.
+in HTML file after the use of `_butiran.js` library.
