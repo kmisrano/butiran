@@ -74,4 +74,6 @@ in HTML file after the use of `_butiran.js` library
 <script src="https://raw.githack.com/dudung/butiran/x/app/_butiran.js"></script>
 ```
 
-or download both files and use them locally. Application `vd_vdbneimg` requires jQuery library that can be downloaded from https://jquery.com/.
+or download both files and use them locally.
+
+Application `vd_vdbneimg` requires jQuery library that can be downloaded from https://jquery.com/.
