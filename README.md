@@ -37,7 +37,7 @@ https://raw.githack.com/dudung/butiran/x/app/gb_tabdiss.js
 8. **gb_sandavl** | Sandpile avalanche simulation based on grid model \
 https://raw.githack.com/dudung/butiran/x/app/gb_sandavl.js
 
-9. **th_simlttcg.js** | Simulation of laser through transparent cylindrical grain \
+9. **th_simlttcg** | Simulation of laser through transparent cylindrical grain \
 https://raw.githack.com/dudung/butiran/x/app/th_simlttcg.js
 
 10. **md_spfwfss** | Spherical particle floating on waving fluid surface \
