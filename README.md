@@ -13,6 +13,9 @@ Library of butiran can be downloaded from
 
 x = b4d0156307d7bcdaf8cc1bb74fbab4cdb128dd89
 
+1. **vd_vdbneimg** | Visualisation and digitization of BNE images \
+https://raw.githack.com/dudung/butiran/x/app/vd_vdbneimg.html
+
 2. **vd_ta2ca** | Visualisation of data from textarea to canvas \
 https://raw.githack.com/dudung/butiran/x/app/vd_ta2ca.js
 
