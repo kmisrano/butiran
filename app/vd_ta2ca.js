@@ -13,7 +13,8 @@
 	but it still takes place or style.display = "none", which
 	is better.
 	20181120
-	Integrate to butiran.
+	Integrate to butiran from unsusccesfull 2017 Econophysics
+	project (AG, AP, MD, MB, TS, .., SV)
 */
 
 
