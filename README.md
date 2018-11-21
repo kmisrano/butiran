@@ -16,8 +16,8 @@ x = d2b790afdd75555b4d96f71a3fb61607f08bce7f
 1. **vd_vdbneimg** | Visualisation and digitization of BNE images \
 https://raw.githack.com/dudung/butiran/x/app/vd_vdbneimg.html
 
-2. **s2drotkiln** | Simulation of 2-d rotary kiln for spherical particles \
-https://raw.githack.com/dudung/butiran/x/app/s2drotkiln.js
+2. **md_s2drotkiln** | Simulation of 2-d rotary kiln for spherical particles \
+https://raw.githack.com/dudung/butiran/x/app/md_s2drotkiln.js
 
 3. **vd_ta2ca** | Visualisation of data from textarea to canvas \
 https://raw.githack.com/dudung/butiran/x/app/vd_ta2ca.js
