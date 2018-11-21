@@ -1,6 +1,6 @@
 /*
 	md_ssastc2d.js
-	Simulation of spherical asteroid compaction in 2-data
+	Simulation of spherical asteroid compaction in 2-d
 	
 	Sparisoma Viridi | dudung@gmail.compile
 	Putri Mustika Widartiningsih | putrimw.itb@gmail.com
