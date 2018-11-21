@@ -16,50 +16,53 @@ x = d2b790afdd75555b4d96f71a3fb61607f08bce7f
 1. **vd_vdbneimg** | Visualisation and digitization of BNE images \
 https://raw.githack.com/dudung/butiran/x/app/vd_vdbneimg.html
 
-2. **vd_ta2ca** | Visualisation of data from textarea to canvas \
+2. **s2drotkiln** | Simulation of 2-d rotary kiln for spherical particles \
+https://raw.githack.com/dudung/butiran/x/app/s2drotkiln.js
+
+3. **vd_ta2ca** | Visualisation of data from textarea to canvas \
 https://raw.githack.com/dudung/butiran/x/app/vd_ta2ca.js
 
-3. **md_ssastc2d** | Simulation of spherical asteroid compaction in 2-d \
+4. **md_ssastc2d** | Simulation of spherical asteroid compaction in 2-d \
 https://raw.githack.com/dudung/butiran/x/app/md_ssastc2d.js
 
-4. **md_s3sgbrot** | Simulation of three spherical growing body rotation \
+5. **md_s3sgbrot** | Simulation of three spherical growing body rotation \
 https://raw.githack.com/dudung/butiran/x/app/md_s3sgbrot.js
 
-5. **fd_fcbsbcm** | Fast charging battery simulation based on capacitor model \
+6. **fd_fcbsbcm** | Fast charging battery simulation based on capacitor model \
 https://raw.githack.com/dudung/butiran/x/app/fd_fcbsbcm.js
 
-6. **md_fsgdods** | Floating spherical grain dynamics in one-dimension \
+7. **md_fsgdods** | Floating spherical grain dynamics in one-dimension \
 https://raw.githack.com/dudung/butiran/x/app/md_fsgdods.js
 
-7. **md_opsebfs** | One particle in static electric and magnetic field \
+8. **md_opsebfs** | One particle in static electric and magnetic field \
 https://raw.githack.com/dudung/butiran/x/app/md_opsebfs.js
 
-8. **gb_tabdiss** | Tablet dissolution simulation based on grid model \
+9. **gb_tabdiss** | Tablet dissolution simulation based on grid model \
 https://raw.githack.com/dudung/butiran/x/app/gb_tabdiss.js
 
-9. **gb_sandavl** | Sandpile avalanche simulation based on grid model \
+10. **gb_sandavl** | Sandpile avalanche simulation based on grid model \
 https://raw.githack.com/dudung/butiran/x/app/gb_sandavl.js
 
-10. **th_simlttcg** | Simulation of laser through transparent cylindrical grain \
+11. **th_simlttcg** | Simulation of laser through transparent cylindrical grain \
 https://raw.githack.com/dudung/butiran/x/app/th_simlttcg.js
 
-11. **md_spfwfss** | Spherical particle floating on waving fluid surface \
+12. **md_spfwfss** | Spherical particle floating on waving fluid surface \
 https://raw.githack.com/dudung/butiran/x/app/md_spfwfss.js
 
-12. **ma_polynom** | Example how to use Polynomial class \
+13. **ma_polynom** | Example how to use Polynomial class \
 https://raw.githack.com/dudung/butiran/x/app/ma_polynom.js
 
-13. **ab_bioecon** | Simulation of plantation in bioeconomy based on ABM \
+14. **ab_bioecon** | Simulation of plantation in bioeconomy based on ABM \
 https://raw.githack.com/dudung/butiran/x/app/ab_bioecon.js
 
-14. **md_sslssgm** | Simulation of snake-like swimming system
+15. **md_sslssgm** | Simulation of snake-like swimming system
 	based on granular model \
 https://raw.githack.com/dudung/butiran/x/app/md_sslssgm.js
 
-15. **ab_phasemat** | Simulation of phase change of materials using ABM \
+16. **ab_phasemat** | Simulation of phase change of materials using ABM \
 https://raw.githack.com/dudung/butiran/x/app/ab_phasemat.js
 
-16. **ab_ssltfs** | Simulation of simple single lane traffic flow \
+17 **ab_ssltfs** | Simulation of simple single lane traffic flow \
 https://raw.githack.com/dudung/butiran/x/app/ab_ssltfs.js
 
 
