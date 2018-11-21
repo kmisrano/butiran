@@ -11,7 +11,7 @@ Library of butiran can be downloaded from
 
 ## CDN of Applications
 
-x = d2b790afdd75555b4d96f71a3fb61607f08bce7f
+x = ac7a2fd2faaed04b8f42c58758a28e6cd856f6c9
 
 1. **vd_vdbneimg** | Visualisation and digitization of BNE images \
 https://raw.githack.com/dudung/butiran/x/app/vd_vdbneimg.html
