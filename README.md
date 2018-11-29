@@ -11,7 +11,7 @@ Library of butiran can be downloaded from
 
 ## CDN of Applications
 
-x = 451bd99ff78d0f8ad41940513bb6902e682b43b2
+x = a017a80b7c5140f4db8fa0e28cb7bc8e98d3d6c5
 
 1. **vd_vdbneimg** | Visualisation and digitization of BNE images \
 https://raw.githack.com/dudung/butiran/x/app/vd_vdbneimg.html
@@ -66,6 +66,9 @@ https://raw.githack.com/dudung/butiran/x/app/ab_phasemat.js
 
 18. **ab_ssltfs** | Simulation of simple single lane traffic flow \
 https://raw.githack.com/dudung/butiran/x/app/ab_ssltfs.js
+
+19. **ab_simstp** | Simulate role of STP in innovation ecosystem \
+https://raw.githack.com/dudung/butiran/x/app/ab_simstp.js
 
 
 ## How to use
