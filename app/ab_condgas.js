@@ -1,6 +1,6 @@
 /*
 	ab_simstp.js
-	Simulate role of STP in innovation ecosystem
+	Simulate condensable gas with agent-based model
 	
 	Sparisoma Viridi | dudung@gmail.com
 	
