@@ -73,8 +73,11 @@ https://raw.githack.com/dudung/butiran/x/app/ab_ssltfs.js
 20. **ab_simstp** | Simulate role of STP in innovation ecosystem \
 https://raw.githack.com/dudung/butiran/x/app/ab_simstp.js
 
-21. **ab_simstp** | Simulate condensable gas with agent-based model \
-https://raw.githack.com/dudung/butiran/x/app/ab_simstp.js
+21. **ab_condgas** | Simulate condensable gas with agent-based model \
+https://raw.githack.com/dudung/butiran/x/app/ab_condgas.js
+
+22. **fd_grainsfry** | Finite differentce simulation of frying with grains \
+https://raw.githack.com/dudung/butiran/x/app/fd_grainsfry.js
 
 
 ## How to use
