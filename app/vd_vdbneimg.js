@@ -46,6 +46,9 @@
 	Old title Brazil-Nut Effect History Line Visualisation.
 */
 
+document.title = "Brazil-Nut Effect "
+	+ " History Line Visualisation";
+
 var rad = 1.;
 var xtrue = 1.;
 var ytrue = 1.;
@@ -54,12 +57,14 @@ var hgbr = 1.;
 var tgbr = 1.;
 var lgbr = 1.;
 
-function bigImg(x) {
+function bigImg() {
+	var x = event.target; // <--- modified 20181208
 	x.style.height = "auto";
 	x.style.width = "auto";
 }
 
-function normalImg(x) {
+function normalImg() {
+	var x = event.target; // <--- modified 20181208
 	x.style.height = "75px";
 	x.style.width = "auto";
 }
@@ -128,6 +133,8 @@ function createImageList() {
 	else
 		stx.drawImage(gbr, 0, 0, 480, (480 * (hgbr/wgbr)));
 
+	console.log(s);
+	
 	var thefile = document.getElementById("i_file");
 	var tester = thefile.value;
 	var test = tester.split("fakepath");
@@ -295,6 +302,7 @@ document.body.append(p1);
 var inp1 = document.createElement("input");
 inp1.type = "file";
 inp1.id = "i_file";
+inp1.addEventListener("change", alertFilename);
 inp1.accept = "image/*";
 document.body.append(inp1);
 
@@ -316,13 +324,14 @@ document.body.append(p2);
 />
 */
 var img = document.createElement("img");
+img.addEventListener("load", normalImg); // <--- modified 20181208
+img.addEventListener("mouseover", bigImg);
+img.addEventListener("mouseout", normalImg);
 img.id = "thumb";
 img.src = "";
 img.width = "auto";
 img.height = "auto";
 img.style.display = "none";
-img.addEventListener("onmouseover", bigImg);
-img.addEventListener("onmouseout", normalImg);
 document.body.append(img);
 
 /*
@@ -340,17 +349,20 @@ document.body.append(b2);
 
 /*
 <div>
-<input type="button" value="Create" onclick="createImageList();" style="width: 80px;" id="createBtn"/>
-</div>
 */
 var div1 = document.createElement("div");
 document.body.append(div1);
+
+/*
+<input type="button" value="Create" onclick="createImageList();" style="width: 80px;" id="createBtn"/>
+</div>
+*/
 var inp2 = document.createElement("input");
 inp2.type = "button";
-inp2.id = "createBtn";
 inp2.value = "Create";
-inp2.style.width = "80px";
 inp2.addEventListener("click", createImageList);
+inp2.style.width = "80px";
+inp2.id = "createBtn";
 div1.append(inp2);
 
 /*
@@ -366,13 +378,47 @@ document.body.append(p3);
 
 /*
 <form>
+*/
+var frm = document.createElement("form");
+document.body.append(frm);
+
+/*
   Radius (dalam cm), garis merah/hitam :
+*/
+frm.innerHTML = "Radius (dalam cm), garis merah/hitam :";
+
+/*
   <input type="text" id="Jejari" size="5">
+*/
+var inp3 = document.createElement("input");
+inp3.type = "text";
+inp3.id = "Jejari";
+inp3.size = "5";
+frm.append(inp3);
+
+/*
   Lebar Sebenarnya (dalam cm):
+*/
+frm.innerHTML += "Lebar Sebenarnya (dalam cm):";
+
+/*
   <input type="text" id="xBenar" size="5">
+*/
+var inp4 = document.createElement("input");
+inp4.type = "text";
+inp4.id = "xBenar";
+inp4.size = "5";
+frm.append(inp4);
+
+/*
   <input type="button" value="Submit" onclick="CalibSet();">
 </form>
 */
+var inp5 = document.createElement("input");
+inp5.type = "button";
+inp5.value = "Submit";
+inp5.addEventListener("click", CalibSet);
+frm.append(inp5);
 
 /*
 <!-- to jQuery dependence -->
@@ -382,6 +428,13 @@ document.body.append(p3);
         });
 </script>
 */
+$("#i_file").change(
+	function(event) {
+		$("img").fadeIn("slow")
+			.attr("src",URL.createObjectURL(event.target.files[0]));
+		//console.log(".."); // <--- modified 20181208
+	}
+);
 
 /*
 <div id="ImageContainer" 
@@ -395,7 +448,7 @@ div2.style.height = "640px";
 div2.style.float = "left"; 
 div2.style.border = "0px #bbb solid";
 div2.style.paddingTop = "0px";
-div2.addEventListener("onclick", getXY);
+div2.addEventListener("click", getXY);
 document.body.append(div2);
 
 /*
@@ -405,8 +458,8 @@ document.body.append(div2);
 */
 var can1 = document.createElement("canvas");
 can1.id= "MyCanvas";
-can1.width="480px";
-can1.height="640px";
+can1.width="480"; // <--- modified 20181208
+can1.height="640"; // <--- modified 20181208
 can1.style.border = "0px solid black";
 div2.append(can1);
 
@@ -425,8 +478,8 @@ div2.append(b4);
 */
 var can2 = document.createElement("canvas");
 can2.id= "AnotherOneCanvas";
-can2.width="480px";
-can2.height="15px";
+can2.width="480"; // <--- modified 20181208
+can2.height="15"; // <--- modified 20181208
 can2.style.border = "0px solid black";
 div2.append(can2);
 
@@ -449,8 +502,8 @@ document.body.append(div3);
 */
 var can3 = document.createElement("canvas");
 can3.id= "AnotherCanvas";
-can3.width="15px";
-can3.height="640px";
+can3.width="15"; // <--- modified 20181208
+can3.height="640"; // <--- modified 20181208
 can3.style.float = "left";
 can3.style.paddingLeft = "5px";
 can3.style.border = "0px solid black";
@@ -519,10 +572,9 @@ div4.append(inp4);
 
 /*
 <div style="float: left; width: 280px; height: 640px; padding-left: 20px; border: 0px #bbb solid; font-weight: bold; font-size: 11pt;">History :
-<br>
 */
 var div5 = document.createElement("div");
-div5.style.float = "left";
+//div5.style.float = "left";
 div5.style.width = "280px";
 div5.style.height = "640px";
 div5.style.paddingLeft = "20px";
@@ -531,6 +583,12 @@ div5.style.fontWeight = "bold";
 div5.style.fontSize = "11pt";
 div5.innerHTML = "History : \n";
 document.body.append(div5);
+
+/*
+<br>
+*/
+var b7 = document.createElement("br");
+div5.append(b7);
 
 /*
 <textarea id="MyHistory" rows="28" cols="12" style="width: 280px; height: 640px; border: 0px solid black; ">
@@ -544,7 +602,7 @@ ta2.cols = "12";
 ta2.style.width = "280px";
 ta2.style.height = "640px";
 ta2.style.border = "0px solid black";
-div4.append(ta2);
+div5.append(ta2);
 
 /*
 	</script>
