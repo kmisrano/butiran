@@ -1,5 +1,5 @@
 /*
-	ab_simstp.js
+	ab_condgas.js
 	Simulate condensable gas with agent-based model
 	
 	Sparisoma Viridi | dudung@gmail.com
