@@ -6,7 +6,7 @@ Simulation of physical system based on granular particles (en: granular particle
 
 Library of butiran can be downloaded from
 
-0. [app/_butiran.js](https://github.com/dudung/butiran/blob/master/app/_butiran.js) (87 KB)
+* [app/_butiran.js](https://github.com/dudung/butiran/blob/master/app/_butiran.js) (87 KB)
 
 
 ## CDN of Applications
