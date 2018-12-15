@@ -1,6 +1,6 @@
 /*
 	hello.cpp
-	Print "Hello world!" to console
+	Print "Hello, World!" to console
 	
 	Sparisoma Viridi | https://github.com/dudung/butiran
 	
@@ -17,7 +17,8 @@ using namespace std;
 
 int main(int argc, char *argv[]) {
 	
-	cout << "Hello, world!" << endl;
+	// Display "Hello, World!" in console
+	cout << "Hello, World!" << endl;
 	
 	return 0;
 }
