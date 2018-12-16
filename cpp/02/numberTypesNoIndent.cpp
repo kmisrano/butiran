@@ -4,8 +4,8 @@
 	
 	Sparisoma Viridi | https://github.com/dudung/butiran
 	
-	Compile: g++ numberTypes.cpp -o numberTypes
-	Execute: ./numberTypes
+	Compile: g++ numberTypes.cpp -o numberTypesNoIndent
+	Execute: ./numberTypesNoIndent
 	
 	20181216
 	Start this program.
