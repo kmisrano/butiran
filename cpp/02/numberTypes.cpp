@@ -74,7 +74,7 @@ int main(int argc, char *argv[]) {
 		// Display result
 		cout << x << " is " << type << endl;
 		
-		// Return value, normally 0 means ok
+		// Return success state
 		return 0;
 	}	
 }
