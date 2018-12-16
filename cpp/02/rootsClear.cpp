@@ -1,11 +1,11 @@
 /*
-	rootsNotClear.cpp
+	rootsClear.cpp
 	Calculate roots with clear variable name
 	
 	Sparisoma Viridi | https://github.com/dudung/butiran
 	
-	Compile: g++ rootsNotClear.cpp -o rootsNotClear
-	Execute: ./rootsNotClear
+	Compile: g++ rootsClear.cpp -o rootsClear
+	Execute: ./rootsClear
 	
 	20181216
 	Start this program.
