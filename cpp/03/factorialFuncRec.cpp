@@ -1,11 +1,11 @@
 /*
-	factorialFunc.cpp
-	Calculate factorial using function
+	factorialFuncRec.cpp
+	Calculate factorial using function recursively
 	
 	Sparisoma Viridi | https://github.com/dudung/butiran
 	
-	Compile: g++ factorialFunc.cpp -o factorialFunc
-	Execute: ./factorialFunc
+	Compile: g++ factorialFuncRec.cpp -o factorialFuncRec
+	Execute: ./factorialFuncRec
 	
 	20181218
 	Start this program.
@@ -21,7 +21,7 @@ long int factorial(int);
 int main(int argc, char *argv[]) {
 	// Verbose program usage
 	if(argc < 2) {
-		cout << "Usage: factorialFunc [n]" << endl;
+		cout << "Usage: factorialFuncRec [n]" << endl;
 		return -1;
 	}
 	
@@ -35,8 +35,8 @@ int main(int argc, char *argv[]) {
 // Calculate factorial of n
 long int factorial(int n) {
 	long int fact = 1;
-	for(int i = n; i > 0; i--) {
-		fact *= i;
+	if(n > 0) {
+		fact *= n * factorial(n - 1);
 	}
 	return fact;
 }
