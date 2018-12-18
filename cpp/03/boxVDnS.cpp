@@ -1,11 +1,11 @@
 /*
-	boxVDns.cpp
+	boxVDnS.cpp
 	Calculate box volume, density, and state
 	
 	Sparisoma Viridi | https://github.com/dudung/butiran
 	
-	Compile: g++ boxVDns.cpp -o boxVDns
-	Execute: ./boxVDns
+	Compile: g++ boxVDnS.cpp -o boxVDnS
+	Execute: ./boxVDnS
 	
 	20181218
 	Start this program.
