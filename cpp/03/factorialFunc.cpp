@@ -21,7 +21,7 @@ double factorial(int);
 int main(int argc, char *argv[]) {
 	// Verbose program usage
 	if(argc < 2) {
-		cout << "Usage: factorial [n]" << endl;
+		cout << "Usage: factorialFunc [n]" << endl;
 		return -1;
 	}
 	
