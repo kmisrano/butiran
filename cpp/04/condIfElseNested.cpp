@@ -38,7 +38,7 @@ int main(int argc, char *argv[]) {
 		if(punyaUang) {
 			cout << "Jajan cemilan" << endl;
 		} else {
-			cout << "Tidak melakukan apa-apa" << endl;
+			cout << "Menahan lapar" << endl;
 		}
 	}
 	
