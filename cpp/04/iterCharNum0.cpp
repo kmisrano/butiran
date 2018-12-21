@@ -1,11 +1,11 @@
 /*
-	iterCharNum.cpp
+	iterCharNum0.cpp
 	Example of nested iteration with for
 	
 	Sparisoma Viridi | https://github.com/dudung/butiran
 	
-	Compile: g++ iterCharNum.cpp -o iterCharNum
-	Execute: ./iterCharNum
+	Compile: g++ iterCharNum0.cpp -o iterCharNum0
+	Execute: ./iterCharNum0
 	
 	20181221
 	Start this program.
