@@ -1,11 +1,11 @@
 /*
-	iterationWhile.cpp
+	iterationDoWhile.cpp
 	Example of iteration with while
 	
 	Sparisoma Viridi | https://github.com/dudung/butiran
 	
-	Compile: g++ iterationWhile.cpp -o iterationWhile
-	Execute: ./iterationWhile
+	Compile: g++ iterationDoWhile.cpp -o iterationDoWhile
+	Execute: ./iterationDoWhile
 	
 	20181221
 	Start this program.
@@ -25,12 +25,12 @@ int main(int argc, char *argv[]) {
 	double x = xbeg;
 	
 	cout << "x\tf(x)" << endl;
-	while(x <= xend) {
+	 do {
 		double fx = f(x);
 		cout << x << "\t";
 		cout << fx << endl;
 		x += dx;
-	}
+	} while(x <= xend);
 	
 	return 0;
 }
