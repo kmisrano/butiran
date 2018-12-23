@@ -1,11 +1,11 @@
 /*
-	vectorSTL.cpp
+	vectorIntSTL.cpp
 	Container of vector of int in STL
 	
 	Sparisoma Viridi | https://github.com/dudung/butiran
 	
-	Compile: g++ vectorSTL.cpp -o vectorSTL
-	Execute: ./vectorSTL
+	Compile: g++ vectorIntSTL.cpp -o vectorIntSTL
+	Execute: ./vectorIntSTL
 	
 	20181223
 	Start this program at home in Bogor.
