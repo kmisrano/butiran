@@ -1,27 +1,25 @@
 /*
-	arrayIntSTL.cpp
-	Container of array of int in STL
+	vectorSTL.cpp
+	Container of vector of int in STL
 	
 	Sparisoma Viridi | https://github.com/dudung/butiran
 	
-	Compile: g++ arrayIntSTL.cpp -o arrayIntSTL
-	Execute: ./arrayIntSTL
+	Compile: g++ vectorSTL.cpp -o vectorSTL
+	Execute: ./vectorSTL
 	
 	20181223
 	Start this program at home in Bogor.
 */
 
 #include <iostream>
-#include <array>
+#include <vector>
 
 using namespace std;
 
-template<size_t SIZE>
-size_t getSize(array<int, SIZE>);
+size_t getSize(vector<int>);
 
 int main(int argc, char *argv[]) {
-	const int N = 6;
-	array<int, N> x = {2, 3, 5, 7, 11, 13};
+	vector<int> x = {2, 3, 5, 7, 11, 13};
 	
 	size_t size = x.size();
 	int sbytes = sizeof(x);
@@ -34,8 +32,7 @@ int main(int argc, char *argv[]) {
 	return 0;
 }
 
-template<size_t SIZE>
-size_t getSize(array<int, SIZE> num) {
+size_t getSize(vector<int> num) {
 	size_t s = num.size();
 	return s;
 }
