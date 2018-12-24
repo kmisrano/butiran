@@ -29,14 +29,15 @@ int main(int argc, char *argv[]) {
 	
 	int N = x.size();
 	for(int i = 0; i < N; i++) {
-		
-		int k = 0;
-		for(int j = i; j < N; j++) {
-			if(ins < x[j]) {
+		int min = x[i];
+		int k = -1;
+		for(int j = i + 1; j < N; j++) {
+			if(x[j] < min) {
+				min = x[j];
 				k = j;
 			}
 		}
-		
+		if(k > 0) swap(x[i], x[k]);
 		disp(x);
 	}
 
