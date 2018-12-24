@@ -30,7 +30,6 @@ int main(int argc, char *argv[]) {
 	int N = x.size();
 	for(int i = 0; i < N; i++) {
 		for(int j = 0; j < (N - i - 1); j++) {
-			cout << j << " " << j + 1 << " | ";
 			if(x[j] > x[j + 1]) {
 				swap(x[j], x[j + 1]);
 			}
