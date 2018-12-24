@@ -25,7 +25,7 @@ int main(int argc, char *argv[]) {
 	disp(x);
 	cout << endl;
 	
-	cout << "insertion sort: " << endl;
+	cout << "selection sort: " << endl;
 	
 	int N = x.size();
 	for(int i = 0; i < N; i++) {
