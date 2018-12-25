@@ -7,7 +7,7 @@
 	Compile: g++ sortBubble.cpp -o sortBubble
 	Execute: ./sortBubble
 	
-	20181224
+	20181225
 	Start this program at home in Bogor.
 */
 
