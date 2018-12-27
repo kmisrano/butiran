@@ -16,7 +16,6 @@
 #include <cmath>
 
 double f(double);
-double g(double);
 double fx(double, double);
 double fxx(double, double);
 
