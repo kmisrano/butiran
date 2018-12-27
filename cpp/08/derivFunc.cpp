@@ -22,14 +22,24 @@ double f(double);
 using namespace std;
 
 int main(int argc, char *argv[]) {
+	// Define dx
+	double dx = 1E-5;
+	
+	double x = 2;
+	double fx = (f(x + dx) - f(x)) / dx;
+	
+	cout << "f(x) = 1 + x + x^2" << endl;
+	cout << "dx = " << dx << endl;
+	cout << "f'(2) = " << fx << endl;
 	
 	return 0;
 }
 
-// Function f(x) = (x - x1) * (x - x2)
+// Function f(x) = c0 + c1 x + c2 x^2
 double f(double x) {
-	double x1 = 3;
-	double x2 = 5;
-	double y = (x - x1) * (x - x2);
+	double c0 = 1;
+	double c1 = 1;
+	double c2 = 1;
+	double y = c0 + c1 * x + c2 * x * x;
 	return y;
 }
