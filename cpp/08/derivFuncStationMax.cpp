@@ -1,12 +1,12 @@
 /*
-	derivFuncStationMin.cpp
-	Derivative of a function to get a minimum point as
+	derivFuncStationMax.cpp
+	Derivative of a function to get a maximum point as
 	one of the stationary points
 	
 	Sparisoma Viridi | https://github.com/dudung/butiran
 	
-	Compile: g++ derivFuncStationMin.cpp -o derivFuncStationMin
-	Execute: ./derivFuncStationMin
+	Compile: g++ derivFuncStationMax.cpp -o derivFuncStationMax
+	Execute: ./derivFuncStationMax
 	
 	20181227
 	Start this program at Physics in Bandung.
@@ -66,9 +66,9 @@ int main(int argc, char *argv[]) {
 
 // Function f(x) = c0 + c1 x + c2 x^2
 double f(double x) {
-	double c0 = 8;
-	double c1 = -6;
-	double c2 = 1;
+	double c0 = -8;
+	double c1 = 6;
+	double c2 = -1;
 	double y = c0 + c1 * x + c2 * x * x;
 	return y;
 }
