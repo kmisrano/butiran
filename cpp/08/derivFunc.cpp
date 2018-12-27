@@ -25,9 +25,11 @@ int main(int argc, char *argv[]) {
 	// Define dx
 	double dx = 1E-5;
 	
+	// Calculate derivative
 	double x = 2;
 	double fx = (f(x + dx) - f(x)) / dx;
 	
+	// Show results
 	cout << "f(x) = 1 + x + x^2" << endl;
 	cout << "dx = " << dx << endl;
 	cout << "f'(2) = " << fx << endl;
