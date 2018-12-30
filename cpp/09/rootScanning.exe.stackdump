@@ -1,9 +1,0 @@
-Exception: STATUS_ACCESS_VIOLATION at eip=0040136E
-eax=00000000 ebx=0062CC8C ecx=3FF00000 edx=00000000 esi=612A2406 edi=612A23FE
-ebp=0062CC68 esp=0062CC00 program=L:\home\Sparisoma Viridi\Documents\github\butiran\cpp\09\rootScanning.exe, pid 17840, thread main
-cs=0023 ds=002B es=002B fs=0053 gs=002B ss=002B
-Stack trace:
-Frame     Function  Args
-0062CC68  0040136E (00000005, 0062CC8C, 200000D0, 0000006E)
-0062CD18  61007A67 (00000000, 0062CD74, 61006A60, 00000000)
-End of stack trace
