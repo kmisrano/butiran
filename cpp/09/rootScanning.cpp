@@ -22,7 +22,7 @@ using namespace std;
 
 int main(int argc, char *argv[]) {
 	// Check arguments
-	if(argc < 2) {
+	if(argc < 5) {
 		cout << "Usage: rootScanning [xbeg xend dx eps]" << endl;
 		cout << "xbeg\tinitial x" << endl;
 		cout << "xend\tfinal x" << endl;
