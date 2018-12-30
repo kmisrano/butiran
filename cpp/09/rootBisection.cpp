@@ -44,28 +44,26 @@ int main(int argc, char *argv[]) {
 	double xc = (xa + xb) / 2;
 	double fc = f(xc);
 	while(fabs(fc) > eps) {
-		xc = (xb + xa) / 2;
-		fc = f(xc);
-		
 		double fa = f(xa);
 		double fb = f(xb);
-		
 		if(fa * fb > 0) {
 			break;
 		}
 		
-		if(fa * fc <= 0) {
-			swap(xb, xa);
-		}
+		xc = (xb + xa) / 2;
+		fc = f(xc);
 		cout << ++i << "\t";
 		cout << xc << "\t" << fc << endl;
-		
-		xa = xb;
-		xb = xc;
 		
 		if(fabs(fc) < eps) {
 			root.push_back(xc);
 		}
+				
+		if(fa * fc <= 0) {
+			swap(xb, xa);
+		}
+		xa = xb;
+		xb = xc;		
 	}
 	
 	// Display result
