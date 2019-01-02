@@ -44,13 +44,13 @@ int main(int argc, char *argv[]) {
 	double AR = 0;
 	for(int i = 1; i <= N; i++) {
 		double xi_1 = xa + (i - 1) * dx;
-		AL += f(xi_1);
+		AL += f(xi_1) * dx;
 		
 		double xi = xa + i * dx;
-		AR += f(xi);
+		AR += f(xi) * dx;
 		
-		doble xi_12 = (xi_1 + xi) / 2;
-		AC += f(xi_12);
+		double xi_12 = (xi_1 + xi) / 2;
+		AC += f(xi_12) * dx;
 	}
 	cout << "AL = " << AL << endl;
 	cout << "AC = " << AC << endl;
@@ -62,6 +62,6 @@ int main(int argc, char *argv[]) {
 
 // Define quadratic function
 double f(double x) {
-	double fx = 1 + x / 2 + x * x / 3;
+	double fx = 1 + 2 * x + 3 * x * x;
 	return fx;
 }
