@@ -1,7 +1,7 @@
 /*
 	intRect.cpp
 	Calculate numerical integration of a function
-	using rectangular method
+	using rectangular rule
 	
 	Sparisoma Viridi | https://github.com/dudung/butiran
 	
