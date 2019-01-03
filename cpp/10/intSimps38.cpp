@@ -48,7 +48,7 @@ int main(int argc, char *argv[]) {
 			+ 3 * f(xi_23) + f(xi));
 		AS += (1.0/8) * f1331 * dx;
 	}
-	cout << "AS = " << AS << endl;
+	cout << "AS3/8 = " << AS << endl;
 	
 	// Terminate program
 	return 0;
