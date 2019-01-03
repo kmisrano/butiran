@@ -13,8 +13,7 @@
 */
 
 #include <iostream>
-#include <cmath>
-#include <vector>
+#include <cstdlib>
 
 double f(double);
 
@@ -53,6 +52,6 @@ int main(int argc, char *argv[]) {
 
 // Define quadratic function
 double f(double x) {
-	double fx = 1 + x / 2 + x * x / 3;
+	double fx = 1 + 2 * x + 3 * x * x;
 	return fx;
 }
