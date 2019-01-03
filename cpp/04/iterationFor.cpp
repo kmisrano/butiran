@@ -21,6 +21,7 @@ int U(int);
 int main(int argc, char *argv[]) {
 	int N = 10;
 	
+	cout << "n\tUn" << endl;
 	for(int n = 0; n <= N; n++) {
 		int Un = U(n);
 		cout << n << "\t";
