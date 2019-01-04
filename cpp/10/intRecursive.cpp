@@ -9,7 +9,8 @@
 	Execute: ./intRecursive
 	
 	20190104
-	Start this program at campus in Bandung.
+	Start this program at campus in Bandung with error in
+	the theory.
 */
 
 #include <iostream>
