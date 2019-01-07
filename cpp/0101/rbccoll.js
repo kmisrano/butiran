@@ -105,10 +105,13 @@ function simulate() {
 	
 	// Calculate pressure force
 	var rc0 = new Vect3;
+	var vc0 = new Vect3;
 	for(var i = 0; i < Ng; i++) {
 		rc0 = Vect3.add(rc0, r0[i]);
+		vc0 = Vect3.add(vc0, v0[i]);
 	}
 	rc0 = Vect3.div(rc0, Ng);
+	vc0 = Vect3.div(vc0, Ng);
 	var A0 = 0;
 	for(var i = 0; i < Ng; i++) {
 		var j = i + 1;
@@ -144,10 +147,13 @@ function simulate() {
 		F0[i] = Vect3.add(F0[i], dF0);
 	}
 	var rc1 = new Vect3;
+	var vc1 = new Vect3;
 	for(var i = 0; i < Ng; i++) {
 		rc1 = Vect3.add(rc1, r1[i]);
+		vc1 = Vect3.add(vc1, r1[i]);
 	}
 	rc1 = Vect3.div(rc1, Ng);
+	vc1 = Vect3.div(vc1, Ng);
 	var A1 = 0;
 	for(var i = 0; i < Ng; i++) {
 		var j = i + 1;
@@ -228,6 +234,10 @@ function simulate() {
 		
 		var tout = document.getElementById(taOut0);
 		tout.value += t.toFixed(digit) + "\t";
+		tout.value += rc0.x.toFixed(digit) + "\t";
+		tout.value += rc1.x.toFixed(digit) + "\t";
+		tout.value += vc0.x.toFixed(digit) + "\t";
+		tout.value += vc1.x.toFixed(digit) + "\t";
 		tout.value += A0.toFixed(digit) + "\t";
 		tout.value += A1.toFixed(digit) + "\n";
 		tout.scrollTop = tout.scrollHeight;
