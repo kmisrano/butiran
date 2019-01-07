@@ -202,11 +202,18 @@ function simulate() {
 		var rg = Vect3.sub(r0[i], rc0);
 		var lg = rg.len();
 		var ug = rg.unit();
-		var dL = lg - LC[i];
+		var dL = lg - LC0[i];
 		var dF0 = Vect3.mul(-kS0 * dL, ug);
 		F0[i] = Vect3.add(F0[i], dF0);
 	}
-	
+	for(var i = 0; i < Ng; i++) {
+		var rg = Vect3.sub(r1[i], rc0);
+		var lg = rg.len();
+		var ug = rg.unit();
+		var dL = lg - LC1[i];
+		var dF0 = Vect3.mul(-kS0 * dL, ug);
+		F1[i] = Vect3.add(F1[i], dF1);
+	}	
 	// Calculate collsion forces between two RBCs
 	for(var i0 = 0; i0 < Ng; i0++) {
 		for(var i1 = 0; i1 < Ng; i1++) {
