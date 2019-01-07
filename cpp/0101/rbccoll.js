@@ -605,7 +605,7 @@ function clearAll() {
 function loadParameters() {
 	var lines = "";
 	lines += "# Grains\n";
-	lines += "DIAG 0.01\n"
+	lines += "DIAG 0.1\n"
 	lines += "RHOG 1000\n";
 	lines += "NUMG 100\n";
 	lines += "\n";
@@ -615,12 +615,12 @@ function loadParameters() {
 	lines += "KONS1 10\n";
 	lines += "KONS2 10\n";
 	lines += "GAMP 1\n";
-	lines += "KONP 0\n";
+	lines += "KONP 1\n";
 	lines += "KONV 1\n";
 	lines += "ETAF 1\n";
 	lines += "VELF 1\n";
 	lines += "TEMF 300\n";
-	lines += "KONN 100\n";
+	lines += "KONN 1000\n";
 	lines += "\n";
 	
 	lines += "# Simulation\n";
