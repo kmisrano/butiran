@@ -58,20 +58,6 @@ function main() {
 
 // Perform simulation
 function simulate() {
-	// Check count for displaying output
-	if(iData == NData) {
-		
-		var tout = document.getElementById(taOut0);
-		tout.value += t.toFixed(digit) + "\n";
-		tout.scrollTop = tout.scrollHeight;
-		
-		drawGrains();
-		
-		// Reset count
-		iData = 0;
-	}
-	iData++;
-	
 	// Declare sum of forces
 	var F0 = [], F1 = [];
 	for(var i = 0; i < Ng; i++) {
@@ -236,6 +222,22 @@ function simulate() {
 			F1[i1] = Vect3.add(F1[i1], dF1);
 		}
 	}
+	
+	// Check count for displaying output
+	if(iData == NData) {
+		
+		var tout = document.getElementById(taOut0);
+		tout.value += t.toFixed(digit) + "\t";
+		tout.value += A0.toFixed(digit) + "\t";
+		tout.value += A1.toFixed(digit) + "\n";
+		tout.scrollTop = tout.scrollHeight;
+		
+		drawGrains();
+		
+		// Reset count
+		iData = 0;
+	}
+	iData++;
 	
 	// Implement Euler method
 	for(var i = 0; i < Ng; i++) {
@@ -611,20 +613,20 @@ function loadParameters() {
 	lines += "\n";
 	
 	lines += "# Constants\n";
-	lines += "KONS0 10\n";
-	lines += "KONS1 10\n";
-	lines += "KONS2 10\n";
+	lines += "KONS0 500\n";
+	lines += "KONS1 100\n";
+	lines += "KONS2 100\n";
 	lines += "GAMP 1\n";
 	lines += "KONP 1\n";
 	lines += "KONV 1\n";
 	lines += "ETAF 1\n";
 	lines += "VELF 1\n";
 	lines += "TEMF 300\n";
-	lines += "KONN 1000\n";
+	lines += "KONN 10000\n";
 	lines += "\n";
 	
 	lines += "# Simulation\n";
-	lines += "TSTEP 0.0001\n";
+	lines += "TSTEP 0.001\n";
 	lines += "TBEG 0\n";
 	lines += "TEND 10\n";
 	lines += "TDATA 0.01\n";
