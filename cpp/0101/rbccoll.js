@@ -57,113 +57,151 @@ function main() {
 
 // Perform simulation
 function simulate() {
-		// Check count for displaying output
-		if(iData == NData) {
-			
-			var tout = document.getElementById(taOut0);
-			tout.value += t.toFixed(digit) + "\n";
-			tout.scrollTop = tout.scrollHeight;
-			
-			drawGrains();
-			
-			// Reset count
-			iData = 0;
-		}
-		iData++;
+	// Check count for displaying output
+	if(iData == NData) {
 		
-		// Declare sum of forces
-		var F0 = [], F1 = [];
-		for(var i = 0; i < Ng; i++) {
-			F0[i] = new Vect3;
-			F1[i] = new Vect3;
-		}
+		var tout = document.getElementById(taOut0);
+		tout.value += t.toFixed(digit) + "\n";
+		tout.scrollTop = tout.scrollHeight;
 		
-		// Calculate spring force in an RBC
-		for(var i = 0; i < Ng; i++) {
-			var neigh = [-2, -1, 1, 2];
-			var Nk = neigh.length;
-			for(var k = 0; k < Nk; k++) {
-				var j = i + neigh[k];
-				if(j < 0) {
-					j += Ng;
-				} else if(j > Ng - 1) {
-					j -= Ng;
-				}
-				var rg = Vect3.sub(r0[i], r0[j]);
-				var lg = rg.len();
-				var ug = rg.unit();
-				var dL = lg - L0[i][k];
-				var dF0 = Vect3.mul(-kN * dL, ug);
-				F0[i] = Vect3.add(F0[i], dF0);
+		drawGrains();
+		
+		// Reset count
+		iData = 0;
+	}
+	iData++;
+	
+	// Declare sum of forces
+	var F0 = [], F1 = [];
+	for(var i = 0; i < Ng; i++) {
+		F0[i] = new Vect3;
+		F1[i] = new Vect3;
+	}
+	
+	// Calculate spring force in an RBC
+	for(var i = 0; i < Ng; i++) {
+		var neigh = [-2, -1, 1, 2];
+		var Nk = neigh.length;
+		for(var k = 0; k < Nk; k++) {
+			var j = i + neigh[k];
+			if(j < 0) {
+				j += Ng;
+			} else if(j > Ng - 1) {
+				j -= Ng;
 			}
+			var rg = Vect3.sub(r0[i], r0[j]);
+			var lg = rg.len();
+			var ug = rg.unit();
+			var dL = lg - L0[i][k];
+			var dF0 = Vect3.mul(-kN * dL, ug);
+			F0[i] = Vect3.add(F0[i], dF0);
 		}
-		for(var i = 0; i < Ng; i++) {
-			var neigh = [-2, -1, 1, 2];
-			var Nk = neigh.length;
-			for(var k = 0; k < Nk; k++) {
-				var j = i + neigh[k];
-				if(j < 0) {
-					j += Ng;
-				} else if(j > Ng - 1) {
-					j -= Ng;
-				}
-				var rg = Vect3.sub(r1[i], r1[j]);
-				var lg = rg.len();
-				var ug = rg.unit();
-				var dL = lg - L0[i][k];
-				var dF1 = Vect3.mul(-kN * dL, ug);
-				F1[i] = Vect3.add(F1[i], dF1);
+	}
+	for(var i = 0; i < Ng; i++) {
+		var neigh = [-2, -1, 1, 2];
+		var Nk = neigh.length;
+		for(var k = 0; k < Nk; k++) {
+			var j = i + neigh[k];
+			if(j < 0) {
+				j += Ng;
+			} else if(j > Ng - 1) {
+				j -= Ng;
 			}
+			var rg = Vect3.sub(r1[i], r1[j]);
+			var lg = rg.len();
+			var ug = rg.unit();
+			var dL = lg - L0[i][k];
+			var dF1 = Vect3.mul(-kN * dL, ug);
+			F1[i] = Vect3.add(F1[i], dF1);
 		}
-		
-		// Calculate pressure force
-		
-		
-		// Calculate collsion forces between two RBCs
-		for(var i0 = 0; i0 < Ng; i0++) {
-			for(var i1 = 0; i1 < Ng; i1++) {
-				var rg = Vect3.sub(r0[i0], r1[i1]);
-				var lg = rg.len();
-				var ksi = Math.max(0, Dg - lg)
-				var ug = rg.unit();
-				var dF0 = Vect3.mul(kN * ksi, ug);
-				F0[i0] = Vect3.add(F0[i0], dF0);
-			}
+	}
+	
+	// Calculate pressure force
+	var rc0 = new Vect3;
+	for(var i = 0; i < Ng; i++) {
+		rc0 = Vect3.add(rc0, r0[i]);
+	}
+	rc0 = Vect3.div(rc0, Ng);
+	var A0 = 0;
+	for(var i = 0; i < Ng; i++) {
+		var j = i + 1;
+		if(j < 0) {
+			j += Ng;
+		} else if(j > Ng - 1) {
+			j -= Ng;
 		}
+		var p = Vect3.sub(r0[i], rc0);
+		var l = Vect3.sub(r0[j], rc0);
+		var dA = Vect3.cross(p, l).len();
+		A0 += dA;
+	}
+	pin0 = gP * temF / A0;
+	for(var i = 0; i < Ng; i++) {
+		var jm = i - 1;
+		if(jm < 0) {
+			jm += Ng;
+		} else if(jm > Ng - 1) {
+			jm -= Ng;
+		}
+		var jp = i + 1;
+		if(jp < 0) {
+			jp += Ng;
+		} else if(jp > Ng - 1) {
+			jp -= Ng;
+		}
+		var jpm = Vect3.sub(r0[jp], r0[jm]);
+		var jci = Vect3.sub(rc0, r0[i]);
+		var aa = Vect3.cross(Vect3.cross(jpm, jci), jpm);
+		var ua = aa.unit();
+		var dF0 = Vect3.mul(-kP * (pin0 - pout) * jpm.len(), ua);
+		F0[i] = Vect3.add(F0[i], dF0);
+	}
+		
+	// Calculate collsion forces between two RBCs
+	for(var i0 = 0; i0 < Ng; i0++) {
 		for(var i1 = 0; i1 < Ng; i1++) {
-			for(var i0 = 0; i0 < Ng; i0++) {
-				var rg = Vect3.sub(r1[i1], r0[i0]);
-				var lg = rg.len();
-				var ksi = Math.max(0, Dg - lg)
-				var ug = rg.unit();
-				var dF1 = Vect3.mul(kN * ksi, ug);
-				F1[i1] = Vect3.add(F1[i1], dF1);
-			}
+			var rg = Vect3.sub(r0[i0], r1[i1]);
+			var lg = rg.len();
+			var ksi = Math.max(0, Dg - lg)
+			var ug = rg.unit();
+			var dF0 = Vect3.mul(kN * ksi, ug);
+			F0[i0] = Vect3.add(F0[i0], dF0);
 		}
-		
-		// Implement Euler method
-		for(var i = 0; i < Ng; i++) {
-			var a0 = Vect3.div(F0[i], mg);
-			v0[i] = Vect3.add(v0[i], Vect3.mul(a0, dt));
-			r0[i] = Vect3.add(r0[i], Vect3.mul(v0[i], dt));
-			
-			var a1 = Vect3.div(F1[i], mg);
-			v1[i] = Vect3.add(v1[i], Vect3.mul(a1, dt));
-			r1[i] = Vect3.add(r1[i], Vect3.mul(v1[i], dt));
+	}
+	for(var i1 = 0; i1 < Ng; i1++) {
+		for(var i0 = 0; i0 < Ng; i0++) {
+			var rg = Vect3.sub(r1[i1], r0[i0]);
+			var lg = rg.len();
+			var ksi = Math.max(0, Dg - lg)
+			var ug = rg.unit();
+			var dF1 = Vect3.mul(kN * ksi, ug);
+			F1[i1] = Vect3.add(F1[i1], dF1);
 		}
+	}
+	
+	// Implement Euler method
+	for(var i = 0; i < Ng; i++) {
+		var a0 = Vect3.div(F0[i], mg);
+		v0[i] = Vect3.add(v0[i], Vect3.mul(a0, dt));
+		r0[i] = Vect3.add(r0[i], Vect3.mul(v0[i], dt));
 		
-		// Increase time
-		t += dt;
-		
-		// Terminate process
-		if(t > tend + dt) {
-			clearInterval(proc);
-			document.getElementById(btStart).innerHTML = "Start";
-			document.getElementById(btStart).disabled = true;
-			document.getElementById(btRead).disabled = false;
-			document.getElementById(taIn).disabled = false;
-			document.getElementById(taOut0).value += "\n";
-		}
+		var a1 = Vect3.div(F1[i], mg);
+		v1[i] = Vect3.add(v1[i], Vect3.mul(a1, dt));
+		r1[i] = Vect3.add(r1[i], Vect3.mul(v1[i], dt));
+	}
+	
+	// Increase time
+	t += dt;
+	
+	// Terminate process
+	if(t > tend + dt) {
+		clearInterval(proc);
+		document.getElementById(btStart).innerHTML = "Start";
+		document.getElementById(btStart).disabled = true;
+		document.getElementById(btRead).disabled = false;
+		document.getElementById(taIn).disabled = false;
+		document.getElementById(taOut0).value += "\n";
+	}
 }
 
 // Oval Cassini modified by Canham
