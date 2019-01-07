@@ -261,8 +261,8 @@ function ovalCassiniCanham(x) {
 function createRBCs() {
 	console.log("Creating RBCs..");
 	
-	var sx = 8;
-	var sy = 1;
+	var sx = 7.3;
+	var sy = 0;
 	
 	// Create 1st RBC
 	var N0 = Ng;
@@ -588,7 +588,7 @@ function loadParameters() {
 	lines += "KONP 1\n";
 	lines += "KONV 1\n";
 	lines += "ETAF 1\n";
-	lines += "VELF 2\n";
+	lines += "VELF 1\n";
 	lines += "TEMF 300\n";
 	lines += "KONN 100\n";
 	lines += "\n";
