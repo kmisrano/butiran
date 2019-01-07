@@ -150,7 +150,7 @@ function simulate() {
 	var vc1 = new Vect3;
 	for(var i = 0; i < Ng; i++) {
 		rc1 = Vect3.add(rc1, r1[i]);
-		vc1 = Vect3.add(vc1, r1[i]);
+		vc1 = Vect3.add(vc1, v1[i]);
 	}
 	rc1 = Vect3.div(rc1, Ng);
 	vc1 = Vect3.div(vc1, Ng);
