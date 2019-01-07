@@ -638,8 +638,8 @@ function loadParameters() {
 	lines += "# Simulation\n";
 	lines += "TSTEP 0.001\n";
 	lines += "TBEG 0\n";
-	lines += "TEND 10\n";
-	lines += "TDATA 0.01\n";
+	lines += "TEND 4\n";
+	lines += "TDATA 0.1\n";
 	lines += "TPROC 1\n";
 	lines += "\n";
 	
