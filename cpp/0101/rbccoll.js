@@ -29,10 +29,8 @@ var kS1, kS2, gP, kP, kV, etaF, velF, kN;
 var tbeg, tend, dt, Tdata, Tproc, t, iData, NData, digit;
 var xmin, ymin, xmax, ymax;
 var proc;
-var r0 = [], v0 = [];
-var l0m2 = [], l0m1 = [], l0p1 = [], l0p2 = [];
-var r1 = [], v1 = [];
-var l1m2 = [], l1m1 = [], l1p1 = [], l1p2 = [];
+var r0 = [], v0 = [], L0 = [];
+var r1 = [], v1 = [], L1 = [];
 
 // Define main function
 function main() {
@@ -72,9 +70,82 @@ function simulate() {
 		}
 		iData++;
 		
-		// Calculate motion
+		// Declare sum of forces
+		var F0 = [], F1 = [];
 		for(var i = 0; i < Ng; i++) {
+			F0[i] = new Vect3;
+			F1[i] = new Vect3;
+		}
+		
+		// Calculate spring force in an RBC
+		for(var i = 0; i < Ng; i++) {
+			var neigh = [-2, -1, 1, 2];
+			var Nk = neigh.length;
+			for(var k = 0; k < Nk; k++) {
+				var j = i + neigh[k];
+				if(j < 0) {
+					j += Ng;
+				} else if(j > Ng - 1) {
+					j -= Ng;
+				}
+				var rg = Vect3.sub(r0[i], r0[j]);
+				var lg = rg.len();
+				var ug = rg.unit();
+				var dL = lg - L0[i][k];
+				var dF0 = Vect3.mul(-kN * dL, ug);
+				F0[i] = Vect3.add(F0[i], dF0);
+			}
+		}
+		for(var i = 0; i < Ng; i++) {
+			var neigh = [-2, -1, 1, 2];
+			var Nk = neigh.length;
+			for(var k = 0; k < Nk; k++) {
+				var j = i + neigh[k];
+				if(j < 0) {
+					j += Ng;
+				} else if(j > Ng - 1) {
+					j -= Ng;
+				}
+				var rg = Vect3.sub(r1[i], r1[j]);
+				var lg = rg.len();
+				var ug = rg.unit();
+				var dL = lg - L0[i][k];
+				var dF1 = Vect3.mul(-kN * dL, ug);
+				F1[i] = Vect3.add(F1[i], dF1);
+			}
+		}
+		
+		// Calculate collsion forces between two RBCs
+		for(var i0 = 0; i0 < Ng; i0++) {
+			for(var i1 = 0; i1 < Ng; i1++) {
+				var rg = Vect3.sub(r0[i0], r1[i1]);
+				var lg = rg.len();
+				var ksi = Math.max(0, Dg - lg)
+				var ug = rg.unit();
+				var dF0 = Vect3.mul(kN * ksi, ug);
+				F0[i0] = Vect3.add(F0[i0], dF0);
+			}
+		}
+		for(var i1 = 0; i1 < Ng; i1++) {
+			for(var i0 = 0; i0 < Ng; i0++) {
+				var rg = Vect3.sub(r1[i1], r0[i0]);
+				var lg = rg.len();
+				var ksi = Math.max(0, Dg - lg)
+				var ug = rg.unit();
+				var dF1 = Vect3.mul(kN * ksi, ug);
+				F1[i1] = Vect3.add(F1[i1], dF1);
+			}
+		}
+		
+		// Implement Euler method
+		for(var i = 0; i < Ng; i++) {
+			var a0 = Vect3.div(F0[i], mg);
+			v0[i] = Vect3.add(v0[i], Vect3.mul(a0, dt));
 			r0[i] = Vect3.add(r0[i], Vect3.mul(v0[i], dt));
+			
+			var a1 = Vect3.div(F1[i], mg);
+			v1[i] = Vect3.add(v1[i], Vect3.mul(a1, dt));
+			r1[i] = Vect3.add(r1[i], Vect3.mul(v1[i], dt));
 		}
 		
 		// Increase time
@@ -109,13 +180,15 @@ function ovalCassiniCanham(x) {
 function createRBCs() {
 	console.log("Creating RBCs..");
 	
+	var sx = 8;
+	
 	// Create 1st RBC
 	var N0 = Ng;
 	var x0min = -7.1;
 	var x0max = 7.1;
 	var dx0 = (x0max - x0min) / (N0/2 - 2);
 	var x0 = [];
-	var y0 =[];
+	var y0 = [];
 	x0[0] = x0min;
 	y0[0] = 0;
 	for(var i = 1; i < N0/2; i++) {
@@ -129,16 +202,67 @@ function createRBCs() {
 		y0[i] = -ovalCassiniCanham(x0[i]);
 	}
 	for(var i = 0; i < N0; i++) {
-		var r = new Vect3(x0[i], y0[i], 0);
+		var r = new Vect3(x0[i] - sx, y0[i], 0);
 		r0.push(r);
-		if(i < N0/2) {
-			v0.push(new Vect3(1, 1, 0));
-		} else {
-			v0.push(new Vect3(1, -1, 0));
+		v0.push(new Vect3(velF, 0, 0));		
+	}
+	for(var i = 0; i < N0; i++) {
+		var neigh = [-2, -1, 1, 2];
+		var Nk = neigh.length;
+		var l = [];
+		for(var k = 0; k < Nk; k++) {
+			var j = i + neigh[k];
+			if(j < 0) {
+				j += Ng;
+			} else if(j > Ng - 1) {
+				j -= Ng;
+			}
+			var lij = Vect3.sub(r0[i], r0[j]).len();
+			l.push(lij);
 		}
+		L0.push(l);
 	}
 	
 	// Create 2nd RBC
+	var N1 = Ng;
+	var x1min = -7.1;
+	var x1max = 7.1;
+	var dx1 = (x1max - x1min) / (N1/2 - 2);
+	var x1 = [];
+	var y1 = [];
+	x1[0] = x1min;
+	y1[0] = 0;
+	for(var i = 1; i < N1/2; i++) {
+		x1[i] = x1min + (i - 1) * dx1;
+		y1[i] = ovalCassiniCanham(x1[i]);
+	}
+	x1[N1/2] = x1max;
+	y1[N1/2] = 0;
+	for(var i = N1/2 + 1; i < N1; i++) {
+		x1[i] = x1max - (i - N1/2 - 1) * dx1;
+		y1[i] = -ovalCassiniCanham(x1[i]);
+	}
+	for(var i = 0; i < N1; i++) {
+		var r = new Vect3(x1[i] + sx, y1[i], 0);
+		r1.push(r);
+		v1.push(new Vect3(-velF, 0, 0));
+	}
+	for(var i = 0; i < N1; i++) {
+		var neigh = [-2, -1, 1, 2];
+		var Nk = neigh.length;
+		var l = [];
+		for(var k = 0; k < Nk; k++) {
+			var j = i + neigh[k];
+			if(j < 0) {
+				j += Ng;
+			} else if(j > Ng - 1) {
+				j -= Ng;
+			}
+			var lij = Vect3.sub(r0[i], r0[j]).len();
+			l.push(lij);
+		}
+		L1.push(l);
+	}
 }
 
 // Draw system on canvas
@@ -148,14 +272,23 @@ function drawGrains() {
 	cx.fillStyle = "#fff";
 	cx.fillRect(0, 0, can.width, can.height);
 	
-	var r = transform(0, 0);
-	var R = Math.abs(transform(0 + 0.5 * Dg, 0).x - r.x);
-	
 	cx.strokeStyle = "#f00";
 	cx.beginPath();
 	for(var i = 0; i < r0.length; i++) {
 		var r = transform(r0[i].x, r0[i].y);
-		//cx.arc(r.x, r.y, R, 0, 2 * Math.PI);
+		if(i == 0) {
+			cx.moveTo(r.x, r.y);
+		} else {
+			cx.lineTo(r.x, r.y);
+		}
+	}
+	cx.closePath();
+	cx.stroke();
+	
+	cx.strokeStyle = "#00f";
+	cx.beginPath();
+	for(var i = 0; i < r1.length; i++) {
+		var r = transform(r1[i].x, r1[i].y);
 		if(i == 0) {
 			cx.moveTo(r.x, r.y);
 		} else {
@@ -319,9 +452,9 @@ function clearAll() {
 function loadParameters() {
 	var lines = "";
 	lines += "# Grains\n";
-	lines += "DIAG 60E-3\n"
+	lines += "DIAG 0.01\n"
 	lines += "RHOG 1000\n";
-	lines += "NUMG 1000\n";
+	lines += "NUMG 100\n";
 	lines += "\n";
 	
 	lines += "# Constants\n";
@@ -331,23 +464,23 @@ function loadParameters() {
 	lines += "KONP 1\n";
 	lines += "KONV 1\n";
 	lines += "ETAF 1\n";
-	lines += "VELF 1\n";
+	lines += "VELF 2\n";
 	lines += "KONN 100\n";
 	lines += "\n";
 	
 	lines += "# Simulation\n";
 	lines += "TSTEP 0.001\n";
 	lines += "TBEG 0\n";
-	lines += "TEND 1\n";
-	lines += "TDATA 0.05\n";
-	lines += "TPROC 10\n";
+	lines += "TEND 10\n";
+	lines += "TDATA 0.01\n";
+	lines += "TPROC 1\n";
 	lines += "\n";
 	
 	lines += "# Coordinates\n";
-	lines += "XMIN -10\n";
-	lines += "YMIN -5\n";
-	lines += "XMAX 10\n";
-	lines += "YMAX 5\n";
+	lines += "XMIN -20\n";
+	lines += "YMIN -10\n";
+	lines += "XMAX 20\n";
+	lines += "YMAX 10\n";
 	
 	var ta = document.getElementById(arguments[0]);
 	ta.value = lines;
