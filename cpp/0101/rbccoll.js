@@ -16,6 +16,7 @@
 	1403 Pass variable by its string name (elements).
 	1754 Finish iteration for time but not yet calculation.
 	2140 Finisih N and S forces.
+	2247 Fail and proposing internal structure with center.
 */	
 
 // Execute main function
@@ -26,12 +27,12 @@ var pname;
 var taIn, caOut, taOut0, taOut1;
 var btClear, btLoad, btRead, btStart, btInfo;
 var Dg, rhog, mg, Ng;
-var kS1, kS2, gP, kP, kV, etaF, velF, temF, kN, pout;
+var kS0, kS1, kS2, gP, kP, kV, etaF, velF, temF, kN, pout;
 var tbeg, tend, dt, Tdata, Tproc, t, iData, NData, digit;
 var xmin, ymin, xmax, ymax;
 var proc;
-var r0 = [], v0 = [], L0 = [], pin0;
-var r1 = [], v1 = [], L1 = [], pin1;
+var r0 = [], v0 = [], L0 = [], pin0, LC0 = [];
+var r1 = [], v1 = [], L1 = [], pin1, LC1 = [];
 
 // Define main function
 function main() {
@@ -195,7 +196,17 @@ function simulate() {
 		var dF1 = Vect3.mul(-kP * (pin1 - pout) * jpm.len(), ua);
 		F1[i] = Vect3.add(F1[i], dF1);
 	}
-		
+	
+	// Calculate internal structure force
+	for(var i = 0; i < Ng; i++) {
+		var rg = Vect3.sub(r0[i], rc0);
+		var lg = rg.len();
+		var ug = rg.unit();
+		var dL = lg - LC[i];
+		var dF0 = Vect3.mul(-kS0 * dL, ug);
+		F0[i] = Vect3.add(F0[i], dF0);
+	}
+	
 	// Calculate collsion forces between two RBCs
 	for(var i0 = 0; i0 < Ng; i0++) {
 		for(var i1 = 0; i1 < Ng; i1++) {
@@ -387,6 +398,16 @@ function createRBCs() {
 	pin1 = gP * temF / A1;
 	
 	pout = 0.5 * (pin0 + pin1);
+	
+	// Calculate initial length to center
+	for(var i = 0; i < N0; i++) {
+		var lc = Vect3.sub(r0[i], rc0).len();
+		LC0.push(lc);
+	}
+	for(var i = 0; i < N1; i++) {
+		var lc = Vect3.sub(r1[i], rc1).len();
+		LC1.push(lc);
+	}
 }
 
 // Draw system on canvas
@@ -582,6 +603,7 @@ function loadParameters() {
 	lines += "\n";
 	
 	lines += "# Constants\n";
+	lines += "KONS0 1\n";
 	lines += "KONS1 1\n";
 	lines += "KONS2 1\n";
 	lines += "GAMP 1\n";
@@ -621,6 +643,7 @@ function readParameters() {
 	mg = rhog * (Math.PI/6) * Dg * Dg * Dg;
 	Ng = getValue(lines, "NUMG");
 	
+	kS0 = getValue(lines, "KONS0");
 	kS1 = getValue(lines, "KONS1");
 	kS2 = getValue(lines, "KONS2");
 	gP = getValue(lines, "GAMP");
