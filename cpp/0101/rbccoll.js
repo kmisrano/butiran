@@ -15,6 +15,7 @@
 	1254 Start physically by designing the interface.
 	1403 Pass variable by its string name (elements).
 	1754 Finish iteration for time but not yet calculation.
+	2140 Finisih N and S forces.
 */	
 
 // Execute main function
@@ -25,12 +26,12 @@ var pname;
 var taIn, caOut, taOut0, taOut1;
 var btClear, btLoad, btRead, btStart, btInfo;
 var Dg, rhog, mg, Ng;
-var kS1, kS2, gP, kP, kV, etaF, velF, kN;
+var kS1, kS2, gP, kP, kV, etaF, velF, temF, kN, pout;
 var tbeg, tend, dt, Tdata, Tproc, t, iData, NData, digit;
 var xmin, ymin, xmax, ymax;
 var proc;
-var r0 = [], v0 = [], L0 = [];
-var r1 = [], v1 = [], L1 = [];
+var r0 = [], v0 = [], L0 = [], pin0;
+var r1 = [], v1 = [], L1 = [], pin1;
 
 // Define main function
 function main() {
@@ -114,6 +115,9 @@ function simulate() {
 				F1[i] = Vect3.add(F1[i], dF1);
 			}
 		}
+		
+		// Calculate pressure force
+		
 		
 		// Calculate collsion forces between two RBCs
 		for(var i0 = 0; i0 < Ng; i0++) {
@@ -263,6 +267,48 @@ function createRBCs() {
 		}
 		L1.push(l);
 	}
+	
+	// Calculate initial pressure
+	var rc0 = new Vect3;
+	for(var i = 0; i < N0; i++) {
+		rc0 = Vect3.add(rc0, r0[i]);
+	}
+	rc0 = Vect3.div(rc0, N0);
+	var A0 = 0;
+	for(var i = 0; i < N0; i++) {
+		var j = i + 1;
+		if(j < 0) {
+			j += Ng;
+		} else if(j > Ng - 1) {
+			j -= Ng;
+		}
+		var p = Vect3.sub(r0[i], rc0);
+		var l = Vect3.sub(r0[j], rc0);
+		var dA = Vect3.cross(p, l).len();
+		A0 += dA;
+	}
+	pin0 = gP * temF / A0;
+	var rc1 = new Vect3;
+	for(var i = 0; i < N1; i++) {
+		rc1 = Vect3.add(rc1, r1[i]);
+	}
+	rc1 = Vect3.div(rc1, N1);
+	var A1 = 0;
+	for(var i = 0; i < N1; i++) {
+		var j = i + 1;
+		if(j < 0) {
+			j += Ng;
+		} else if(j > Ng - 1) {
+			j -= Ng;
+		}
+		var p = Vect3.sub(r1[i], rc1);
+		var l = Vect3.sub(r1[j], rc1);
+		var dA = Vect3.cross(p, l).len();
+		A1 += dA;
+	}
+	pin1 = gP * temF / A1;
+	
+	pout = 0.5 * (pin0 + pin1);
 }
 
 // Draw system on canvas
@@ -465,6 +511,7 @@ function loadParameters() {
 	lines += "KONV 1\n";
 	lines += "ETAF 1\n";
 	lines += "VELF 2\n";
+	lines += "TEMF 300\n";
 	lines += "KONN 100\n";
 	lines += "\n";
 	
@@ -503,6 +550,7 @@ function readParameters() {
 	kV = getValue(lines, "KONV");
 	etaF = getValue(lines, "ETAF");
 	velF = getValue(lines, "VELF");
+	temF = getValue(lines, "TEMF");
 	kN = getValue(lines, "KONN");
 	
 	tbeg = getValue(lines, "TBEG");
