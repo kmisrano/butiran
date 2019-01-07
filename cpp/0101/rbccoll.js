@@ -14,6 +14,7 @@
 	Try to fuse md_rbcellips.js and md_fsgdods.js (20190101) files.
 	1254 Start physically by designing the interface.
 	1403 Pass variable by its string name (elements).
+	1754 Finish iteration for time but not yet calculation.
 */	
 
 // Execute main function
@@ -25,8 +26,10 @@ var taIn, caOut, taOut0, taOut1;
 var btClear, btLoad, btRead, btStart, btInfo;
 var Dg, rhog, mg;
 var kS1, kS2, gP, kP, kV, etaF, velF, kN;
-var tbeg, tend, dt, Tdata;
+var tbeg, tend, dt, Tdata, Tproc, t, iData, NData, digit;
 var xmin, ymin, xmax, ymax;
+var proc;
+var N, r0, r1, v0, v1;
 
 // Define main function
 function main() {
@@ -48,6 +51,39 @@ function main() {
 		taIn, caOut, taOut0, taOut1,
 		btClear, btLoad, btRead, btStart, btInfo
 	);
+}
+
+// Perform simulation
+function simulate() {
+		// Check count for displaying output
+		if(iData == NData) {
+			
+			var tout = document.getElementById(taOut0);
+			tout.value += t.toFixed(digit) + "\n";
+			tout.scrollTop = tout.scrollHeight;
+			
+			// Reset count
+			iData = 0;
+		}
+		iData++;
+		
+		// Increase time
+		t += dt;
+		
+		// Terminate process
+		if(t > tend + dt) {
+			clearInterval(proc);
+			document.getElementById(btStart).innerHTML = "Start";
+			document.getElementById(btStart).disabled = true;
+			document.getElementById(btRead).disabled = false;
+			document.getElementById(taIn).disabled = false;
+			document.getElementById(taOut0).value += "\n";
+		}
+}
+
+// Create RBC0 adn RBC1
+function createRBCs() {
+	
 }
 
 // Create visual elements and set layout
@@ -108,11 +144,13 @@ function setElementsLayout() {
 	var btRead = document.createElement("button");
 		btRead.innerHTML = "Read";
 		btRead.style.width = "70px";
+		btRead.disabled = true;
 		btRead.addEventListener("click", buttonClick);
 		btRead.id = arguments[6];
 	var btStart = document.createElement("button");
 		btStart.innerHTML = "Start";
 		btStart.style.width = "70px";
+		btStart.disabled = true;
 		btStart.addEventListener("click", buttonClick);
 		btStart.id = arguments[7];
 	var btInfo = document.createElement("button");
@@ -146,13 +184,31 @@ function setElementsLayout() {
 
 // Do something when buttons clicked
 function buttonClick() {
-	var id = event.target.id;
+	var target = event.target;
+	var id = target.id;
 	if(id == "load") {
 		loadParameters(taIn);
+		document.getElementById(btRead).disabled = false;
 	} else if(id == "clear") {
 		clearAll();
+		document.getElementById(btRead).disabled = true;
+		document.getElementById(btStart).disabled = true;
 	} else if(id == "read") {
 		readParameters();
+		createRBCs();
+		document.getElementById(btStart).disabled = false;
+	} else if(id == "start") {
+		if(target.innerHTML == "Start") {
+			target.innerHTML = "Stop";
+			document.getElementById(btRead).disabled = true;
+			document.getElementById(taIn).disabled = true;
+			proc = setInterval(simulate, Tproc);
+		} else {
+			target.innerHTML = "Start";
+			document.getElementById(btRead).disabled = false;
+			document.getElementById(taIn).disabled = false;
+			clearInterval(proc);
+		}
 	}
 }
 
@@ -190,6 +246,7 @@ function loadParameters() {
 	lines += "TBEG 0\n";
 	lines += "TEND 1\n";
 	lines += "TDATA 0.05\n";
+	lines += "TPROC 10\n";
 	lines += "\n";
 	
 	lines += "# Coordinates\n";
@@ -224,6 +281,11 @@ function readParameters() {
 	tend = getValue(lines, "TEND");
 	dt = getValue(lines, "TSTEP");
 	Tdata = getValue(lines, "TDATA");
+	Tproc = getValue(lines, "TPROC");
+	t = tbeg;
+	NData = Math.round(Tdata / dt);
+	iData = NData;
+	digit = -Math.floor(Math.log10(Tdata));
 	
 	xmin = getValue(lines, "XMIN");
 	ymin = getValue(lines, "YMIN");
