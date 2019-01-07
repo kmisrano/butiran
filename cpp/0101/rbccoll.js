@@ -158,7 +158,7 @@ function simulate() {
 	}
 	var rc1 = new Vect3;
 	for(var i = 0; i < Ng; i++) {
-		rc1 = Vect3.add(rc0, r1[i]);
+		rc1 = Vect3.add(rc1, r1[i]);
 	}
 	rc1 = Vect3.div(rc1, Ng);
 	var A1 = 0;
@@ -192,7 +192,7 @@ function simulate() {
 		var jci = Vect3.sub(rc1, r1[i]);
 		var aa = Vect3.cross(Vect3.cross(jpm, jci), jpm);
 		var ua = aa.unit();
-		var dF0 = Vect3.mul(-kP * (pin1 - pout) * jpm.len(), ua);
+		var dF1 = Vect3.mul(-kP * (pin1 - pout) * jpm.len(), ua);
 		F1[i] = Vect3.add(F1[i], dF1);
 	}
 		
@@ -262,6 +262,7 @@ function createRBCs() {
 	console.log("Creating RBCs..");
 	
 	var sx = 8;
+	var sy = 1;
 	
 	// Create 1st RBC
 	var N0 = Ng;
@@ -283,7 +284,7 @@ function createRBCs() {
 		y0[i] = -ovalCassiniCanham(x0[i]);
 	}
 	for(var i = 0; i < N0; i++) {
-		var r = new Vect3(x0[i] - sx, y0[i], 0);
+		var r = new Vect3(x0[i] - sx, y0[i] - sy, 0);
 		r0.push(r);
 		v0.push(new Vect3(velF, 0, 0));		
 	}
@@ -324,7 +325,7 @@ function createRBCs() {
 		y1[i] = -ovalCassiniCanham(x1[i]);
 	}
 	for(var i = 0; i < N1; i++) {
-		var r = new Vect3(x1[i] + sx, y1[i], 0);
+		var r = new Vect3(x1[i] + sx, y1[i] + sy, 0);
 		r1.push(r);
 		v1.push(new Vect3(-velF, 0, 0));
 	}
