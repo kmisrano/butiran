@@ -4,6 +4,9 @@
 
 	Ismi Yasifa | 
 	Sparisoma Viridi | dudung@gmail.com
+	
+	20181126
+	Get previous version from Ismi and change it to JS.
 */
 
 
