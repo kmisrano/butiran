@@ -17,6 +17,8 @@
 	1754 Finish iteration for time but not yet calculation.
 	2140 Finisih N and S forces.
 	2247 Fail and proposing internal structure with center.
+	20190108
+	Finish but not yet implement viscouse force.
 */	
 
 // Execute main function
@@ -227,6 +229,16 @@ function simulate() {
 			var dF1 = Vect3.mul(kN * ksi, ug);
 			F1[i1] = Vect3.add(F1[i1], dF1);
 		}
+	}
+	
+	// Calculate viscous force
+	for(var i0 = 0; i0 < Ng; i0++) {
+		var dF0 = new Vect3;
+		F0[i0] = Vect3.add(F0[i0], dF0);
+	}
+	for(var i1 = 0; i1 < Ng; i1++) {
+		var dF1 = new Vect3;
+		F1[i1] = Vect3.add(F1[i1], dF1);
 	}
 	
 	// Check count for displaying output
