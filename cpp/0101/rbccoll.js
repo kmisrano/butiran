@@ -156,6 +156,45 @@ function simulate() {
 		var dF0 = Vect3.mul(-kP * (pin0 - pout) * jpm.len(), ua);
 		F0[i] = Vect3.add(F0[i], dF0);
 	}
+	var rc1 = new Vect3;
+	for(var i = 0; i < Ng; i++) {
+		rc1 = Vect3.add(rc0, r1[i]);
+	}
+	rc1 = Vect3.div(rc1, Ng);
+	var A1 = 0;
+	for(var i = 0; i < Ng; i++) {
+		var j = i + 1;
+		if(j < 0) {
+			j += Ng;
+		} else if(j > Ng - 1) {
+			j -= Ng;
+		}
+		var p = Vect3.sub(r1[i], rc1);
+		var l = Vect3.sub(r1[j], rc1);
+		var dA = Vect3.cross(p, l).len();
+		A1 += dA;
+	}
+	pin1 = gP * temF / A1;
+	for(var i = 0; i < Ng; i++) {
+		var jm = i - 1;
+		if(jm < 0) {
+			jm += Ng;
+		} else if(jm > Ng - 1) {
+			jm -= Ng;
+		}
+		var jp = i + 1;
+		if(jp < 0) {
+			jp += Ng;
+		} else if(jp > Ng - 1) {
+			jp -= Ng;
+		}
+		var jpm = Vect3.sub(r1[jp], r1[jm]);
+		var jci = Vect3.sub(rc1, r1[i]);
+		var aa = Vect3.cross(Vect3.cross(jpm, jci), jpm);
+		var ua = aa.unit();
+		var dF0 = Vect3.mul(-kP * (pin1 - pout) * jpm.len(), ua);
+		F1[i] = Vect3.add(F1[i], dF1);
+	}
 		
 	// Calculate collsion forces between two RBCs
 	for(var i0 = 0; i0 < Ng; i0++) {
