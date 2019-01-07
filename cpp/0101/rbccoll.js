@@ -611,11 +611,11 @@ function loadParameters() {
 	lines += "\n";
 	
 	lines += "# Constants\n";
-	lines += "KONS0 1\n";
-	lines += "KONS1 1\n";
-	lines += "KONS2 1\n";
+	lines += "KONS0 10\n";
+	lines += "KONS1 10\n";
+	lines += "KONS2 10\n";
 	lines += "GAMP 1\n";
-	lines += "KONP 1\n";
+	lines += "KONP 0\n";
 	lines += "KONV 1\n";
 	lines += "ETAF 1\n";
 	lines += "VELF 1\n";
@@ -624,7 +624,7 @@ function loadParameters() {
 	lines += "\n";
 	
 	lines += "# Simulation\n";
-	lines += "TSTEP 0.001\n";
+	lines += "TSTEP 0.0001\n";
 	lines += "TBEG 0\n";
 	lines += "TEND 10\n";
 	lines += "TDATA 0.01\n";
