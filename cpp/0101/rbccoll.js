@@ -24,12 +24,15 @@ main();
 var pname;
 var taIn, caOut, taOut0, taOut1;
 var btClear, btLoad, btRead, btStart, btInfo;
-var Dg, rhog, mg;
+var Dg, rhog, mg, Ng;
 var kS1, kS2, gP, kP, kV, etaF, velF, kN;
 var tbeg, tend, dt, Tdata, Tproc, t, iData, NData, digit;
 var xmin, ymin, xmax, ymax;
 var proc;
-var N, r0, r1, v0, v1;
+var r0 = [], v0 = [];
+var l0m2 = [], l0m1 = [], l0p1 = [], l0p2 = [];
+var r1 = [], v1 = [];
+var l1m2 = [], l1m1 = [], l1p1 = [], l1p2 = [];
 
 // Define main function
 function main() {
@@ -62,10 +65,17 @@ function simulate() {
 			tout.value += t.toFixed(digit) + "\n";
 			tout.scrollTop = tout.scrollHeight;
 			
+			drawGrains();
+			
 			// Reset count
 			iData = 0;
 		}
 		iData++;
+		
+		// Calculate motion
+		for(var i = 0; i < Ng; i++) {
+			r0[i] = Vect3.add(r0[i], Vect3.mul(v0[i], dt));
+		}
 		
 		// Increase time
 		t += dt;
@@ -81,9 +91,91 @@ function simulate() {
 		}
 }
 
+// Oval Cassini modified by Canham
+function ovalCassiniCanham(x) {
+	var A = 5.0;
+	var B = 0.5;
+	var C = 5.05;
+	var C4 = C * C * C * C;
+	var A2 = A * A;
+	var x2 = x * x;
+	var sqrt0 = Math.sqrt(C4 + 4 * A2 * x2);
+	var sqrt1 = Math.sqrt(sqrt0 - A2 - x2);
+	var y = B * sqrt1;
+	return y;
+}
+
 // Create RBC0 adn RBC1
 function createRBCs() {
+	console.log("Creating RBCs..");
 	
+	// Create 1st RBC
+	var N0 = Ng;
+	var x0min = -7.1;
+	var x0max = 7.1;
+	var dx0 = (x0max - x0min) / (N0/2 - 2);
+	var x0 = [];
+	var y0 =[];
+	x0[0] = x0min;
+	y0[0] = 0;
+	for(var i = 1; i < N0/2; i++) {
+		x0[i] = x0min + (i - 1) * dx0;
+		y0[i] = ovalCassiniCanham(x0[i]);
+	}
+	x0[N0/2] = x0max;
+	y0[N0/2] = 0;
+	for(var i = N0/2 + 1; i < N0; i++) {
+		x0[i] = x0max - (i - N0/2 - 1) * dx0;
+		y0[i] = -ovalCassiniCanham(x0[i]);
+	}
+	for(var i = 0; i < N0; i++) {
+		var r = new Vect3(x0[i], y0[i], 0);
+		r0.push(r);
+		if(i < N0/2) {
+			v0.push(new Vect3(1, 1, 0));
+		} else {
+			v0.push(new Vect3(1, -1, 0));
+		}
+	}
+	
+	// Create 2nd RBC
+}
+
+// Draw system on canvas
+function drawGrains() {
+	var can = document.getElementById(caOut);
+	var cx = can.getContext("2d");
+	cx.fillStyle = "#fff";
+	cx.fillRect(0, 0, can.width, can.height);
+	
+	var r = transform(0, 0);
+	var R = Math.abs(transform(0 + 0.5 * Dg, 0).x - r.x);
+	
+	cx.strokeStyle = "#f00";
+	cx.beginPath();
+	for(var i = 0; i < r0.length; i++) {
+		var r = transform(r0[i].x, r0[i].y);
+		//cx.arc(r.x, r.y, R, 0, 2 * Math.PI);
+		if(i == 0) {
+			cx.moveTo(r.x, r.y);
+		} else {
+			cx.lineTo(r.x, r.y);
+		}
+	}
+	cx.closePath();
+	cx.stroke();
+	
+	function transform(x, y) {
+		var YMIN = can.height;
+		var YMAX = 0;
+		var XMIN = 0;
+		var XMAX = can.width;
+		
+		var X = (x - xmin) / (xmax - xmin) * (XMAX - XMIN) + XMIN;
+		var Y = (y - ymin) / (ymax - ymin) * (YMAX - YMIN) + YMIN;
+		
+		return {x: X, y: Y};
+	}
 }
 
 // Create visual elements and set layout
@@ -196,6 +288,7 @@ function buttonClick() {
 	} else if(id == "read") {
 		readParameters();
 		createRBCs();
+		drawGrains();
 		document.getElementById(btStart).disabled = false;
 	} else if(id == "start") {
 		if(target.innerHTML == "Start") {
@@ -226,8 +319,9 @@ function clearAll() {
 function loadParameters() {
 	var lines = "";
 	lines += "# Grains\n";
-	lines += "DIAG 60E-9\n"
+	lines += "DIAG 60E-3\n"
 	lines += "RHOG 1000\n";
+	lines += "NUMG 1000\n";
 	lines += "\n";
 	
 	lines += "# Constants\n";
@@ -250,10 +344,10 @@ function loadParameters() {
 	lines += "\n";
 	
 	lines += "# Coordinates\n";
-	lines += "XMIN -10E-6\n";
-	lines += "YMIN -5E-6\n";
-	lines += "XMAX 10E-6\n";
-	lines += "YMAX 5E-6\n";
+	lines += "XMIN -10\n";
+	lines += "YMIN -5\n";
+	lines += "XMAX 10\n";
+	lines += "YMAX 5\n";
 	
 	var ta = document.getElementById(arguments[0]);
 	ta.value = lines;
@@ -267,6 +361,7 @@ function readParameters() {
 	Dg = getValue(lines, "DIAG");
 	rhog = getValue(lines, "RHOG");
 	mg = rhog * (Math.PI/6) * Dg * Dg * Dg;
+	Ng = getValue(lines, "NUMG");
 	
 	kS1 = getValue(lines, "KONS1");
 	kS2 = getValue(lines, "KONS2");
@@ -291,6 +386,11 @@ function readParameters() {
 	ymin = getValue(lines, "YMIN");
 	xmax = getValue(lines, "XMAX");
 	ymax = getValue(lines, "YMAX");
+
+	r0 = []; v0 = [];
+	l0m2 = []; l0m1 = []; l0p1 = []; l0p2 = [];
+	r1 = []; v1 = [];
+	l1m2 = []; l1m1 = []; l1p1 = []; l1p2 = [];
 }
 
 // Get value from a line inside parameter textarea
