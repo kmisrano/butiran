@@ -39,7 +39,7 @@ int main(int argc, char *argv[]) {
 	double TE = 298; // K
 	
 	// Input
-	double V = 1; // V
+	double V = 0.25; // V
 	
 	// Calculated parameters
 	double R = lambda * L;
@@ -75,21 +75,20 @@ int main(int argc, char *argv[]) {
 	
 	double t = 0;
 	double dt = 1E-3;
-	double Tdata = 0.1;
+	double Tdata = 5;
 	int Ndata = round(Tdata / dt);
 	int idata = Ndata;
 	
-	return 1;
-	
 	double delT = 1;
-	double eps = 1E-3;
+	double eps = 1E-6;
 	double T = T0;
 	double Told = T;
 	while(delT > eps) {
 		
 		if(idata == Ndata) {
 			cout << t << "\t";
-			cout << T << endl;
+			cout << T << "\t";
+			cout << delT << endl;
 			
 			idata = 0;
 		}
