@@ -10,6 +10,7 @@
 	
 	20190110
 	Start this program at campus in Bandung.
+	1400 Fin.
 */
 
 #include <iostream>
