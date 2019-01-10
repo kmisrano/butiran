@@ -25,13 +25,13 @@ int main(int argc, char *argv[]) {
 	double sigma = 5.6703E-8; // W/m2.K4
 	
 	// Material properties
-	double epsilon = 0.04; //
+	double epsilon = 0.76; //
 	double c = 385; // J/kg.K
 	double rho = 1.68E-8; // \Omega.m
 	double rho_m = 8.9E3; // kg/m3
 
-	// Wire parameters
-	double lambda = 80E-3; // m\Omega/m
+	// Wire parameters AWG 24 copper wire
+	double lambda = 80E-3; // \Omega/m
 	double D = 0.511E-3; // m
 	double L = 1; // m
 	
@@ -39,7 +39,7 @@ int main(int argc, char *argv[]) {
 	double TE = 298; // K
 	
 	// Input
-	double V = 9; // V
+	double V = 1; // V
 	
 	// Calculated parameters
 	double R = lambda * L;
@@ -62,6 +62,7 @@ int main(int argc, char *argv[]) {
 	// Verbose values
 	cout << "R\t" << R << endl;
 	cout << "R\t" << (rho * L / AD) << endl;
+	cout << "I\t" << V / R << endl;
 	cout << "AL\t" << AL << endl;
 	cout << "AD\t" << AD << endl;
 	cout << "m\t" << m << endl;
@@ -70,6 +71,38 @@ int main(int argc, char *argv[]) {
 	cout << "T0\t" << T0 << endl;
 	cout << "dT4\t" << dT4 << endl;
 	cout << "Tinf\t" << Tinf << endl;
+	cout << endl;
+	
+	double t = 0;
+	double dt = 1E-3;
+	double Tdata = 0.1;
+	int Ndata = round(Tdata / dt);
+	int idata = Ndata;
+	
+	return 1;
+	
+	double delT = 1;
+	double eps = 1E-3;
+	double T = T0;
+	double Told = T;
+	while(delT > eps) {
+		
+		if(idata == Ndata) {
+			cout << t << "\t";
+			cout << T << endl;
+			
+			idata = 0;
+		}
+		
+		double T3 = T * T * T;
+		T = T * (1 - kt4 * T3 * dt) + kt4 * Tinf4 * dt;
+		
+		delT = fabs(T - Told);
+		Told = T;
+		
+		t += dt;
+		idata++;
+	}
 	
 	return 0;
 }
