@@ -92,6 +92,7 @@ int main(int argc, char *argv[]) {
 			cout << T << endl;
 			
 			T += dT;
-		
+	}
+	
 	return 0;
 }
