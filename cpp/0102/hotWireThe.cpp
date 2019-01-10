@@ -1,16 +1,16 @@
 /*
-	hotWireNum.cpp
+	hotWireThe.cpp
 	Simulate simple hot wire system interacting with
 	environment using Euler method
 	
 	Sparisoma Viridi | https://github.com/dudung/butiran
 	
-	Compile: g++ hotWireNum.cpp -o hotWireNum
-	Execute: ./hotWireNum
+	Compile: g++ hotWireThe.cpp -o hotWireThe
+	Execute: ./hotWireThe
 	
 	20190110
-	Start this program at campus in Bandung.
-	1400 Fin.
+	Start this program at home.
+	1702 Start by modifying hotWireNum.
 */
 
 #include <iostream>
@@ -54,6 +54,7 @@ int main(int argc, char *argv[]) {
 	double Tinf4 = TE4 + dT4;
 	double Tinf2 = sqrt(Tinf4);
 	double Tinf = sqrt(Tinf2);
+	double Tinf3 = Tinf * Tinf2;
 	
 	// Initial value
 	double T0 = TE;
@@ -72,35 +73,25 @@ int main(int argc, char *argv[]) {
 	cout << "Tinf\t" << Tinf << endl;
 	cout << endl;
 	
-	double t = 0;
-	double dt = 1E-3;
-	double Tdata = 5;
-	int Ndata = round(Tdata / dt);
-	int idata = Ndata;
-	
-	double delT = 1;
-	double eps = 1E-6;
 	double T = T0;
-	double Told = T;
-	while(delT > eps) {
-		
-		if(idata == Ndata) {
-			cout << t << "\t";
-			cout << T << "\t";
-			cout << delT << endl;
-			
-			idata = 0;
-		}
-		
-		double T3 = T * T * T;
-		T = T * (1 - kt4 * T3 * dt) + kt4 * Tinf4 * dt;
-		
-		delT = fabs(T - Told);
-		Told = T;
-		
-		t += dt;
-		idata++;
-	}
+	double dT = 1;
+	double t0 = 0;
 	
+	while(T <= Tinf) {
+			
+			double cbel = 1.0 / (4 * Tinf3 * kt4);
+			double cmin = (T - Tinf) / (T0 - Tinf);
+			double cplu = (T0 + Tinf) / (T + Tinf);
+			double clon = log(cmin * cplu);
+			double atan1 = atan(T / Tinf);
+			double atan2 = atan(T0 / Tinf);
+			
+			double t = t0 - cbel * (clon - 2 * (atan1 - atan2));
+			
+			cout << t << "\t";
+			cout << T << endl;
+			
+			T += dT;
+		
 	return 0;
 }
