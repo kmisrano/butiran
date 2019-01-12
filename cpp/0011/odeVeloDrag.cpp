@@ -45,7 +45,7 @@ int main(int argc, char *argv[]) {
 	int idata = Ndata;
 	
 	// Perform iteration
-	cout << "# t\tv_the\tv_num" << endl;
+	cout << "# t\tv_num\tv_the" << endl;
 	double t = tbeg;
 	double vthe = v0 * exp(-(b/m)*t);
 	double vnum = v0;
