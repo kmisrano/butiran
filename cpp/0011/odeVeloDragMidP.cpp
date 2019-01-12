@@ -9,7 +9,7 @@
 	Compile: g++ odeVeloDragMidP.cpp -o odeVeloDragMidP
 	Execute: ./odeVeloDragMidP
 	
-	20190112
+	20190113
 	Start this program at home in Bandung.
 */
 
