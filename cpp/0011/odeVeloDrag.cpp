@@ -10,6 +10,8 @@
 	
 	20190112
 	Start this program at home in Bandung.
+	20190113
+	Correct output mismatch with time t.
 */
 
 #include <iostream>
@@ -58,11 +60,11 @@ int main(int argc, char *argv[]) {
 			idata = 0;
 		}
 		
-		vthe = v0 * exp(-(b/m)*t);
-		vnum *= (1 - (b/m) * dt);
-	
 		t += dt;
 		idata++;
+		
+		vthe = v0 * exp(-(b/m)*t);
+		vnum *= (1 - (b/m) * dt);
 	}
 	
 	// Terminate program
