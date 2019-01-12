@@ -10,7 +10,8 @@
 	Execute: ./odeVeloDragMidP
 	
 	20190113
-	Start this program at home in Bandung.
+	Start this program at home in Bandung, with correct time
+	stamp.
 */
 
 #include <iostream>
@@ -64,6 +65,9 @@ int main(int argc, char *argv[]) {
 			idata = 0;
 		}
 		
+		t += dt;
+		idata++;
+		
 		// Calculate theoretical function
 		vthe = v0 * exp(-(b/m)*t);
 		
@@ -71,9 +75,6 @@ int main(int argc, char *argv[]) {
 		double tt = t + 0.5 * dt;
 		double vv = vnum + 0.5 * dt * f(t, vnum); 
 		vnum = vnum + dt * f(tt, vv);
-		
-		t += dt;
-		idata++;
 	}
 	
 	// Terminate program
