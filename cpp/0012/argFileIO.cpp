@@ -15,6 +15,8 @@
 #include <iostream>
 #include <cstdlib>
 #include <fstream>
+#include <cstring>
+#include <sstream>
 
 using namespace std;
 
@@ -32,23 +34,46 @@ int main(int argc, char *argv[]) {
 	// Define constants
 	double g = 10;
 	
-	// Get initial condition
-	double x0 = atof(argv[1]);
-	double y0 = atof(argv[2]);
-	double v0x = atof(argv[3]);
-	double v0y = atof(argv[4]);
+	// Declare variables for initial condition
+	double x0, y0, v0x, v0y;
 	
-	// Get iteration parameters
-	double tbeg = atof(argv[5]);
-	double tend = atof(argv[6]);
-	double dt = atof(argv[7]);
-	double t = tbeg;
+	// Declare variable for iteration parameters
+	double tbeg, tend, dt, t;
 	
 	// Get filenames
 	const char *ifname = argv[1];
 	const char *ofname = argv[2];
 	
-	// Open filestream
+	// Open filestream for input
+	ifstream fin;
+	fin.open(ifname);
+	
+	// Read input file
+	string line;
+	int i = 0;
+	while(fin.good()) {
+		getline(fin, line);
+		double x = atof(line.c_str());
+		switch(i) {
+		case 0: x0 = x; break;
+		case 1: y0 = x; break;
+		case 2: v0x = x; break;
+		case 3: v0y = x; break;
+		case 4: tbeg = x; break;
+		case 5: tend = x; break;
+		case 6: dt = x; break;
+		default: break;
+		}
+		i++;
+	}
+	
+	// Close input filestream
+	fin.close();
+	
+	// Initiate t
+	t = tbeg;
+	
+	// Open filestream for output
 	ofstream fout;
 	fout.open(ofname);
 	
@@ -72,6 +97,8 @@ int main(int argc, char *argv[]) {
 		// Increase time t by dt
 		t += dt;
 	}
+	
+	// Close output filestream
 	fout.close();
 	
 	// Terminate program
