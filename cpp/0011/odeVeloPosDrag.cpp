@@ -39,7 +39,7 @@ int main(int argc, char *argv[]) {
 	
 	// Set physical parameters
 	double v0 = 1;
-	double x0 = 0;
+	double x0 = 2;
 	double b = 1;
 	double m = 1;
 	
