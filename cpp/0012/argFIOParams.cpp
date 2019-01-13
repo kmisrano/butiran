@@ -20,7 +20,9 @@
 
 using namespace std;
 
-int main(int argc, char *argv[]) {
+double getParams(const char*, const char*);
+
+int main(int argc, const char *argv[]) {
 	// Show usage
 	const char *pname = "argOutStreamF";
 	if(argc < 2) {
@@ -44,21 +46,23 @@ int main(int argc, char *argv[]) {
 	const char *ifname = argv[1];
 	const char *ofname = argv[2];
 	
-	// Open filestream for input
-	ifstream fin;
-	fin.open(ifname);
+	// Read parameters from input file
+	x0 = getParams(ifname, "XXX0");
+	y0 = getParams(ifname, "YYY0");
+	v0x = getParams(ifname, "VV0X");
+	v0y = getParams(ifname, "VV0Y");
+	tbeg = getParams(ifname, "TBEG");
+	tend = getParams(ifname, "TEND");
+	dt = getParams(ifname, "TSTP");
 	
-	// Read input file
-	string line;
-	while(fin.good()) {
-		getline(fin, line);
-		cout << line << endl;
-	}
-	
-	// Close input filestream
-	fin.close();
-	
-	return 1;
+	// Confirm file reading
+	cout << x0 << endl;
+	cout << y0 << endl;
+	cout << v0x << endl;
+	cout << v0y << endl;
+	cout << tbeg << endl;
+	cout << tend << endl;
+	cout << dt << endl;
 	
 	// Initiate t
 	t = tbeg;
@@ -93,4 +97,23 @@ int main(int argc, char *argv[]) {
 	
 	// Terminate program
 	return 0;
+}
+
+double getParams(const char *fname, const char *key) {
+	ifstream fin;
+	fin.open(fname);
+	string line;
+	double x = 0;
+	while(fin.good()) {
+		getline(fin, line);
+		size_t beg = line.find(key);
+		size_t len = line.length();
+		if(beg != string::npos) {
+			beg = line.find("\t");
+			string vals = line.substr(beg+1, len-beg);
+			x = atof(vals.c_str());
+		}
+	}
+	fin.close();
+	return x;
 }
