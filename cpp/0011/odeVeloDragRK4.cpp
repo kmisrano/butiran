@@ -11,6 +11,7 @@
 	20190113
 	Start this program at home in Bandung, with correct time
 	stamp.
+		0806 ok.
 */
 
 #include <iostream>
