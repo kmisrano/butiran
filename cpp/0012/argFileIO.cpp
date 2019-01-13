@@ -21,16 +21,10 @@ using namespace std;
 int main(int argc, char *argv[]) {
 	// Show usage
 	const char *pname = "argOutStreamF";
-	if(argc < 9) {
+	if(argc < 2) {
 		cout << "Usage: " << pname;
-		cout << " [x0 y0 v0x v0y tbeg tend dt ofile]" << endl;
-		cout << "x0\tinitial x" << endl;
-		cout << "y0\tinitial y" << endl;
-		cout << "v0x\tinitial vx" << endl;
-		cout << "v0y\tinitial vy" << endl;
-		cout << "tbeg\tinitial t" << endl;
-		cout << "tend\tfinal t" << endl;
-		cout << "dt\tstep of t" << endl;
+		cout << " [ifile ofile]" << endl;
+		cout << "ifile\tinput filename" << endl;
 		cout << "ofile\toutput filename" << endl;
 		return 1;
 	}
@@ -50,8 +44,9 @@ int main(int argc, char *argv[]) {
 	double dt = atof(argv[7]);
 	double t = tbeg;
 	
-	// Get filename
-	const char *ofname = argv[8];
+	// Get filenames
+	const char *ifname = argv[1];
+	const char *ofname = argv[2];
 	
 	// Open filestream
 	ofstream fout;
