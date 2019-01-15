@@ -9,6 +9,7 @@
 	
 	20190115
 	0809 Start creating at home.
+	2041 Can find bug
 */
 
 #include <iostream>
@@ -42,6 +43,7 @@ int main(int argc, char *argv[]) {
 	// Set initial condition
 	double x0 = atof(argv[4]); // xo
 	double v0 = atof(argv[5]); // 1
+	double t0 = 0;
 	
 	// Calculate omega0 and T0
 	double omega0 = sqrt(k / m);
@@ -56,9 +58,9 @@ int main(int argc, char *argv[]) {
 	double B = sqrt(AA - A * A);
 	
 	// Calculate phi0
-	double AL = omega0 * (x0 - xo);
+	double AL = omega0 * (x0 - xo) * A;
 	double AR = v0 * B;
-	double phi0 = atan( (AL - AR)/(AL + AR) );
+	double phi0 = atan( (AL - AR)/(AL + AR) ) - omega0 * t0;
 	
 	cout << "m = " << m << endl;
 	cout << "k = " << k << endl;
@@ -68,6 +70,10 @@ int main(int argc, char *argv[]) {
 	cout << "A = " << A << endl;
 	cout << "B = " << B << endl;
 	cout << "phi0 = " << phi0 << endl;
+	
+	cout << "v0 = " << v0 << endl;
+	cout << "v0 = " << omega0 * A * cos(omega0 * t0 + phi0)
+		- omega0 * B * sin(omega0 * t0 + phi0) << endl;
 	
 	// Terminate program
 	return 0;
