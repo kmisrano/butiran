@@ -4,7 +4,7 @@
 	
 	Sparisoma Viridi | https://github.com/dudung/butiran
 	
-	Compile: g++ ssmsThe.cpp -o ssmsThe.
+	Compile: g++ ssmsThe.cpp -o ssmsThe
 	Execute: ./ssmsThe
 	
 	20190115
