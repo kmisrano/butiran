@@ -9,6 +9,10 @@
 	
 	20190119
 	1858 Start creating at home.
+	20190120
+	Can not find bug.
+	20190121
+	Fix something.
 */
 
 #include <iostream>
@@ -35,6 +39,8 @@ int main(int argc, char *argv[]) {
 	double v_w1 = v0 / omega1;
 	double v_w2 = v0 / omega2;
 	double x2L5 = 2*x0 + 5*L;
+	double c1 = (omega2*omega2) * (x0 + 2*L);
+	double c2 = (omega2*omega2) * (x0 + 2*L);
 	
 	// Define parameters for case A
 	double phi1A = atan((-L) / v_w1);
@@ -68,7 +74,7 @@ int main(int argc, char *argv[]) {
 	cout << endl;
 	
 	// Verbose time series of A1A, A2A, A1B, A2B
-	cout << "# t\tx1A\tx2A\tx1B\tx2B" << endl;
+	cout << "# t\tx1A\tx2A\tx1B\tx2B\tX1A\tX2A\tX1B\tX2B" << endl;
 	while(t <= tend) {
 		// Calculate case A
 		double x1A = 0.5 * A2A * sin(omega2 * t + phi2A)
@@ -78,6 +84,9 @@ int main(int argc, char *argv[]) {
 			- 0.5 * A1A * sin(omega1 * t + phi1A)
 			- (x0 + 4*L);
 		
+		double X1A = (x1A - x2A) + (c1 - c2) / (omega1 * omega1);
+		double X2A = (x1A + x2A) + (c1 + c2) / (omega2 * omega2);
+		
 		// Calculate case B
 		double x1B = 0.5 * A2B * sin(omega2 * t + phi2B)
 			+ 0.5 * A1B * sin(omega1 * t + phi1B)
@@ -85,12 +94,19 @@ int main(int argc, char *argv[]) {
 		double x2B = 0.5 * A2B * sin(omega2 * t + phi2B)
 			- 0.5 * A1B * sin(omega1 * t + phi1B)
 			- (x0 + 4*L);
+			
+		double X1B = (x1B - x2B) + (c1 - c2) / (omega1 * omega1);
+		double X2B = (x1B + x2B) + (c1 + c2) / (omega2 * omega2);
 		
 		cout << t << "\t"; 
 		cout << x1A << "\t"; 
 		cout << x2A << "\t"; 
 		cout << x1B << "\t"; 
-		cout << x2B << endl; 
+		cout << x2B << "\t"; 
+		cout << X1A << "\t"; 
+		cout << X2A << "\t"; 
+		cout << X1B << "\t"; 
+		cout << X2B << endl; 
 		
 		t += dt;
 	}
