@@ -32,26 +32,21 @@ int main(int argc, char *argv[]) {
 	double v0 = 0.2 * L * omega2;
 	
 	// Define general parameters
-	double v_w = v0 / omega1;
-	double v_w2 = v_w * v_w;
-	double L2 = L * L;
-	double x1L2 = 1*x0 + 2*L;
+	double v_w1 = v0 / omega1;
+	double v_w2 = v0 / omega2;
 	double x2L5 = 2*x0 + 5*L;
-	double x1L3 = 1*x0 + 3*L;
 	
 	// Define parameters for case A
-	double phi1A = atan(-L / v_w);
-	double phi2A = M_PI / 2;
-	double A1A = -4 * sqrt(1 + v_w2/L2) * x1L2;
-	double sqrtLvw = sqrt(L2 + v_w2);
-	double A2A = (v0/omega2) * (A1A/sqrtLvw - 2);
+	double phi1A = atan((-L) / v_w1);
+	double phi2A = M_PI / 2;	
+	double A1A = 2 * sqrt((-L)*(-L) + v_w1*v_w1);
+	double A2A = 2 * x2L5;
 	
 	// Define parameters for case B
 	double phi1B = M_PI / 2;
-	double phi2B = atan(x2L5 / v_w);
-	double sqrtxLvw = sqrt(x2L5 * x2L5 + v_w2);
-	double A2B = (4 * x1L3 * x2L5) / sqrtxLvw;
-	double A1B = (omega2*A2B * v_w/omega1) / sqrtxLvw - 2*v_w;
+	double phi2B = atan(x2L5 / v_w2);
+	double A1B = 2*(-L);
+	double A2B = 2 * sqrt(x2L5*x2L5 + v_w2*v_w2);
 	
 	// Define iteration parameters
 	double tbeg = 0;
