@@ -41,13 +41,13 @@ int main(int argc, char *argv[]) {
 	
 	// Define parameters for case A
 	double phi1A = atan(-L / v_w);
-	double phi2A = M_PI;
+	double phi2A = M_PI / 2;
 	double A1A = -4 * sqrt(1 + v_w2/L2) * x1L2;
 	double sqrtLvw = sqrt(L2 + v_w2);
 	double A2A = (v0/omega2) * (A1A/sqrtLvw - 2);
 	
 	// Define parameters for case B
-	double phi1B = M_PI;
+	double phi1B = M_PI / 2;
 	double phi2B = atan(x2L5 / v_w);
 	double sqrtxLvw = sqrt(x2L5 * x2L5 + v_w2);
 	double A2B = (4 * x1L3 * x2L5) / sqrtxLvw;
