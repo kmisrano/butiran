@@ -60,6 +60,20 @@ int main(int argc, char *argv[]) {
 	double dt = (tend - tbeg) / Nt;
 	double t = tbeg;
 	
+	// Verbose parameters
+	cout << "# parameters" << endl;
+	cout << "# omega1 " << omega1 << endl;
+	cout << "# omega2 " << omega2 << endl;
+	cout << "# T1 " << T1 << endl;
+	cout << "# T2 " << T2 << endl;
+	cout << "# A1A " << A1A << endl;
+	cout << "# A2A " << A2A << endl;
+	cout << "# A1B " << A1B << endl;
+	cout << "# A2B " << A2B << endl;
+	cout << endl;
+	
+	// Verbose time series of A1A, A2A, A1B, A2B
+	cout << "# t\tx1A\tx2A\tx1B\tx2B" << endl;
 	while(t <= tend) {
 		// Calculate case A
 		double x1A = 0.5 * A2A * sin(omega2 * t + phi2A)
@@ -76,19 +90,16 @@ int main(int argc, char *argv[]) {
 		double x2B = 0.5 * A2B * sin(omega2 * t + phi2B)
 			- 0.5 * A1B * sin(omega1 * t + phi1B)
 			- (x0 + 4L);
+			
+		cout << t << "\t"; 
+		cout << x1A << "\t"; 
+		cout << x2A << "\t"; 
+		cout << x1B << "\t"; 
+		cout << x2B << endl; 
 		
 		t += dt;
 	}
-	
-	cout << "omega1 " << omega1 << endl;
-	cout << "omega2 " << omega2 << endl;
-	cout << "T1 " << T1 << endl;
-	cout << "T2 " << T2 << endl;
-	cout << "A1A " << A1A << endl;
-	cout << "A2A " << A2A << endl;
-	cout << "A1B " << A1B << endl;
-	cout << "A2B " << A2B << endl;
-	
+		
 	// Terminate program
 	return 0;
 }
