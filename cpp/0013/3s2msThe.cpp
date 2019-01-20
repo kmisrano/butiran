@@ -12,7 +12,7 @@
 	20190120
 	Can not find bug.
 	20190121
-	Fix something.
+	Fix something and fin at 0430.
 */
 
 #include <iostream>
