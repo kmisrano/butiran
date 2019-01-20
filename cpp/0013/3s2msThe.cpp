@@ -45,7 +45,7 @@ int main(int argc, char *argv[]) {
 	// Define parameters for case B
 	double phi1B = M_PI / 2;
 	double phi2B = atan(x2L5 / v_w2);
-	double A1B = 2*(-L);
+	double A1B = 2 * (-L);
 	double A2B = 2 * sqrt(x2L5*x2L5 + v_w2*v_w2);
 	
 	// Define iteration parameters
@@ -73,19 +73,19 @@ int main(int argc, char *argv[]) {
 		// Calculate case A
 		double x1A = 0.5 * A2A * sin(omega2 * t + phi2A)
 			+ 0.5 * A1A * sin(omega1 * t + phi1A)
-			- (x0 + 3L);
+			- (x0 + 3*L);
 		double x2A = 0.5 * A2A * sin(omega2 * t + phi2A)
 			- 0.5 * A1A * sin(omega1 * t + phi1A)
-			- (x0 + 4L);
+			- (x0 + 4*L);
 		
 		// Calculate case B
 		double x1B = 0.5 * A2B * sin(omega2 * t + phi2B)
 			+ 0.5 * A1B * sin(omega1 * t + phi1B)
-			- (x0 + 3L);
+			- (x0 + 3*L);
 		double x2B = 0.5 * A2B * sin(omega2 * t + phi2B)
 			- 0.5 * A1B * sin(omega1 * t + phi1B)
-			- (x0 + 4L);
-			
+			- (x0 + 4*L);
+		
 		cout << t << "\t"; 
 		cout << x1A << "\t"; 
 		cout << x2A << "\t"; 
