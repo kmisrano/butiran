@@ -50,7 +50,7 @@ int main(int argc, char *argv[]) {
 	
 	// Define iteration parameters
 	double tbeg = 0;
-	double tend = 2 * max(T1, T2);
+	double tend = 4 * max(T1, T2);
 	double Nt = 100;
 	double dt = (tend - tbeg) / Nt;
 	double t = tbeg;
