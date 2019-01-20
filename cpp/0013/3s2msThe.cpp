@@ -29,7 +29,7 @@ int main(int argc, char *argv[]) {
 	double T1 = 2 * M_PI / omega1;
 	double T2 = 2 * M_PI / omega2;
 	double x0 = 0;
-	double v0 = 0.2 * L * omega2;
+	double v0 = 0.01 * L * omega2;
 	
 	// Define general parameters
 	double v_w1 = v0 / omega1;
