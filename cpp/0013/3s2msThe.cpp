@@ -32,26 +32,26 @@ int main(int argc, char *argv[]) {
 	double v0 = 0.2 * L * omega2;
 	
 	// Define general parameters
-	double v_w = v0 / w1;
+	double v_w = v0 / omega1;
 	double v_w2 = v_w * v_w;
+	double L2 = L * L;
+	double x1L2 = 1*x0 + 2*L;
+	double x2L5 = 2*x0 + 5*L;
+	double x1L3 = 1*x0 + 3*L;
 	
 	// Define parameters for case A
-	double phi1A = atan(-L / (v0/omega1));
+	double phi1A = atan(-L / v_w);
 	double phi2A = M_PI;
-	double v0w1L = (v0/omega1) / L;
-	double v0w1L2 = v0w1L * v0w1L;
-	double A1A = -4 * sqrt(1 + v0w1L2) * (x0 + 2*L);
-	double sqrtLv0w1 = sqrt(L*L - (v0*v0)*(omega1*omega1));
-	double A2A = (v0/omega2) * (A1A/sqrtLv0w1 - 2);
+	double A1A = -4 * sqrt(1 + v_w2/L2) * x1L2;
+	double sqrtLvw = sqrt(L2 + v_w2);
+	double A2A = (v0/omega2) * (A1A/sqrtLvw - 2);
 	
 	// Define parameters for case B
 	double phi1B = M_PI;
-	double phi2B = atan((2*x0 + 5*L) / (v0/omega1));
-	double aa1 = x0 + 3*L;
-	double aa2 = 2*x0 + 5*L;
-	double aa3 =  v0*omega1;
-	double A1B = 0;
-	double A2B = 4 * aa1 * aa2 / sqrt(aa2*aa2 + aa3*aa3);
+	double phi2B = atan(x2L5 / v_w);
+	double sqrtxLvw = sqrt(x2L5 * x2L5 + v_w2);
+	double A2B = (4 * x1L3 * x2L5) / sqrtxLvw;
+	double A1B = (omega2*A2B * v_w/omega1) / sqrtxLvw - 2*v_w;
 	
 	// Define iteration parameters
 	double tbeg = 0;
@@ -84,6 +84,10 @@ int main(int argc, char *argv[]) {
 	cout << "omega2 " << omega2 << endl;
 	cout << "T1 " << T1 << endl;
 	cout << "T2 " << T2 << endl;
+	cout << "A1A " << A1A << endl;
+	cout << "A2A " << A2A << endl;
+	cout << "A1B " << A1B << endl;
+	cout << "A2B " << A2B << endl;
 	
 	// Terminate program
 	return 0;
