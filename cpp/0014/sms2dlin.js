@@ -10,6 +10,8 @@
 	20190122
 	0350 Start creating at home.
 	2010 Modify from sms2dperp.js.
+	20190123
+	0545 Finish this program.
 */
 
 // Define global variables
