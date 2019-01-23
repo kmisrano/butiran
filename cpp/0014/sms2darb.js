@@ -19,9 +19,10 @@
 var h1, btn, ta, can;
 var proc, Tproc;
 var tbeg, tend, dt, t;
-var m, k1, k2, L1, L2, x0, y0, v0x, v0y;
+var m, x0, y0, v0x, v0y;
 var xo, yo, x, y, vx, vy;
-var x1, y1, x2, y2;
+var Ns, ks = [], Ls = [];
+var xs = [], ys = [];
 var xmin, ymin, xmax, ymax;
 
 // Execute main function
@@ -42,31 +43,37 @@ function initParams() {
 	Tproc = 100;
 	tbeg = 0;
 	tend = 1;
-	dt = 0.01;
+	dt = 0.002;
 	t = tbeg;
 	
-	// Set physical system parameters
+	// Set physical system parameters of mass m
 	m = 0.1;
-	k1 = 100;
-	k2 = 100;
-	L1 = 0.4;
-	L2 = 0.4;
 	xo = 0;
 	yo = 0;
-	x1 = xo - L1;
-	y1 = yo;
-	x2 = xo + L2;
-	y2 = yo;
-	x0 = xo;
+	x0 = xo + 0.2;
 	y0 = yo;
-	v0x = 1;
-	v0y = 0;
+	v0x = 0;
+	v0y = 10;
 	
 	// Set initial conditions
 	x = x0;
 	y = y0
 	vx = v0x;
 	vy = v0y;
+	
+	// Set springs information
+	N = 6;
+	var L = 0.4;
+	var dq = 2 * Math.PI / N;
+	for(var i = 0; i < N; i++) {
+		ks[i] = 100;
+		Ls[i] = L;
+		var q = i * dq;
+		var xi = xo + Ls[i] * Math.cos(q);
+		var yi = yo + Ls[i] * Math.sin(q);
+		xs.push(xi);
+		ys.push(yi);
+	}
 	
 	// Set drawing area
 	xmin = -0.5;
@@ -91,18 +98,23 @@ function simulate() {
 	drawMassOnCanvas(x, y, can);
 	
 	// Implement Euler method
-	var w1 = Math.sqrt(k1/m);
-	var w2 = Math.sqrt(k2/m);
-	var sqrt1 = Math.sqrt((x-x1)*(x-x1) - (y-y1)*(y-y1));
-	var sqrt2 = Math.sqrt((x-x2)*(x-x2) - (y-y2)*(y-y2));
-	var del1 = (sqrt1 - L1) / sqrt1;
-	var del2 = (sqrt2 - L2) / sqrt2;
-	
-	var ax = -(w1*w1) * del1 * (x-x1) - (w2*w2) * del2 * (x-x2);
+	var ax = 0;
+	var ay = 0;
+	for(var i = 0; i < N; i++) {
+		var w = Math.sqrt(ks[i]/m);
+		var sqrt = Math.sqrt(
+			(x-xs[i])*(x-xs[i]) + (y-ys[i])*(y-ys[i])
+		);
+		console.log(sqrt);
+		var del = (sqrt - Ls[i]) / sqrt;
+		
+		ax += -(w*w) * del * (x - xs[i]);
+		ay += -(w*w) * del * (y - ys[i]);
+	}
+
 	vx = vx + ax*dt;
 	x = x + vx*dt;
 	
-	var ay = -(w1*w1) * del1 * (y-y1) - (w2*w2) * del2 * (y-y2);
 	vy = vy + ay*dt;
 	y = y + vy*dt;
 	
@@ -132,31 +144,42 @@ function drawMassOnCanvas(x, y, can) {
 	var XMAX = can.width;
 	var YMAX = 0;
 	
-	// Draw spring k1
-	cx.beginPath();
-	cx.strokeStyle = "#f00";
-	cx.moveTo(tx(x), ty(y));
-	cx.lineTo(tx(xo - L1), ty(yo));
-	cx.stroke();
-	cx.beginPath();
-	cx.strokeStyle = "#f00";
-	cx.arc(tx(xo - L1), ty(yo), 2, 0, 2*Math.PI);
-	cx.stroke();
-	cx.fillStyle = "#f00";
-	cx.fill();
-	
-	// Draw spring k2
-	cx.beginPath();
-	cx.strokeStyle = "#00f";
-	cx.moveTo(tx(x), ty(y));
-	cx.lineTo(tx(xo + L2), ty(yo));
-	cx.stroke();
-	cx.beginPath();
-	cx.strokeStyle = "#00f";
-	cx.arc(tx(xo + L2), ty(yo), 2, 0, 2*Math.PI);
-	cx.stroke();
-	cx.fillStyle = "#00f";
-	cx.fill();
+	// Draw spring ki
+	for(var i = 0; i < N; i++) {
+		
+		// Calculate current length
+		var dist = Math.sqrt(
+			(x-xs[i])*(x-xs[i]) + (y-ys[i])*(y-ys[i])
+		);
+		
+		// Set length dependent line thickness
+		var lw = 6;
+		var sc = (dist / Ls[i] / 0.5);
+		lw /= sc;
+		
+		// Set length dependent color
+		var cG = 0;
+		var cR = ((1.0 - dist / Ls[i]) * 255) * 1.0/0.25;
+		var cB = ((dist / Ls[i] - 1.0) * 255) * 1.0/0.25;
+		var color = "rgb(" + cR + ", " + cG + ", " + cB + ")";
+		
+		// Draw line
+		cx.beginPath();
+		cx.strokeStyle = color;
+		cx.moveTo(tx(x), ty(y));
+		cx.lineTo(tx(xs[i]), ty(ys[i]));
+		cx.lineWidth = lw;
+		cx.stroke();
+		
+		// Draw fixed point
+		cx.beginPath();
+		cx.lineWidth = 1;
+		cx.strokeStyle = "#000";
+		cx.arc(tx(xs[i]), ty(ys[i]), 2, 0, 2*Math.PI);
+		cx.stroke();
+		cx.fillStyle = "#555";
+		cx.fill();
+	}
 	
 	// Draw mass
 	var R = 10;
@@ -190,7 +213,7 @@ function drawMassOnCanvas(x, y, can) {
 function createAndArrangeElements() {
 	// Create text with style h1
 	h1 = document.createElement("h1");
-	h1.innerHTML = "Two serial springs and a mass";
+	h1.innerHTML = "Multi springs and a mass";
 	
 	// Create start button
 	btn = document.createElement("button");
