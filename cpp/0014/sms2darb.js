@@ -1,17 +1,18 @@
 /*
-	sms2dlin.js
-	Spring-mass system in 2d in the case two linier springs
+	sms2darb.js
+	Spring-mass system in 2d in the case arbitrary N springs
 	
 	Sparisoma Viridi | https://github.com/dudung/butiran
 	
 	Use in HTML file:
-	<script src="sms2dlin.js"></script>
+	<script src="sms2darb.js"></script>
 	
 	20190122
 	0350 Start creating at home.
 	2010 Modify from sms2dperp.js.
 	20190123
 	0545 Finish this program.
+	0825 Derive it from sms2dlin.js
 */
 
 // Define global variables
