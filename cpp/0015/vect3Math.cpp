@@ -1,0 +1,1 @@
+/*	vect3Math.cpp	Some matrix operation using function.		Sparisoma Viridi | https://github.com/dudung/butiran		Compile: g++ vect3Math.cpp -o vect3Math	Execute: ./vect3Math		20181216	Start this program.*/#include <iostream>#include <cmath>#include <cstdlib>using namespace std;int main(int argc, char *argv[]) {				return 0;}
