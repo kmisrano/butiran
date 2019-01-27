@@ -9,16 +9,16 @@
 	
 	20190127
 	0939 Start at Neutron, while accompanying Kakak.
+	0944 Modify sms2darb.js file.
 */
 
 // Define global variables
 var h1, btn, ta, can;
 var proc, Tproc;
 var tbeg, tend, dt, t;
-var m, x0, y0, v0x, v0y;
-var xo, yo, x, y, vx, vy;
-var Ns, ks = [], Ls = [];
-var xs = [], ys = [];
+var m1, D1, x1, y1, v1, cL1, cF1;
+var m2, D2, x2, y2, v2, cL2, cF2;
+var kN, gammaN;
 var xmin, ymin, xmax, ymax;
 
 // Execute main function
@@ -38,84 +38,79 @@ function initParams() {
 	// Set iteration parameters
 	Tproc = 100;
 	tbeg = 0;
-	tend = 1;
-	dt = 0.002;
+	tend = 0.1;
+	dt = 0.001;
 	t = tbeg;
 	
-	// Set physical system parameters of mass m
-	m = 0.1;
-	xo = 0;
-	yo = 0;
-	x0 = xo + 0.2;
-	y0 = yo;
-	v0x = 0;
-	v0y = 10;
+	// Set collision parameters
+	kN = 1000; // N/m
+	gammaN = .; // N.s/m \in [2.0,2.5]
+	
+	// Set physical system parameters of mass m1 and m2
+	m1 = 0.01; // kg
+	D1 = 0.01; // m
+	m2 = 0.01; // kg
+	D2 = 0.01; // m
+	
+	// Set color of m1 and m2
+	cL1 = "#f00";
+	cF1 = "#fcc";
+	cL2 = "#00f";
+	cF2 = "#ccf";
 	
 	// Set initial conditions
-	x = x0;
-	y = y0
-	vx = v0x;
-	vy = v0y;
-	
-	// Set springs information
-	N = 6;
-	var L = 0.4;
-	var dq = 2 * Math.PI / N;
-	for(var i = 0; i < N; i++) {
-		ks[i] = 100;
-		Ls[i] = L;
-		var q = i * dq;
-		var xi = xo + Ls[i] * Math.cos(q);
-		var yi = yo + Ls[i] * Math.sin(q);
-		xs.push(xi);
-		ys.push(yi);
-	}
+	x1 = -0.01; // m
+	y1 = 0; // m
+	v1 = 0.1; // m/s
+	x2 = 0.01; // m
+	v2 = -0.1; // m/s
+	y2 = 0; // m
 	
 	// Set drawing area
-	xmin = -0.5;
-	ymin = -0.5;
-	xmax = 0.5;
-	ymax = 0.5;
+	xmin = -0.02; // m
+	ymin = -0.02; // m
+	xmax = 0.02; // m
+	ymax = 0.02; // m
 	
 	// Display header information
-	ta.value = "# t\tx\ty\tvx\tvy\n";
+	ta.value = "# t\tx1\tx2\tv1\tv2\n";
 }
 
 // Perform simulation
 function simulate() {
 	// Display results on textarea
 	ta.value += t.toFixed(3) + "\t" 
-		+ x.toFixed(3) + "\t" + y.toFixed(3) + "\t"
-		+ vx.toFixed(3) + "\t" + vy.toFixed(3) + "\n";
+		+ x1.toFixed(4) + "\t" + x2.toFixed(4) + "\t"
+		+ v1.toFixed(3) + "\t" + v2.toFixed(3) + "\n";
 	ta.scrollTop = ta.scrollHeight;
 	
 	// Display mass position of canvas
 	clearCanvas(can);
-	drawMassOnCanvas(x, y, can);
+	drawMassOnCanvas(x1, y1, 0.5 * D1, cL1, cF1, can);
+	drawMassOnCanvas(x2, y2, 0.5 * D2, cL2, cF2, can);
+	
+	// Calculate overlap
+	var l12 = Math.abs(x1 - x2);
+	var xi = Math.max(0, 0.5 * (D1 + D2) - l12);
+	var xidot = -Math.abs(v1 - v2) * Math.sign(xi);
+	
+	// Calculate normal force
+	var F1 = (kN * xi + gammaN * xidot) * (-1);
+	var F2 = -F1;
+	
+	// Use Newton 2nd law of motion
+	var a1 = F1 / m1;
+	var a2 = F2 / m2;
 	
 	// Implement Euler method
-	var ax = 0;
-	var ay = 0;
-	for(var i = 0; i < N; i++) {
-		var w = Math.sqrt(ks[i]/m);
-		var sqrt = Math.sqrt(
-			(x-xs[i])*(x-xs[i]) + (y-ys[i])*(y-ys[i])
-		);
-		console.log(sqrt);
-		var del = (sqrt - Ls[i]) / sqrt;
-		
-		ax += -(w*w) * del * (x - xs[i]);
-		ay += -(w*w) * del * (y - ys[i]);
-	}
-
-	vx = vx + ax*dt;
-	x = x + vx*dt;
+	v1 = v1 + a1*dt;
+	x1 = x1 + v1*dt;
 	
-	vy = vy + ay*dt;
-	y = y + vy*dt;
+	v2 = v2 + a2*dt;
+	x2 = x2 + v2*dt;
 	
 	// Terminate simulation if condition meets		
-	if(t >= tend - dt) {
+	if(t >= tend) {
 		clearInterval(proc);
 		btn.innerHTML = "Start";
 		btn.disabled = true;
@@ -131,7 +126,7 @@ function clearCanvas(can) {
 }
 
 // Display mass position of canvas
-function drawMassOnCanvas(x, y, can) {
+function drawMassOnCanvas(x, y, R, cLine, cFill, can) {
 	var cx = can.getContext("2d");
 	
 	// Get canvas coordinate
@@ -140,56 +135,14 @@ function drawMassOnCanvas(x, y, can) {
 	var XMAX = can.width;
 	var YMAX = 0;
 	
-	// Draw spring ki
-	for(var i = 0; i < N; i++) {
-		
-		// Calculate current length
-		var dist = Math.sqrt(
-			(x-xs[i])*(x-xs[i]) + (y-ys[i])*(y-ys[i])
-		);
-		
-		// Set length dependent line thickness
-		var lw = 6;
-		var sc = (dist / Ls[i] / 0.5);
-		lw /= sc;
-		
-		// Set length dependent color
-		var cG = 0;
-		var cR = ((1.0 - dist / Ls[i]) * 255) * 1.0/0.25;
-		var cB = ((dist / Ls[i] - 1.0) * 255) * 1.0/0.25;
-		var color = "rgb(" + cR + ", " + cG + ", " + cB + ")";
-		
-		// Draw line
-		cx.beginPath();
-		cx.strokeStyle = color;
-		cx.moveTo(tx(x), ty(y));
-		cx.lineTo(tx(xs[i]), ty(ys[i]));
-		cx.lineWidth = lw;
-		cx.stroke();
-		
-		// Draw fixed point
-		cx.beginPath();
-		cx.lineWidth = 1;
-		cx.strokeStyle = "#000";
-		cx.arc(tx(xs[i]), ty(ys[i]), 2, 0, 2*Math.PI);
-		cx.stroke();
-		cx.fillStyle = "#555";
-		cx.fill();
-	}
-	
 	// Draw mass
-	var R = 10;
+	var RR = tx(2*R) - tx(R);
 	cx.beginPath();
-	cx.strokeStyle = "#000";
-	cx.arc(tx(x), ty(y), R, 0, 2*Math.PI);
+	cx.strokeStyle = cLine;
+	cx.lineWidth = 4;
+	cx.arc(tx(x), ty(y), RR, 0, 2*Math.PI);
 	cx.stroke();
-	cx.fillStyle = "#ccc";
-	cx.fill();
-	cx.beginPath();
-	cx.strokeStyle = "#000";
-	cx.arc(tx(x), ty(y), 2, 0, 2*Math.PI);
-	cx.stroke();
-	cx.fillStyle = "#000";
+	cx.fillStyle = cFill;
 	cx.fill();
 	
 	// Transform x from real coordinate to canvas coordinate
