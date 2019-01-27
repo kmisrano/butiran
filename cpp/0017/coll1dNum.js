@@ -16,6 +16,7 @@
 var h1, btn, ta, can;
 var proc, Tproc;
 var tbeg, tend, dt, t;
+var Tdata, Ndata, idata;
 var m1, D1, x1, y1, v1, cL1, cF1;
 var m2, D2, x2, y2, v2, cL2, cF2;
 var kN, gammaN;
@@ -36,15 +37,18 @@ function main() {
 // Initialize parameters
 function initParams() {
 	// Set iteration parameters
-	Tproc = 100;
+	Tproc = 1;
 	tbeg = 0;
 	tend = 0.1;
-	dt = 0.001;
+	dt = 0.0001;
 	t = tbeg;
+	Tdata = 0.001;
+	Ndata = Math.round(Tdata / dt);
+	idata = Ndata;
 	
 	// Set collision parameters
-	kN = 1000; // N/m
-	gammaN = 2.0; // N.s/m \in [2.0,2.5]
+	kN = 10000; // N/m
+	gammaN = 12; // N.s/m \in [0,12]
 	
 	// Set physical system parameters of mass m1 and m2
 	m1 = 0.01; // kg
@@ -78,16 +82,21 @@ function initParams() {
 
 // Perform simulation
 function simulate() {
-	// Display results on textarea
-	ta.value += t.toFixed(3) + "\t" 
-		+ x1.toFixed(4) + "\t" + x2.toFixed(4) + "\t"
-		+ v1.toFixed(3) + "\t" + v2.toFixed(3) + "\n";
-	ta.scrollTop = ta.scrollHeight;
 	
-	// Display mass position of canvas
-	clearCanvas(can);
-	drawMassOnCanvas(x1, y1, 0.5 * D1, cL1, cF1, can);
-	drawMassOnCanvas(x2, y2, 0.5 * D2, cL2, cF2, can);
+	if(idata == Ndata) {
+		// Display results on textarea
+		ta.value += t.toFixed(3) + "\t" 
+			+ x1.toFixed(4) + "\t" + x2.toFixed(4) + "\t"
+			+ v1.toFixed(3) + "\t" + v2.toFixed(3) + "\n";
+		ta.scrollTop = ta.scrollHeight;
+		
+		// Display mass position of canvas
+		clearCanvas(can);
+		drawMassOnCanvas(x1, y1, 0.5 * D1, cL1, cF1, can);
+		drawMassOnCanvas(x2, y2, 0.5 * D2, cL2, cF2, can);
+		
+		idata = 0;
+	}
 	
 	// Calculate overlap
 	var l12 = Math.abs(x1 - x2);
@@ -116,6 +125,7 @@ function simulate() {
 		btn.disabled = true;
 	} else {
 		t +=dt;
+		idata++;
 	}
 }
 
