@@ -68,9 +68,9 @@ function initParams() {
 	
 	// Set drawing area
 	xmin = -0.02; // m
-	ymin = -0.02; // m
+	ymin = -0.01; // m
 	xmax = 0.02; // m
-	ymax = 0.02; // m
+	ymax = 0.01; // m
 	
 	// Display header information
 	ta.value = "# t\tx1\tx2\tv1\tv2\n";
@@ -174,13 +174,13 @@ function createAndArrangeElements() {
 	// Create output textarea
 	ta = document.createElement("textarea");
 	ta.style.width = "300px";
-	ta.style.height = "296px";
+	ta.style.height = "146px";
 	ta.style.overflowY = "scroll";
 	
 	// Create a canvas
 	can = document.createElement("canvas");
 	can.width = "300";
-	can.height = "300";
+	can.height = "150";
 	can.style.width = can.width + "px";
 	can.style.height = can.height + "px";
 	can.style.border = "1px solid #ccc";
