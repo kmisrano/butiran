@@ -48,7 +48,7 @@ function initParams() {
 	
 	// Set collision parameters
 	kN = 10000; // N/m
-	gammaN = 8; // N.s/m \in [0,12]
+	gammaN = 12; // N.s/m \in [0,12]
 	
 	// Set physical system parameters of mass m1 and m2
 	m1 = 0.01; // kg
