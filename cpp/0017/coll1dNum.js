@@ -44,7 +44,7 @@ function initParams() {
 	
 	// Set collision parameters
 	kN = 1000; // N/m
-	gammaN = .; // N.s/m \in [2.0,2.5]
+	gammaN = 2.0; // N.s/m \in [2.0,2.5]
 	
 	// Set physical system parameters of mass m1 and m2
 	m1 = 0.01; // kg
@@ -162,7 +162,7 @@ function drawMassOnCanvas(x, y, R, cLine, cFill, can) {
 function createAndArrangeElements() {
 	// Create text with style h1
 	h1 = document.createElement("h1");
-	h1.innerHTML = "Multi springs and a mass";
+	h1.innerHTML = "1-d collision of 2 spherical masses";
 	
 	// Create start button
 	btn = document.createElement("button");
