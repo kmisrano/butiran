@@ -9,6 +9,8 @@
 	
 	20190128
 	1729 Start at home.
+	20190129
+	0404 Fix comment of stdev.
 	
 	Note:
 	Results require browser console with can be opened with
@@ -123,7 +125,7 @@ function sort() {
 	}
 }
 
-// Calculate average value of array components
+// Calculate standard deviation of array components
 function stdev() {
 	var x = arguments[0];
 	var N = x.length;
