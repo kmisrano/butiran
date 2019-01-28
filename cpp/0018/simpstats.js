@@ -94,7 +94,7 @@ function mod() {
 	return z[imax];
 }
 
-// Get minimum value of an array
+// Get median of an array
 function med() {
 	var x = arguments[0];
 	var N = x.length;

@@ -8,13 +8,16 @@
 	Execute: ./simpstats
 	
 	20190128
-	1953 Derive from simpstats.js at home.	
+	1953 Derive from simpstats.js at home.
+	20190129
+	0423 Finish manual conversion of cpp from js.
 */
 
 #include <iostream>
 #include <sstream>
 #include <vector>
 #include <cstring>
+#include <cmath>
 
 using namespace std;
 
@@ -23,6 +26,10 @@ string strval(vector<double>);
 double min(vector<double>);
 double max(vector<double>);
 double avg(vector<double>);
+double stdev(vector<double>);
+void sort(vector<double>&);
+double med(vector<double>);
+double mod(vector<double>);
 
 // Define main function
 int main(int argc, char *argv[]) {
@@ -42,57 +49,49 @@ int main(int argc, char *argv[]) {
 	double xavg = avg(x);
 	cout << "xavg = " << xavg << endl;
 	
-	/*
-	// Calculate avarage
-	var xavg = avg(x);
-	tout("xavg = " + xavg + "\n");	
-	
 	// Calculate standard deviation
-	var sigma = stdev(x);
-	tout("sigma = " + sigma + "\n");
-	
+	double sigma = stdev(x);
+	cout << "sigma = " << sigma << endl;
+
 	// Sort x
 	sort(x);
-	tout("x (sorted) = " + x.toString().replace(/,/g, ', ')
-		+ "\n");
+	cout << "x (sorted) = " << strval(x) << endl;
 	
 	// Get median
-	var xmed = med(x);
-	tout("xmed = " + xmed + "\n");
+	double xmed = med(x);
+	cout << "xmed = " << xmed << endl;
 	
 	// Get mode
-	var xmod = mod(x);
-	tout("xmod = " + xmod + "\n");
-	*/
+	double xmod = mod(x);
+	cout << "xmod = " << xmod << endl;
+	
 	return 0;
 }
 
-/*
 // Get mode of an array
-function mod() {
-	var x = arguments[0];
-	var N = x.length;
+double mod(vector<double> x) {
+	int N = x.size();
 	sort(x);
-	var y = []; // for frequency
-	var z = []; // for value
-	var j;
-	for(var i = 0; i < N; i++) {
+	vector<double> y; // for frequency
+	vector<double> z; // for value
+	int j;
+	for(int i = 0; i < N; i++) {
 		if(i == 0) {
-			y.push(1);
+			y.push_back(1);
 			j = 0;
-			z.push(x[i]);
+			z.push_back(x[i]);
 		} else {
 			if(x[i] == x[i - 1]) {
 				y[j]++;
 			} else {
-				y.push(1);
+				y.push_back(1);
 				j++;
-				z.push(x[i]);
+				z.push_back(x[i]);
 			}
 		}
 	}
-	var imax = 0;
-	for(var i = 1; i < y.length; i++) {
+	int imax = 0;
+	for(int i = 1; i < y.size(); i++) {
 		if(y[i] > y[imax]) {
 			imax = i;
 		} 
@@ -100,30 +99,28 @@ function mod() {
 	return z[imax];
 }
 
-// Get minimum value of an array
-function med() {
-	var x = arguments[0];
-	var N = x.length;
+// Get median value of an array
+double med(vector<double> x) {
+	int N = x.size();
 	sort(x);
-	var xmed;
-	if((N / 2) == Math.floor(N / 2)) {
-		var i = N / 2 - 1;
+	double xmed;
+	if((N / 2) == floor(N / 2)) {
+		int i = N / 2 - 1;
 		xmed = 0.5 * (x[i] + x[i + 1]);
 	} else {
-		var i = (N - 1) / 2;
+		int i = (N - 1) / 2;
 		xmed = x[i];
 	}
 	return xmed;
 }
 
 // Sort using bubble sort
-function sort() {
-	var x = arguments[0];
-	var N = x.length;
-	for(var i = 0; i < N; i++) {
-		for(var j = i + 1; j < N; j++) {
+void sort(vector<double> &x) {
+	int N = x.size();
+	for(int i = 0; i < N; i++) {
+		for(int j = i + 1; j < N; j++) {
 			if(x[i] > x[j]) {
-				var xbuf = x[i];
+				double xbuf = x[i];
 				x[i] = x[j];
 				x[j] = xbuf;
 			}
@@ -131,46 +128,19 @@ function sort() {
 	}
 }
 
-// Calculate average value of array components
-function stdev() {
-	var x = arguments[0];
-	var N = x.length;
-	var xavg = avg(x);
-	var s2 = 0;
-	for(var i = 0; i < N; i++) {
-		var dx = (x[i] - xavg);
+// Calculate standard deviation of array components
+double stdev(vector<double> x) {
+	int N = x.size();	
+	double xavg = avg(x);
+	double s2 = 0;
+	for(int i = 0; i < N; i++) {
+		double dx = (x[i] - xavg);
 		s2 += dx*dx;
 	}
-	var xdev = Math.sqrt(s2 / (N - 1));
+	double xdev = sqrt(s2 / (N - 1));
 	return xdev;
 }
 
-// Calculate average value of array components
-function stdev() {
-	var x = arguments[0];
-	var N = x.length;
-	var xavg = avg(x);
-	var s2 = 0;
-	for(var i = 0; i < N; i++) {
-		var dx = (x[i] - xavg);
-		s2 += dx*dx;
-	}
-	var xdev = Math.sqrt(s2 / (N - 1));
-	return xdev;
-}
-
-// Calculate average value of array components
-function avg() {
-	var x = arguments[0];
-	var N = x.length;
-	var sx = 0;
-	for(var i = 0; i < N; i++) {
-		sx += x[i];
-	}
-	var xavg = sx / N;
-	return xavg;
-}
-*/
 // Calculate average value of array components
 double avg(vector<double> x) {
 	int N = x.size();	
