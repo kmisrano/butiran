@@ -140,20 +140,6 @@ function stdev() {
 }
 
 // Calculate average value of array components
-function stdev() {
-	var x = arguments[0];
-	var N = x.length;
-	var xavg = avg(x);
-	var s2 = 0;
-	for(var i = 0; i < N; i++) {
-		var dx = (x[i] - xavg);
-		s2 += dx*dx;
-	}
-	var xdev = Math.sqrt(s2 / (N - 1));
-	return xdev;
-}
-
-// Calculate average value of array components
 function avg() {
 	var x = arguments[0];
 	var N = x.length;
