@@ -12,7 +12,7 @@
 */
 
 // Define global variables
-var tin, btn, tout;
+var tin, btn, tout, tlog;
 
 // Execute main function
 main();
@@ -20,13 +20,15 @@ main();
 // Define main function
 function main() {
 	// Create layout of visual elements
-	createLayout(tin, btn, tout);
+	createLayout(tin, btn, tout, tlog);
 	
 	// Display initialize values of SLE
 	initSLE(tin);
 	
 	// Read array from textarea
 	var M = readArray(tin);
+	textOut(tlog, "# Initial matrix")
+	textOut(tlog, M);
 	
 	// Solve SLE from M
 	var solution = solveSLE(M);
@@ -72,7 +74,10 @@ function initSLE() {
 // Add text to textarea
 function textOut() {
 	ta = arguments[0];
-	ta.value += arguments[1];
+	var x = arguments[1];
+	if(x[0] == "#") {
+		ta.value += arguments[1];
+	}
 	ta.scrollTop = ta.scrollHeight;
 }
 
@@ -81,7 +86,7 @@ function createLayout() {
 	// Create 1st visual element
 	tin = arguments[0];
 	tin = document.createElement("textarea");
-	tin.style.width = "350px";
+	tin.style.width = "400px";
 	tin.style.height = "150px";
 	tin.style.overflowY = "scroll";
 	tin.style.float = "left";
@@ -95,14 +100,25 @@ function createLayout() {
 	// Create 3rd visual element
 	tout = arguments[2];
 	tout = document.createElement("textarea");
-	tout.style.width = "200px";
+	tout.style.width = "150px";
 	tout.style.height = "150px";
 	tout.style.overflowY = "scroll";
 	tout.style.float = "left";
+	
+	// Create 4th visual element
+	tlog = arguments[3];
+	tlog = document.createElement("textarea");
+	tlog.style.width = "605px";
+	tlog.style.height = "300px";
+	tlog.style.overflowY = "scroll";
+	tlog.style.float = "left";
+	tlog.style.background = "#000";
+	tlog.style.color = "#aaa";
 	
 	// Arrange elements
 	document.body.append(tin);
 	document.body.append(btn);
 	document.body.append(tout);
+	document.body.append(tlog);
 }
 
