@@ -12,7 +12,7 @@
 */
 
 // Define global variables
-var tin, btn, tout, tlog;
+var tin, btn, tout, tlog, M;
 
 // Execute main function
 main();
@@ -23,20 +23,75 @@ function main() {
 	createLayout(tin, btn, tout, tlog);
 	
 	// Display initialize values of SLE
-	initSLE(tin);
-	
+	initSLE(tin);	
+}
+
+// When Solve button clicked
+function solve() {
 	// Read array from textarea
-	var M = readArray(tin);
-	textOut(tlog, "# Initial matrix")
+	M = readArray(tin);
+	textOut(tlog, "# Initial matrix\n")
 	textOut(tlog, M);
 	
 	// Solve SLE from M
 	var solution = solveSLE(M);
 }
 
+
 // Solve SLE from an augmented matrix
 function solveSLE() {
 	var M = arguments[0];
+
+	// Zero column C other than row R of matrix M
+	for(var R = 0; R < M.length; R++) {
+		var C = R;
+		zeroColumnOtherThanRow(C, R, M);
+		round(M, 3);
+		textOut(tlog, "# Zero column " + (C + 1)
+			+ " other than row " + (R + 1) + "\n");
+		textOut(tlog, M);
+	}
+	
+	// One column C row R of matrix M
+	for(var R = M.length - 1; R >= 0; R--) {
+		var C = R;
+		oneColumnRow(C, R, M);
+		round(M, 3);
+		textOut(tlog, "# One column " + (C + 1)
+			+ " row " + (R + 1) + "\n");
+		textOut(tlog, M);
+	}
+}
+
+// Round results
+function round(M, digit) {
+	var eps = 1E-10;
+	for(var r = 0; r < M.length; r++) {
+		for(var c = 0; c < M[0].length; c++) {
+			if(Math.abs(M[r][c]) < eps) {
+				M[r][c] = 0;
+			}
+			M[r][c] = parseFloat(M[r][c].toFixed(digit));
+		}
+	}
+}
+
+// One column C row R of matrix M
+function oneColumnRow(C, R, M) {
+	var piv = M[R][C];
+	for(var c = 0; c < M[R].length; c++) {
+		M[R][c] /= piv;
+	}
+}
+
+// Zero column C other than row R of matrix M
+function zeroColumnOtherThanRow(C, R, M) {
+	for(var r = R + 1; r < M.length; r++) {
+		var piv = M[r][C];
+		for(var c = 0; c < M[R].length; c++) {
+			M[r][c] -= (piv / M[R][C]) * M[R][c];
+		}
+	}
 }
 
 // Read array from textarea
@@ -75,10 +130,22 @@ function initSLE() {
 function textOut() {
 	ta = arguments[0];
 	var x = arguments[1];
-	if(x[0] == "#") {
+	if(x[0].length == 1) {
 		ta.value += arguments[1];
+	} else {
+		var M = x;
+		for(var r = 0; r < M.length; r++) {
+			for(var c = 0; c < M[r].length; c++) {
+				ta.value += M[r][c];
+				if(c < M[r].length - 1) {
+					ta.value += "\t";
+				} else {
+					ta.value += "\n";
+				}
+			}
+		}
 	}
-	ta.scrollTop = ta.scrollHeight;
+	ta.scrollTop = ta.scrollHeight;	
 }
 
 // Create layout of visual elements
@@ -96,6 +163,7 @@ function createLayout() {
 	btn = document.createElement("button");
 	btn.innerHTML = "Solve";
 	btn.style.float = "left";
+	btn.addEventListener("click", solve);
 	
 	// Create 3rd visual element
 	tout = arguments[2];
