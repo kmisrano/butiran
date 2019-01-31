@@ -50,6 +50,7 @@ function solveSLE() {
 		textOut(tlog, "# Zero column " + (C + 1)
 			+ " other than row " + (R + 1) + "\n");
 		textOut(tlog, M);
+		textOut(tlog, "\n");
 	}
 	
 	// One column C row R of matrix M
@@ -60,7 +61,20 @@ function solveSLE() {
 		textOut(tlog, "# One column " + (C + 1)
 			+ " row " + (R + 1) + "\n");
 		textOut(tlog, M);
+		textOut(tlog, "\n");
 	}
+	
+	/*
+	// Zero row R other than diagonal of matrix M
+	for(var R = M.length - 1; R >= 0; R--) {
+		zeroRowOtherThanDiagonal(R, M);
+		round(M, 3);
+		textOut(tlog, "# Zero row " + (R + 1)
+			+ " other than diagonal\n");
+		textOut(tlog, M);
+		textOut(tlog, "\n");
+	}
+	*/
 }
 
 // Round results
@@ -72,6 +86,16 @@ function round(M, digit) {
 				M[r][c] = 0;
 			}
 			M[r][c] = parseFloat(M[r][c].toFixed(digit));
+		}
+	}
+}
+
+// Zero other than diagonal of matrix M
+function zeroRowOtherThanDiagonal(R, M) {
+	if(R < M.length - 1) {
+		var coef = M[R][R + 1] / M[R + 1][R + 1];
+		for(var c = M[R].length - 1; c >= 0; c--) {
+			M[R][c] -= coef * M[R + 1][c];
 		}
 	}
 }
