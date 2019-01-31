@@ -9,10 +9,13 @@
 	
 	20190130
 	1931 Start at home.
+	20190201
+	0613 Fin @home.
 */
 
 // Define global variables
 var tin, btn, tout, tlog, M;
+var zero = 100, epsZero = 1E-10, digit = 4;
 
 // Execute main function
 main();
@@ -28,6 +31,10 @@ function main() {
 
 // When Solve button clicked
 function solve() {
+	// Clear tlog and tout
+	tlog.value = "";
+	tout.value = "";
+	
 	// Read array from textarea
 	M = readArray(tin);
 	textOut(tlog, "# Initial matrix\n")
@@ -35,8 +42,20 @@ function solve() {
 	
 	// Solve SLE from M
 	var solution = solveSLE(M);
+	textOut(tout, solution, zero);
 }
 
+// Get zero
+function getZero(M) {
+	for(var r = 0; r < M.length; r++) {
+		for(var c = 0; c < M[r].length; c++) {
+			var cell = Math.abs(M[r][c]);
+			if(0 < cell && cell < epsZero) {
+				zero = M[r][c];
+			}
+		}
+	}
+}
 
 // Solve SLE from an augmented matrix
 function solveSLE() {
@@ -45,8 +64,7 @@ function solveSLE() {
 	// Zero column C other than row R of matrix M
 	for(var R = 0; R < M.length; R++) {
 		var C = R;
-		zeroColumnOtherThanRow(C, R, M);
-		round(M, 3);
+		zeroColumnBelowRow(C, R, M);
 		textOut(tlog, "# Zero column " + (C + 1)
 			+ " other than row " + (R + 1) + "\n");
 		textOut(tlog, M);
@@ -57,45 +75,39 @@ function solveSLE() {
 	for(var R = M.length - 1; R >= 0; R--) {
 		var C = R;
 		oneColumnRow(C, R, M);
-		round(M, 3);
 		textOut(tlog, "# One column " + (C + 1)
 			+ " row " + (R + 1) + "\n");
 		textOut(tlog, M);
 		textOut(tlog, "\n");
 	}
 	
-	/*
 	// Zero row R other than diagonal of matrix M
 	for(var R = M.length - 1; R >= 0; R--) {
-		zeroRowOtherThanDiagonal(R, M);
-		round(M, 3);
+		var C = R;
+		zeroColumnAboveRow(C, R, M);
 		textOut(tlog, "# Zero row " + (R + 1)
 			+ " other than diagonal\n");
 		textOut(tlog, M);
 		textOut(tlog, "\n");
 	}
-	*/
-}
-
-// Round results
-function round(M, digit) {
-	var eps = 1E-10;
+	
+	// Return results
+	getZero(M);
+	zero = parseFloat(zero.toExponential(digit));
+	var Mout = [];
 	for(var r = 0; r < M.length; r++) {
-		for(var c = 0; c < M[0].length; c++) {
-			if(Math.abs(M[r][c]) < eps) {
-				M[r][c] = 0;
-			}
-			M[r][c] = parseFloat(M[r][c].toFixed(digit));
-		}
+		var lastColumn = [M[r][M[r].length - 1], zero];
+		Mout.push(lastColumn);
 	}
+	return Mout;
 }
 
 // Zero other than diagonal of matrix M
-function zeroRowOtherThanDiagonal(R, M) {
-	if(R < M.length - 1) {
-		var coef = M[R][R + 1] / M[R + 1][R + 1];
+function zeroColumnAboveRow(C, R, M) {
+	for(var r = R - 1; r >= 0; r--) {
+		var piv = M[r][C];
 		for(var c = M[R].length - 1; c >= 0; c--) {
-			M[R][c] -= coef * M[R + 1][c];
+			M[r][c] -= (piv / M[R][C]) * M[R][c];
 		}
 	}
 }
@@ -109,7 +121,7 @@ function oneColumnRow(C, R, M) {
 }
 
 // Zero column C other than row R of matrix M
-function zeroColumnOtherThanRow(C, R, M) {
+function zeroColumnBelowRow(C, R, M) {
 	for(var r = R + 1; r < M.length; r++) {
 		var piv = M[r][C];
 		for(var c = 0; c < M[R].length; c++) {
@@ -139,7 +151,6 @@ function readArray() {
 	return mat;
 }
 
-
 // Display initialize values of SLE
 function initSLE() {
 	var ta = arguments[0];
@@ -160,7 +171,11 @@ function textOut() {
 		var M = x;
 		for(var r = 0; r < M.length; r++) {
 			for(var c = 0; c < M[r].length; c++) {
-				ta.value += M[r][c];
+				if(arguments.length < 3) {
+					ta.value += parseFloat(M[r][c].toFixed(digit));
+				} else {
+					ta.value += M[r][c];
+				}
 				if(c < M[r].length - 1) {
 					ta.value += "\t";
 				} else {
