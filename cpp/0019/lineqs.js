@@ -228,4 +228,3 @@ function createLayout() {
 	document.body.append(tout);
 	document.body.append(tlog);
 }
-
