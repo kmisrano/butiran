@@ -9,7 +9,13 @@
 	
 	20190203
 	1654 Beg zuhause, derived from rbccoll.js file.
-*/	
+*/
+
+// Define global variables
+var L, R;
+var w1, w2, w3, w4, w5, w6, w7, w8; 
+var Nb, Nw;
+var inp;
 
 // Execute main function
 main();
@@ -17,14 +23,36 @@ main();
 
 // Define main function
 function main() {
+	setElementsLayout();
 	
+	initParams();
+}
+
+// Initialize all parameters
+function initParams() {
+	// Set box size, width = 2R, height = L
+	R = 0.05; // m
+	L = 0.50; // m
+	
+	// Set 8 points for box corners
+	w1 = new Vect3(R, -R, 0);
+}
+
+
+
+// Set layout of all elements
+function setElementsLayout() {
+	inp = document.createElement("input");
+	inp.type = "range";
+	inp.style.transform = "rotate(270deg)";
+	document.body.append(inp);
 }
 
 
 
 
-/*
 
+/*
 // Below lines are from rbccoll.js -- 20190108
 
 // Declare program variables
