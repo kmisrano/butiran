@@ -13,8 +13,14 @@
 
 // Define global variables
 var L, R;
-var w1, w2, w3, w4, w5, w6, w7, w8; 
-var Nb, Nw;
+var w1, w2, w3, w4, w5, w6, w7, w8;
+var WL, WR, WT, WB;
+var wL, wR, wT, wB;
+var wall, Nw, kw;
+var rho, eta;
+var g;
+var Db, rhob, ball, Nb, kb; 
+
 var inp;
 
 // Execute main function
@@ -30,15 +36,66 @@ function main() {
 
 // Initialize all parameters
 function initParams() {
-	// Set box size, width = 2R, height = L
+	// Define box size, width = 2R, height = L
 	R = 0.05; // m
 	L = 0.50; // m
 	
-	// Set 8 points for box corners
+	// Define 8 points for box corners
 	w1 = new Vect3(R, -R, 0);
+	w2 = new Vect3(R, R, 0);
+	w3 = new Vect3(-R, -R, 0);
+	w4 = new Vect3(-R, R, 0);
+	w5 = new Vect3(R, -R, L);
+	w6 = new Vect3(R, R, L);
+	w7 = new Vect3(-R, -R, L);
+	w8 = new Vect3(-R, R, L);
+	
+	// Define 4 walls using previous points
+	WL = [w1, w3, w7, w5];
+	WR = [w2, w6, w8, w4];
+	WT = [w5, w7, w8, w6];
+	WB = [w1, w2, w4, w3];
+	wall = [WL, WR, WT, WB];
+	Nw = wall.length;
+	kw = 1E4; // N.m^-1
+	
+	// Calculate center of each wall
+	wL = vect3Average(WL);
+	wR = vect3Average(WR);
+	wT = vect3Average(WT);
+	wB = vect3Average(WB);
+	
+	// Use water properties
+	rho = 1000; // kg.m^-3
+	eta = 8.90E-4; // Pa.s
+	
+	// Use earth gravity
+	g = 9.80665;// m.s^-2
+	
+	// Define grains properties
+	Db = [0.01, 0.02, 0.03, 0.04]; // m
+	rhob = [2000, 2000, 2000, 2000]; // kg.m^-3
+	ball = [
+		new Vect3(0, 0.02, Db[0]), // m
+		new Vect3(0, 0.04, Db[1]), // m
+		new Vect3(0, 0.06, Db[2]), // m
+		new Vect3(0, 0.08, Db[3]) // m
+	];
+	Nb = ball.length;
+	kb = 1E4; // N.m^-1
 }
 
-
+// Average some Vect3s
+function vect3Average() {
+	var r = arguments[0];
+	var N = r.length;
+	var c = new Vect3;
+	for(var i = 0; i < N; i++) {
+		c = Vect3.add(c, r[i]);
+	}
+	c = Vect3.div(c, N);
+	return c;
+}
 
 // Set layout of all elements
 function setElementsLayout() {
