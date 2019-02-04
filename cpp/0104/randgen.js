@@ -8,6 +8,7 @@
 	Execute: Refresh web browser viewing the HTML file
 	
 	20190204 Zuhause 1928 beg, 2017 end.
+	20190205 Mod 0531.
 	
 	References
 	20190204 https://stackoverflow.com/a/33898676/9475509
@@ -21,19 +22,20 @@ function main() {
 	// Create textarea as output
 	var ta = document.createElement("textarea");
 	ta.style.overflowY = "scroll";
-	ta.style.width = "200px";
-	ta.style.height = "200px";
+	ta.style.width = "210px";
+	ta.style.height = "290px";
 	document.body.append(ta);
 	
 	// Define arrays for number and its statistic frequency
-	var min = 3;
-	var max = 7;
+	var min = 53;
+	var max = 62;
+	var M = max - min + 1;
 	var num = range(min, max);
 	var sum = [...num];
 	sum.fill(0);
 	
 	// Generate random number N times
-	var N = 100;
+	var N = 1000000;
 	for(var i = 0; i < N; i++) {
 		var x = randInt(min, max);
 		var idx = num.indexOf(x);
@@ -42,11 +44,14 @@ function main() {
 	
 	// Display results in textarea
 	var digit = Math.floor(Math.log10(N));
-	var str = "N = " + N + "\n";
+	var str = "# Parameters\n";
+	str += "N = " + N + "\n";
 	str += "min = " + min + "\n";
 	str += "max = " + max + "\n";
+	str += "M = " + M + "\n";
 	str += "\n";
-	str += "Distribution\n";
+	str += "# Distribution\n";
+	str += "# x\tNx\tf(x)\n";
 	for(var i = 0; i < num.length; i++) {
 		var x = (sum[i] / N).toFixed(digit);
 		str += num[i] + "\t" + sum[i] + "\t" + x + "\n";
