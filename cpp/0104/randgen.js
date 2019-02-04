@@ -7,7 +7,7 @@
 	Include: <script src="randgen.js"></script> in a HTML file
 	Execute: Refresh web browser viewing the HTML file
 	
-	20190204 Zuhause 1928 beg, 2016 end.
+	20190204 Zuhause 1928 beg, 2017 end.
 	
 	References
 	20190204 https://stackoverflow.com/a/33898676/9475509
