@@ -12,6 +12,7 @@
 	Create this program waehrend zuhause krank.
 	2045 Continue from subMat.cpp file and see mat.cpp for
 	all references.
+	2050 !ok, save it for morgen oder uebermorgen.
 */
 
 #include <iostream>
@@ -22,11 +23,11 @@
 using namespace std;
 
 void disp(vector<vector<int>>);
-vector<vector<int>> subMat(
+vector<vector<int>> mulMat(
 	vector<vector<int>>,
 	vector<vector<int>>
 );
-vector<vector<int>> operator-(
+vector<vector<int>> operator*(
 	vector<vector<int>>,
 	vector<vector<int>>
 );
@@ -35,9 +36,9 @@ int main(int argc, char *argv[]) {
 	
 	// Declare a matrix and show it
 	vector<vector<int>> A = {
-		{1, 0, 0, 0, 1},
-		{0, 1, 0, 1, 0},
-		{0, 0, 1, 1, 1},
+		{1, 2, 3},
+		{1, 1, 1},
+		{0, 0, 1},
 	};
 	cout << "A = " << endl;
 	disp(A);
@@ -47,9 +48,9 @@ int main(int argc, char *argv[]) {
 	
 	// Declare another matrix and show it
 	vector<vector<int>> B = {
-		{0, 0, 0, 1, 0},
-		{1, 0, 0, 1, 1},
-		{0, 1, 1, 0, 1},
+		{1, 1},
+		{1, 0},
+		{1, -1},
 	};
 	cout << "B = " << endl;
 	disp(B);
@@ -57,24 +58,16 @@ int main(int argc, char *argv[]) {
 	// Add a blank line
 	cout << endl;
 	
-	// Sub two previous matrix and show the result
-	vector<vector<int>> C = subMat(A, B);
-	cout << "C = A - B = " << endl;
+	// Multiply two previous matrix and show the result
+	vector<vector<int>> C = mulMat(A, B);
+	cout << "C = A * B = " << endl;
 	disp(C);
-	
-	// Add a blank line
-	cout << endl;
-	
-	// Sub last two previous matrix and show the result
-	vector<vector<int>> D = B - C;
-	cout << "D = B - C = " << endl;
-	disp(D);
 	
 	return 0;
 }
 
 // Sub two matrices using operator
-vector<vector<int>> operator-(
+vector<vector<int>> operator*(
 	vector<vector<int>> M,
 	vector<vector<int>> N
 ) {
@@ -88,7 +81,7 @@ vector<vector<int>> operator-(
 }
 
 // Sub two matrices using function
-vector<vector<int>> subMat(
+vector<vector<int>> mulMat(
 	vector<vector<int>> M,
 	vector<vector<int>> N
 ) {
