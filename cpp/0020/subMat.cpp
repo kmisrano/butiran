@@ -58,7 +58,7 @@ int main(int argc, char *argv[]) {
 	cout << endl;
 	
 	// Sub two previous matrix and show the result
-	vector<vector<int>> C = addMat(A, B);
+	vector<vector<int>> C = subMat(A, B);
 	cout << "C = A - B = " << endl;
 	disp(C);
 	
