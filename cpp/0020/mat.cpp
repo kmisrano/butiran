@@ -9,6 +9,8 @@
 	
 	20190211
 	Create this program waehrend zuhause krank.
+	1944 Considered it finished but still not understand how
+	to get implicit iterator in for(auto xx: <vector>).
 	
 	References
 	1 Iterate through a C++ Vector
@@ -26,25 +28,37 @@
 
 using namespace std;
 
-void disp0(vector<vector<int>>);
-void disp1(vector<vector<int>>);
+void dispMat0(vector<vector<int>>);
+void dispMat1(vector<vector<int>>);
 
 int main(int argc, char *argv[]) {
 	
-	vector<vector<int>> N = {
+	// Declare a matrix and show it
+	vector<vector<int>> A = {
 		{1, 2},
-		{3, 4, 8, 9},
+		{3, 4},
 		{5, 6},
 	};
+	cout << "A = " << endl;
+	dispMat0(A);
 	
-	disp0(N);
-	disp1(N);
+	// Add a blank line
+	
+	// Declare another matrix and show it
+	vector<vector<int>> B = {
+		{1, 2, -1},
+		{3, 4, -2},
+		{5, 6, -3},
+		{0, 0, -4},
+	};
+	cout << "B = " << endl;
+	dispMat1(B);
 	
 	return 0;
 }
 
 // Display matrix of C++ Vector without iterator
-void disp0(vector<vector<int>> M) {
+void dispMat0(vector<vector<int>> M) {
 	for(int i = 0; i < M.size(); i++) {
 		for(int j = 0; j < M[i].size(); j++) {
 			cout << M[i][j];
@@ -57,11 +71,13 @@ void disp0(vector<vector<int>> M) {
 }
 
 // Display matrix of C++ Vector using iterator
-void disp1(vector<vector<int>> M) {
+void dispMat1(vector<vector<int>> M) {
 	for(vector<int> rows: M) {
+		auto it = rows.begin();
 		for(int val: rows) {
 			cout << val;
-			if(val < rows.end) {
+			it++;
+			if(it < rows.end()) {
 				cout << " ";
 			}
 		}
