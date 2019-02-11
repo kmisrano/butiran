@@ -1,16 +1,16 @@
 /*
-	subMat.cpp
-	Sub matrices in C++ using vector with function and also
-	operator
+	MulMat.cpp
+	Multiply matrices in C++ using vector with function and
+	also operator
 	
 	Sparisoma Viridi | dudung@gmail.com
 	
-	Compile: g++ subMat.cpp -o subMat
-	Execute: ./subMat
+	Compile: g++ mulMat.cpp -o mulMat
+	Execute: ./mulMat
 	
 	20190211
 	Create this program waehrend zuhause krank.
-	2031 Continue from addMat.cpp file and see mat.cpp for
+	2045 Continue from subMat.cpp file and see mat.cpp for
 	all references.
 */
 
