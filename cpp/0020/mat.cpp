@@ -19,6 +19,8 @@
 	url https://stackoverflow.com/q/17663186/9475509
 	3 Iterate through a two dimensional C++ Vector
 	url https://stackoverflow.com/a/23303597/9475509
+	4 Various way of iterating through C++ Vector
+	url https://stackoverflow.com/a/409396/9475509
 */
 
 #include <iostream>
@@ -43,6 +45,7 @@ int main(int argc, char *argv[]) {
 	dispMat0(A);
 	
 	// Add a blank line
+	cout << endl;
 	
 	// Declare another matrix and show it
 	vector<vector<int>> B = {
