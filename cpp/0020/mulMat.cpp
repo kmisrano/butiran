@@ -86,11 +86,13 @@ vector<vector<int>> mulMat(
 	vector<vector<int>> N
 ) {
 	vector<vector<int>> O = M;
+
 	for(int i = 0; i < M.size(); i++) {
 		for(int j = 0; j < M[i].size(); j++) {
 			O[i][j] = M[i][j] - N[i][j];
 		}	
 	}
+	
 	return O;
 }
 
