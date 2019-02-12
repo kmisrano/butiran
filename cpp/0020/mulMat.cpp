@@ -36,9 +36,9 @@ int main(int argc, char *argv[]) {
 	
 	// Declare a matrix and show it
 	vector<vector<int>> A = {
-		{1, 2, 3},
-		{1, 1, 1},
-		{0, 0, 1},
+		{1, 2, 3, 4},
+		{1, 1, 1, 1},
+		{0, 0, 1, 1},
 	};
 	cout << "A = " << endl;
 	disp(A);
@@ -51,6 +51,7 @@ int main(int argc, char *argv[]) {
 		{1, 1},
 		{1, 0},
 		{1, -1},
+		{-1, 1},
 	};
 	cout << "B = " << endl;
 	disp(B);
@@ -86,13 +87,13 @@ vector<vector<int>> mulMat(
 	vector<vector<int>> N
 ) {
 	vector<vector<int>> O = M;
-
-	for(int i = 0; i < M.size(); i++) {
-		for(int j = 0; j < M[i].size(); j++) {
-			O[i][j] = M[i][j] - N[i][j];
-		}	
+	for(int i = 0; i < O.size(); i++) {
+		O[i].clear();
+		for(int j = 0; j < N[i].size(); j++) {
+			O[i].push_back(0);
+		}
 	}
-	
+		
 	return O;
 }
 
