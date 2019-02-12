@@ -9,8 +9,9 @@
 	Execute: ./divMat
 	
 	20190212
-	2045 Continue from divMat.cpp file and see mat.cpp for
+	1945 Continue from divMat.cpp file and see mat.cpp for
 	all references.
+	2005 Fin.
 */
 
 #include <iostream>
@@ -29,9 +30,9 @@ int main(int argc, char *argv[]) {
 	
 	// Declare a matrix and show it
 	vector<vector<int>> A = {
-		{1, 2, 3, 4},
-		{1, 1, 1, 1},
-		{0, 0, 1, 1},
+		{10, 20, 30, 40},
+		{12, 14, 16, 18},
+		{60, 30, 88, 38},
 	};
 	cout << "A = " << endl;
 	disp(A);
@@ -47,7 +48,7 @@ int main(int argc, char *argv[]) {
 	// Div a matrix with a scalar
 	vector<vector<int>> B = A / a;
 	cout << "B = A / a = " << endl;
-	disp(C);
+	disp(B);
 	
 	// Add a blank line
 	cout << endl;
