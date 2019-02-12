@@ -1,5 +1,5 @@
 /*
-	MulMat.cpp
+	mulMat.cpp
 	Multiply matrices in C++ using vector with function and
 	also operator
 	
@@ -16,6 +16,7 @@
 	20190212
 	1932 ok only for two matrices multiplication not yet with
 	scalar.
+	1956 ok all muls.
 */
 
 #include <iostream>
@@ -34,6 +35,9 @@ vector<vector<int>> operator*(
 	vector<vector<int>>,
 	vector<vector<int>>
 );
+vector<vector<int>> operator*(vector<vector<int>>, int);
+vector<vector<int>> operator*(int, vector<vector<int>>);
+
 
 int main(int argc, char *argv[]) {
 	
@@ -75,7 +79,40 @@ int main(int argc, char *argv[]) {
 	cout << "D = A * B = " << endl;
 	disp(C);
 	
+	// Add a blank line
+	cout << endl;
+	
+	// Multiply a matrix with scalar and vice versa
+	int a = 2;
+	cout << "a = " << a << endl;
+	cout << endl;
+	
+	vector<vector<int>> Aa = A * a;
+	cout << "Aa = A * a = " << endl;
+	disp(Aa);
+	cout << endl;
+
+	vector<vector<int>> aA = a * A;
+	cout << "aA = a * A = " << endl;
+	disp(aA);
+	
 	return 0;
+}
+
+// Mul matrix with scalar
+vector<vector<int>> operator*(vector<vector<int>> M, int m) {
+	vector<vector<int>> O = M;
+	for(int i = 0; i < M.size(); i++) {
+		for(int j = 0; j < M[i].size(); j++) {
+			O[i][j] = M[i][j] * m;
+		}
+	}
+	return O;
+}
+
+// Mul scalar with matrix
+vector<vector<int>> operator*(int m, vector<vector<int>> M) {
+	return M * m;
 }
 
 // Mul two matrices using operator
