@@ -13,6 +13,9 @@
 	2045 Continue from subMat.cpp file and see mat.cpp for
 	all references.
 	2050 !ok, save it for morgen oder uebermorgen.
+	20190212
+	1932 ok only for two matrices multiplication not yet with
+	scalar.
 */
 
 #include <iostream>
@@ -61,39 +64,73 @@ int main(int argc, char *argv[]) {
 	
 	// Multiply two previous matrix and show the result
 	vector<vector<int>> C = mulMat(A, B);
-	cout << "C = A * B = " << endl;
+	cout << "C = mulMat(A, B) = " << endl;
+	disp(C);
+	
+	// Add a blank line
+	cout << endl;
+	
+	// Multiply two previous matrix and show the result
+	vector<vector<int>> D = A * B;
+	cout << "D = A * B = " << endl;
 	disp(C);
 	
 	return 0;
 }
 
-// Sub two matrices using operator
+// Mul two matrices using operator
 vector<vector<int>> operator*(
 	vector<vector<int>> M,
 	vector<vector<int>> N
 ) {
+	
+	// Creating zero matrix for output
 	vector<vector<int>> O = M;
 	for(int i = 0; i < M.size(); i++) {
-		for(int j = 0; j < M[i].size(); j++) {
-			O[i][j] = M[i][j] - N[i][j];
-		}	
-	}
-	return O;
-}
-
-// Sub two matrices using function
-vector<vector<int>> mulMat(
-	vector<vector<int>> M,
-	vector<vector<int>> N
-) {
-	vector<vector<int>> O = M;
-	for(int i = 0; i < O.size(); i++) {
 		O[i].clear();
 		for(int j = 0; j < N[i].size(); j++) {
 			O[i].push_back(0);
 		}
 	}
-		
+	
+	// Perform multiplication
+	for(int i = 0; i < M.size(); i++) {
+		for(int j = 0; j < N[i].size(); j++) {
+			O[i][j] = 0;
+			for(int k = 0; k < M[i].size(); k++) {
+				O[i][j] += M[i][k] * N[k][j];
+			}
+		}		
+	}
+	
+	return O;
+}
+
+// Mul two matrices using function
+vector<vector<int>> mulMat(
+	vector<vector<int>> M,
+	vector<vector<int>> N
+) {
+	
+	// Creating zero matrix for output
+	vector<vector<int>> O = M;
+	for(int i = 0; i < M.size(); i++) {
+		O[i].clear();
+		for(int j = 0; j < N[i].size(); j++) {
+			O[i].push_back(0);
+		}
+	}
+	
+	// Perform multiplication
+	for(int i = 0; i < M.size(); i++) {
+		for(int j = 0; j < N[i].size(); j++) {
+			O[i][j] = 0;
+			for(int k = 0; k < M[i].size(); k++) {
+				O[i][j] += M[i][k] * N[k][j];
+			}
+		}		
+	}
+	
 	return O;
 }
 
