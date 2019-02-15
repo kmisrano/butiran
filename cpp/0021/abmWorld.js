@@ -9,6 +9,8 @@
 	
 	20190215
 	1852 Start at home mit ein bisschen noch krank beim Fuss.
+	20190216
+	0511 Add color scheme to drawMatrixOnCanvas function.
 	
 	References
 	1. Thinnest lineWidth is 1
@@ -35,7 +37,7 @@ function main() {
 	can = createCanvas(MW, NW, boxSize);
 	document.body.append(can);
 	
-	drawMatrixOnCanvas(W, can);
+	drawMatrixOnCanvas(W, can, 0);
 }
 
 // Draw a matrix on a canvas
@@ -44,14 +46,21 @@ function drawMatrixOnCanvas() {
 	var can = arguments[1];
 	var cx = can.getContext("2d");
 	var s = can.height / M.length;
-	console.log(s);
+	
+	var colorScheme = arguments[2];
+	
+	
 	for(var i = 0; i < M.length; i++) {
 		for(var j = 0; j < M[i].length; j++) {
 			var x = j * s;
 			var y = i * s;
-			var cR = (1 - M[i][j]) * 255;
-			var cG = (1 - M[i][j]) * 255;
-			var cB = (1 - M[i][j]) * 255;
+			
+			var cR, cG, cB;
+			if(colorScheme == 0) {
+				cR = (1 - M[i][j]) * 255;
+				cG = (1 - M[i][j]) * 255;
+				cB = (1 - M[i][j]) * 255;
+			}
 			cx.fillStyle = "rgb(" + cR + "," + cG + "," + cB + ")";
 			cx.fillRect(x, y, s, s);
 			cx.stroke();
