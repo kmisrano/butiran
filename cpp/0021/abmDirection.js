@@ -13,6 +13,9 @@
 	References
 	1. Hexadesimal in JS
 	url https://www.w3schools.com/js/js_numbers.asp
+	2. Linear gradient fill
+	url https://www.w3schools.com/tags
+	/canvas_createlineargradient.asp
 */
 
 // Define global variables
@@ -56,13 +59,17 @@ function drawMatrixOnCanvas() {
 				cx.fillStyle =
 					"rgb(" + cR + "," + cG + "," + cB + ")";
 			} else if(colorScheme == 1) {
-				cR = M[i][j] * 64;
+				cR = M[i][j];
 				cG = M[i][j];
 				cB = M[i][j];
-				cx.fillStyle =
-					"rgb(" + cR + "," + cG + "," + cB + ")";
+				
+				var grd = cx.createLinearGradient(x, y, 1, 1);
+				grd.addColorStop(0, "#000");
+				grd.addColorStop(1, "#fff");
+				cx.fillStyle = grd;
 			}
 			
+			cx.beginPath();
 			cx.fillRect(x, y, s, s);
 			cx.stroke();
 			
