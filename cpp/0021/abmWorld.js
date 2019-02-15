@@ -13,6 +13,10 @@
 	References
 	1. Thinnest lineWidth is 1
 	url https://stackoverflow.com/q/35304794/9475509
+	2. Dashed line style
+	url https://stackoverflow.com/a/15968095/9475509
+	3. Line color gradient
+	url https://www.w3schools.com/tags/canvas_strokestyle.asp
 */
 
 // Define global variables
@@ -52,8 +56,8 @@ function drawMatrixOnCanvas() {
 			cx.fillRect(x, y, s, s);
 			cx.stroke();
 			
-			cx.strokeStyle = "#ccc";
 			cx.lineWidth = 1;
+			cx.strokeStyle = "#eee";
 			cx.rect(x, y, s, s);
 			cx.stroke();
 		}
