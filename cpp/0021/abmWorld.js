@@ -74,7 +74,7 @@ function drawMatrixOnCanvas() {
 }
 
 
-// Create world canvas according to worl matrix size
+// Create world canvas according to world matrix size
 function createCanvas() {
 	var width = arguments[0] * arguments[2];
 	var height = arguments[1] * arguments[2];

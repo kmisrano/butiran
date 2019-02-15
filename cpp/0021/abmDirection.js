@@ -40,14 +40,21 @@ function drawMatrixOnCanvas() {
 	var can = arguments[1];
 	var cx = can.getContext("2d");
 	var s = can.height / M.length;
-	console.log(s);
+	
+	var colorScheme = arguments[2];
+	
 	for(var i = 0; i < M.length; i++) {
 		for(var j = 0; j < M[i].length; j++) {
 			var x = j * s;
 			var y = i * s;
-			var cR = (1 - M[i][j]) * 255;
-			var cG = (1 - M[i][j]) * 255;
-			var cB = (1 - M[i][j]) * 255;
+			
+			var cR, cG, cB;
+			if(colorScheme == 0) {
+				cR = (1 - M[i][j]) * 255;
+				cG = (1 - M[i][j]) * 255;
+				cB = (1 - M[i][j]) * 255;
+			}
+			
 			cx.fillStyle = "rgb(" + cR + "," + cG + "," + cB + ")";
 			cx.fillRect(x, y, s, s);
 			cx.stroke();
@@ -60,8 +67,7 @@ function drawMatrixOnCanvas() {
 	}
 }
 
-
-// Create world canvas according to worl matrix size
+// Create world canvas according to world matrix size
 function createCanvas() {
 	var width = arguments[0] * arguments[2];
 	var height = arguments[1] * arguments[2];
