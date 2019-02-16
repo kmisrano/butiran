@@ -76,11 +76,13 @@ function drawMatrixOnCanvas() {
 				cx.beginPath();
 				cx.moveTo(xx, yy);
 				cx.lineTo(xx + dx , yy - dy);
+				cx.lineWidth = 2;
 				cx.strokeStyle = "#00f";
 				cx.stroke();
 				
 				cx.beginPath();
 				cx.arc(xx, yy, 1, 0, 2 * Math.PI);
+				cx.lineWidth = 2;
 				cx.strokeStyle = "#f00";
 				cx.stroke();
 			}
