@@ -1,25 +1,18 @@
 /*
-	abmDirection.js
-	Matrix of 2-d direction of ABM
+	abmWorldDirs.js
+	Matrices of 2-d world and directions of ABM
 	
 	Sparisoma Viridi | https://github.com/dudung/butiran
 	
 	Use in HTML file:
-	<script src="abmWorld.js"></script>
+	<script src="abmWorldDirs.js"></script>
 	
 	20190216
-	0503 Start at home derived from abmWorld.js file.
-	
-	References
-	1. Hexadesimal in JS
-	url https://www.w3schools.com/js/js_numbers.asp
-	2. Linear gradient fill
-	url https://www.w3schools.com/tags
-	/canvas_createlineargradient.asp
+	0934 Start at home derived from abmDirection.js file.	
 */
 
 // Define global variables
-var D, can;
+var W, D, can;
 
 // Execute main function
 main();
@@ -121,6 +114,23 @@ function createDirectionMatrix() {
 		[0, 1, 0, 0, 5, 0, 1, 0, 0, 5, 0],
 		[0, 8, 7, 7, 6, 0, 8, 7, 7, 6, 0],
 		[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+	];
+	return M;
+}
+
+// Create world matrix
+function createWorldMatrix() {
+	var M = [
+		[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+		[1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1],
+		[1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1],
+		[1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1],
+		[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+		[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+		[1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1],
+		[1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1],	
+		[1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1],	
+		[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
 	];
 	return M;
 }
