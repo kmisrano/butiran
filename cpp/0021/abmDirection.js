@@ -58,21 +58,21 @@ function drawMatrixOnCanvas() {
 				cB = (1 - M[i][j]) * 255;
 				cx.fillStyle =
 					"rgb(" + cR + "," + cG + "," + cB + ")";
+				cx.beginPath();
+				cx.fillRect(x, y, s, s);
+				cx.stroke();
 			} else if(colorScheme == 1) {
-				cR = M[i][j];
-				cG = M[i][j];
-				cB = M[i][j];
+				var k = M[i][j];
 				
-				var grd = cx.createLinearGradient(x, y, 1, 1);
-				grd.addColorStop(0, "#000");
-				grd.addColorStop(1, "#fff");
-				cx.fillStyle = grd;
+				var sx = [+0, +0, +1, +1, +1, +0, -1, -1, -1];
+				var sy = [+1, +1, +0, +0, -1, -1, -1, +0, +1];
+				
+				var xx = x + 0.5 * s;
+				var yy = y + 0.5 * s;
+				var dx = sx[k] * 0.5 * s;
+				var dy = sy[k] * 0.5 * s;
 			}
-			
-			cx.beginPath();
-			cx.fillRect(x, y, s, s);
-			cx.stroke();
-			
+						
 			cx.lineWidth = 1;
 			cx.strokeStyle = "#eee";
 			cx.rect(x, y, s, s);

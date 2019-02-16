@@ -59,13 +59,13 @@ function drawMatrixOnCanvas() {
 				cR = (1 - M[i][j]) * 255;
 				cG = (1 - M[i][j]) * 255;
 				cB = (1 - M[i][j]) * 255;
+				cx.fillStyle =
+					"rgb(" + cR + "," + cG + "," + cB + ")";
+				cx.beginPath();
+				cx.fillRect(x, y, s, s);
+				cx.stroke();
 			}
-			
-			cx.beginPath();
-			cx.fillStyle = "rgb(" + cR + "," + cG + "," + cB + ")";
-			cx.fillRect(x, y, s, s);
-			cx.stroke();
-			
+						
 			cx.lineWidth = 1;
 			cx.strokeStyle = "#eee";
 			cx.rect(x, y, s, s);
