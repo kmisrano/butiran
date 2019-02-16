@@ -65,7 +65,8 @@ function drawMatrixOnCanvas() {
 				cx.fillRect(x, y, s, s);
 				cx.stroke();
 			}
-						
+			
+			cx.beginPath();
 			cx.lineWidth = 1;
 			cx.strokeStyle = "#eee";
 			cx.rect(x, y, s, s);

@@ -64,15 +64,23 @@ function drawMatrixOnCanvas() {
 			} else if(colorScheme == 1) {
 				var k = M[i][j];
 				
+				//        OR  NO  NE  EA  SE  SO  SW  WE  NW
 				var sx = [+0, +0, +1, +1, +1, +0, -1, -1, -1];
-				var sy = [+1, +1, +0, +0, -1, -1, -1, +0, +1];
+				var sy = [+0, +1, +1, +0, -1, -1, -1, +0, +1];
 				
 				var xx = x + 0.5 * s;
 				var yy = y + 0.5 * s;
 				var dx = sx[k] * 0.5 * s;
 				var dy = sy[k] * 0.5 * s;
+				
+				cx.beginPath();
+				cx.moveTo(xx, yy);
+				cx.lineTo(xx + 10, yy + 10);
+				cx.strokeStyle = "#000";
+				cx.stroke();
 			}
-						
+			
+			cx.beginPath();
 			cx.lineWidth = 1;
 			cx.strokeStyle = "#eee";
 			cx.rect(x, y, s, s);
