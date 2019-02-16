@@ -12,7 +12,7 @@
 */
 
 // Define global variables
-var W, D1, can;
+var W, D1, D2, D3, can;
 
 // Execute main function
 main();
@@ -22,6 +22,7 @@ function main() {
 	W = createWorldMatrix();
 	D1 = createDirectionMatrix1();
 	D2 = createDirectionMatrix2();
+	D3 = createDirectionMatrix3();
 	var NW = W.length;
 	var MW = W[0]. length;
 	
@@ -32,6 +33,7 @@ function main() {
 	drawMatrixOnCanvas(W, can, 0);
 	drawMatrixOnCanvas(D1, can, 1);
 	drawMatrixOnCanvas(D2, can, 1);
+	drawMatrixOnCanvas(D3, can, 1);
 }
 
 // Draw a matrix on a canvas
@@ -129,11 +131,28 @@ function createDirectionMatrix2() {
 		[0, 4, 0, 0, 6, 0, 4, 0, 0, 6, 0],
 		[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 		[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-		[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-		[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+		[0, 0, 2, 4, 0, 0, 0, 2, 4, 0, 0],
+		[0, 0, 8, 6, 0, 0, 0, 8, 6, 0, 0],
 		[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 		[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 		[0, 2, 0, 0, 8, 0, 2, 0, 0, 8, 0],
+		[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+	];
+	return M;
+}
+
+// Create direction matrix 3
+function createDirectionMatrix3() {
+	var M = [
+		[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+		[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+		[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+		[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+		[0, 0, 1, 3, 0, 0, 0, 1, 3, 0, 0],
+		[0, 0, 7, 5, 0, 0, 0, 7, 5, 0, 0],
+		[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+		[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+		[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 		[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 	];
 	return M;
