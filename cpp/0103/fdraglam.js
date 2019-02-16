@@ -11,6 +11,8 @@
 	1654 Beg zuhause, derived from rbccoll.js file.
 	20190203
 	0335 Cont zuhause, do the layout.
+	20190216
+	2005 Start again zuhause.
 */
 
 // Define global variables for walls
@@ -30,10 +32,10 @@ var g;
 var Db, rhob, ball, Nb, kb; 
 
 // Define global variables for visual elements
-var taIn, taOut;
+var taIn, caOut, taOut0, taOut1;
 var btClear, btLoad, btRead, btStart, btInfo;
-var caOut;
-var inIn;
+
+//var inIn;
 
 // Execute main function
 main();
@@ -51,15 +53,14 @@ function main() {
 // Set layout of all elements
 function setElementsLayout() {
 	// Create input textarea
-	var taIn = document.createElement("textarea");
+	taIn = document.createElement("textarea");
 	taIn.style.width = "150px";
 	taIn.style.height = "390px";
 	taIn.style.overflowY = "scroll"
 	taIn.style.float = "left";
-	taIn.id = arguments[0];
 	
 	// Create output canvas
-	var caOut = document.createElement("canvas");
+	caOut = document.createElement("canvas");
 	caOut.width = "400";
 	caOut.height = "200";
 	caOut.style.width = caOut.width + "px";
@@ -70,56 +71,53 @@ function setElementsLayout() {
 	var cx = caOut.getContext("2d");
 	cx.fillStyle = "#fff";
 	cx.fillRect(0, 0, caOut.width, caOut.height);
-	caOut.id = arguments[1];
 	
 	// Create ouput textarea 0
-	var taOut0 = document.createElement("textarea");
+	taOut0 = document.createElement("textarea");
 	taOut0.style.width = "161px";
 	taOut0.style.height = -2
 		+ parseInt(taIn.style.height)
 		- parseInt(caOut.style.height) + "px"
 	taOut0.style.overflowY = "scroll";
 	taOut0.style.float = "left";
-	taOut0.id = arguments[2];
 	
 	// Create ouput textarea 0
-	var taOut1 = document.createElement("textarea");
+	taOut1 = document.createElement("textarea");
 	taOut1.style.width = "161px";
 	taOut1.style.height = -2
 		+ parseInt(taIn.style.height)
 		- parseInt(caOut.style.height) + "px"
 	taOut1.style.overflowY = "scroll";
 	taOut1.style.float = "left";
-	taOut1.id = arguments[3];
 	
 	// Create buttons
-	var btClear = document.createElement("button");
-		btClear.innerHTML = "Clear";
-		btClear.style.width = "70px";
-		btClear.addEventListener("click", buttonClick);
-		btClear.id = arguments[4];
-	var btLoad = document.createElement("button");
-		btLoad.innerHTML = "Load";
-		btLoad.style.width = "70px";
-		btLoad.addEventListener("click", buttonClick);
-		btLoad.id = arguments[5];
-	var btRead = document.createElement("button");
-		btRead.innerHTML = "Read";
-		btRead.style.width = "70px";
-		btRead.disabled = true;
-		btRead.addEventListener("click", buttonClick);
-		btRead.id = arguments[6];
-	var btStart = document.createElement("button");
-		btStart.innerHTML = "Start";
-		btStart.style.width = "70px";
-		btStart.disabled = true;
-		btStart.addEventListener("click", buttonClick);
-		btStart.id = arguments[7];
-	var btInfo = document.createElement("button");
-		btInfo.innerHTML = "Info";
-		btInfo.style.width = "70px";
-		btInfo.addEventListener("click", buttonClick);
-		btInfo.id = arguments[8];
+	btClear = document.createElement("button");
+	btClear.innerHTML = "Clear";
+	btClear.style.width = "70px";
+	btClear.addEventListener("click", buttonClick);
+
+	btLoad = document.createElement("button");
+	btLoad.innerHTML = "Load";
+	btLoad.style.width = "70px";
+	btLoad.addEventListener("click", buttonClick);
+	
+	btRead = document.createElement("button");
+	btRead.innerHTML = "Read";
+	btRead.style.width = "70px";
+	btRead.disabled = true;
+	btRead.addEventListener("click", buttonClick);
+
+	btStart = document.createElement("button");
+	btStart.innerHTML = "Start";
+	btStart.style.width = "70px";
+	btStart.disabled = true;
+	btStart.addEventListener("click", buttonClick);
+
+	btInfo = document.createElement("button");
+	btInfo.innerHTML = "Info";
+	btInfo.style.width = "70px";
+	btInfo.addEventListener("click", buttonClick);
+	btInfo.id = arguments[8];
 	
 	// Create main division
 	var div0 = document.createElement("div");
@@ -143,38 +141,41 @@ function setElementsLayout() {
 		div0.append(btStart);
 		div0.append(btInfo);
 	
+	/*
 	inIn = document.createElement("input");
 	inIn.type = "range";
 	inIn.style.transform = "rotate(270deg)";
 	document.body.append(inIn);
+	*/
 }
 
 // Do something when buttons clicked
 function buttonClick() {
 	var target = event.target;
-	var id = target.id;
-	if(id == "load") {
+	var cap = target.innerHTML;
+	console.log(cap);
+	if(cap == "Load") {
 		loadParameters(taIn);
-		document.getElementById(btRead).disabled = false;
-	} else if(id == "clear") {
+		btRead.disabled = false;
+	} else if(cap == "Clear") {
 		clearAll();
-		document.getElementById(btRead).disabled = true;
-		document.getElementById(btStart).disabled = true;
-	} else if(id == "read") {
+		btRead.disabled = true;
+		btStart.disabled = true;
+	} else if(cap == "Read") {
 		readParameters();
 		createRBCs();
 		drawGrains();
-		document.getElementById(btStart).disabled = false;
-	} else if(id == "start") {
+		btStart.disabled = false;
+	} else if(cap == "Start") {
 		if(target.innerHTML == "Start") {
 			target.innerHTML = "Stop";
-			document.getElementById(btRead).disabled = true;
-			document.getElementById(taIn).disabled = true;
+			btRead.disabled = true;
+			taIn.disabled = true;
 			proc = setInterval(simulate, Tproc);
 		} else {
 			target.innerHTML = "Start";
-			document.getElementById(btRead).disabled = false;
-			document.getElementById(taIn).disabled = false;
+			btRead.disabled = false;
+			taIn.disabled = false;
 			clearInterval(proc);
 		}
 	}
@@ -182,12 +183,11 @@ function buttonClick() {
 
 // Clear all
 function clearAll() {
-	document.getElementById(taIn).value = "";
-	document.getElementById(taOut0).value = "";
-	var can = document.getElementById(caOut)
-	var cx = can.getContext("2d");
+	taIn.value = "";
+	taOut0.value = "";
+	var cx = caOut.getContext("2d");
 	cx.fillStyle = "#fff";
-	cx.fillRect(0, 0, can.width, can.height);
+	cx.fillRect(0, 0, caOut.width, caOut.height);
 }
 
 // Load parameters to textarea
@@ -287,7 +287,6 @@ function getValue(lines, key) {
 	}
 	return value;
 }
-
 
 // Initialize all parameters
 function initParams() {
