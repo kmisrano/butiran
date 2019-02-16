@@ -64,9 +64,9 @@ function drawMatrixOnCanvas() {
 			} else if(colorScheme == 1) {
 				var k = M[i][j];
 				
-				//        OR  NO  NE  EA  SE  SO  SW  WE  NW
-				var sx = [+0, +0, +1, +1, +1, +0, -1, -1, -1];
-				var sy = [+0, +1, +1, +0, -1, -1, -1, +0, +1];
+				//        OR  NO  NE   EA  SE   SO  SW   WE  NW
+				var sx = [+0, +0, +.7, +1, +.7, +0, -.7, -1, -.7];
+				var sy = [+0, +1, +.7, +0, -.7, -1, -.7, +0, +.7];
 				
 				var xx = x + 0.5 * s;
 				var yy = y + 0.5 * s;
@@ -75,8 +75,13 @@ function drawMatrixOnCanvas() {
 				
 				cx.beginPath();
 				cx.moveTo(xx, yy);
-				cx.lineTo(xx + 10, yy + 10);
-				cx.strokeStyle = "#000";
+				cx.lineTo(xx + dx , yy - dy);
+				cx.strokeStyle = "#00f";
+				cx.stroke();
+				
+				cx.beginPath();
+				cx.arc(xx, yy, 1, 0, 2 * Math.PI);
+				cx.strokeStyle = "#f00";
 				cx.stroke();
 			}
 			
