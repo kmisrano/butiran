@@ -226,4 +226,3 @@ function randInt() {
 	var num = min + Math.floor((range + 1) * Math.random());
 	return num;
 }
-
