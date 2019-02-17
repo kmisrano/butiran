@@ -68,9 +68,33 @@ function simulate() {
 		var digit = -Math.floor(Math.log10(tdata));
 		var tt = t.toFixed(digit);
 		tout(taOut0, tt + "\n");
+		
+		clearCanvas();
+		drawSystem();
+		
 		idata = 0;
 	}
 	
+	// Prepare variable for storing total force
+	var F = [];
+	for(var i = 0; i < numg; i++) {
+		F.push(new Vect3());
+	}
+	
+	// Calculate force due to earth gravitation
+	for(var i = 0; i < numg; i++) {
+		var Fg = new Vect3(0, 0, m[i] * -gacc);
+		F = Vect3.add(Fg);
+	}
+	
+	// Calculate acceleration, velocity, and position
+	for(var i = 0; i < numg; i++) {
+		var a = Vect3.div(F, m[i]);
+		v[i] = Vect3.add(v[i], Vect3.mul(tstep, a));
+		r[i] = Vect3.add(r[i], Vect3.mul(tstep, v[i]));
+	}
+	
+	// Increase time
 	idata++;
 	t += tstep;
 }
