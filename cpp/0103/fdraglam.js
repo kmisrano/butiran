@@ -13,6 +13,8 @@
 	0335 Cont zuhause, do the layout.
 	20190216
 	2005 Start again zuhause.
+	20190217
+	0717 Con zuhause.
 */
 
 // Define global variables for walls
@@ -61,11 +63,11 @@ function setElementsLayout() {
 	
 	// Create output canvas
 	caOut = document.createElement("canvas");
-	caOut.width = "400";
-	caOut.height = "200";
+	caOut.width = "150";
+	caOut.height = "394";
 	caOut.style.width = caOut.width + "px";
 	caOut.style.height = caOut.height + "px";
-	caOut.style.float = "right";
+	caOut.style.float = "left";
 	caOut.style.border = "#aaa 1px solid";
 	caOut.style.paddingRight = "2px";
 	var cx = caOut.getContext("2d");
@@ -74,21 +76,17 @@ function setElementsLayout() {
 	
 	// Create ouput textarea 0
 	taOut0 = document.createElement("textarea");
-	taOut0.style.width = "161px";
-	taOut0.style.height = -2
-		+ parseInt(taIn.style.height)
-		- parseInt(caOut.style.height) + "px"
+	taOut0.style.width = "252px";
+	taOut0.style.height = "192px"
 	taOut0.style.overflowY = "scroll";
-	taOut0.style.float = "left";
+	taOut0.style.float = "right";
 	
-	// Create ouput textarea 0
+	// Create ouput textarea 1
 	taOut1 = document.createElement("textarea");
-	taOut1.style.width = "161px";
-	taOut1.style.height = -2
-		+ parseInt(taIn.style.height)
-		- parseInt(caOut.style.height) + "px"
+	taOut1.style.width = "252px";
+	taOut1.style.height = "192px";
 	taOut1.style.overflowY = "scroll";
-	taOut1.style.float = "left";
+	taOut1.style.float = "right";
 	
 	// Create buttons
 	btClear = document.createElement("button");
@@ -122,62 +120,78 @@ function setElementsLayout() {
 	// Create main division
 	var div0 = document.createElement("div");
 	div0.style.border = "#aaa 1px solid";
-	div0.style.width = 10
+	div0.style.width = 340
 		+ parseInt(taIn.style.width)
 		+ parseInt(caOut.style.width) + "px";
 	div0.style.height = 6
 		+ parseInt(taIn.style.height) + "px";
 	div0.style.background = "#eee";
 	
+	// Create button division
+	var div1 = document.createElement("div");
+	div1.style.width = "70px";
+	div1.style.height = (105 + 290) + "px";
+	div1.style.float = "left";
+	div1.style.border = "#aaa 1px solid";
+
+	
 	// Set layout of visual components
 	document.body.append(div0);
 		div0.append(taIn);
+		div0.append(div1);
+			div1.append(btClear);
+			div1.append(btLoad);
+			div1.append(btRead);
+			div1.append(btStart);
+			div1.append(btInfo);
 		div0.append(caOut);
 		div0.append(taOut0);
 		div0.append(taOut1);
-		div0.append(btClear);
-		div0.append(btLoad);
-		div0.append(btRead);
-		div0.append(btStart);
-		div0.append(btInfo);
-	
-	/*
-	inIn = document.createElement("input");
-	inIn.type = "range";
-	inIn.style.transform = "rotate(270deg)";
-	document.body.append(inIn);
-	*/
 }
 
 // Do something when buttons clicked
 function buttonClick() {
+	// Get target and verbose to taOut1
 	var target = event.target;
 	var cap = target.innerHTML;
-	console.log(cap);
+	tout(taOut1, cap + "\n");
+	
+	// Perform according to the clicked button
 	if(cap == "Load") {
-		loadParameters(taIn);
+		//loadParameters(taIn);
 		btRead.disabled = false;
+		tout(taOut1, "Parameters are loaded\n\n");
 	} else if(cap == "Clear") {
 		clearAll();
 		btRead.disabled = true;
 		btStart.disabled = true;
+		tout(taOut1, "All are cleared except this element\n\n");
 	} else if(cap == "Read") {
 		readParameters();
-		createRBCs();
-		drawGrains();
+		//createRBCs();
+		//drawGrains();
 		btStart.disabled = false;
+		tout(taOut1, "Parameters are read\n\n");
 	} else if(cap == "Start") {
-		if(target.innerHTML == "Start") {
-			target.innerHTML = "Stop";
-			btRead.disabled = true;
-			taIn.disabled = true;
-			proc = setInterval(simulate, Tproc);
-		} else {
-			target.innerHTML = "Start";
-			btRead.disabled = false;
-			taIn.disabled = false;
-			clearInterval(proc);
-		}
+		target.innerHTML = "Stop";
+		btRead.disabled = true;
+		taIn.disabled = true;
+		tout(taOut1, "Simulation starts\n\n");
+		//proc = setInterval(simulate, Tproc);
+	} else if(cap == "Stop") {
+		target.innerHTML = "Start";
+		btRead.disabled = false;
+		taIn.disabled = false;
+		tout(taOut1, "Simulation stops\n\n");
+		//clearInterval(proc);
+	} else if(cap == "Info") {
+		tout(taOut1, "fdraglam.js\n"
+			+ "Laminar flow drag force "
+			+ "on collidable spherical grains\n"
+			+ "Sparisoma Viridi | "
+			+ "https://github.com/dudung/butiran"
+			+ "\n\n"
+		);
 	}
 }
 
@@ -353,6 +367,14 @@ function vect3Average() {
 	return c;
 }
 
+
+// Display text in an output textarea
+function tout() {
+	var taOut = arguments[0];
+	var msg = arguments[1];
+	taOut.value += msg;
+	taOut.scrollTop = taOut.scrollHeight;
+}
 
 /*
 // Below lines are from rbccoll.js -- 20190108
@@ -1054,3 +1076,10 @@ function getValue(lines, key) {
 	return value;
 }
 */
+
+	/*
+	inIn = document.createElement("input");
+	inIn.type = "range";
+	inIn.style.transform = "rotate(270deg)";
+	document.body.append(inIn);
+	*/
