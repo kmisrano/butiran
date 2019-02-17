@@ -80,8 +80,28 @@ function simulate() {
 	// Verbose result each tdata period
 	if(idata == Ndata) {
 		var digit = -Math.floor(Math.log10(tdata));
-		var tt = t.toFixed(digit);
-		tout(taOut0, tt + "\n");
+		var tt = t.toExponential(digit);
+		
+		var ravg = vect3Average(r);
+		var zavg = (ravg.z).toFixed(digit + 2);
+		
+		var zmax = vect3MaxZ(r).toFixed(digit + 2);
+		
+		var vfz = (0.01 * inIn.value).toFixed(digit);
+		
+		// Display header for first run
+		if(t == tbeg) {
+			tout(taOut0, "# t     vfz  zavg   zmax\n");
+			//            0.00e+0 0.00 0.0689 0.1309
+		}
+		
+		tout(taOut0,
+			tt + " " +
+			vfz + " " +
+			zavg + " " +
+			zmax + "\n"
+		);
+		
 		if(t >= tend) {
 			tout(taOut0, "\n");
 		}
@@ -200,14 +220,14 @@ function setElementsLayout() {
 	
 	// Create ouput textarea 0
 	taOut0 = document.createElement("textarea");
-	taOut0.style.width = "252px";
+	taOut0.style.width = "270px";
 	taOut0.style.height = "192px"
 	taOut0.style.overflowY = "scroll";
 	taOut0.style.float = "right";
 	
 	// Create ouput textarea 1
 	taOut1 = document.createElement("textarea");
-	taOut1.style.width = "252px";
+	taOut1.style.width = "270px";
 	taOut1.style.height = "192px";
 	taOut1.style.overflowY = "scroll";
 	taOut1.style.float = "right";
@@ -243,7 +263,7 @@ function setElementsLayout() {
 	// Create main division
 	var div0 = document.createElement("div");
 	div0.style.border = "#aaa 1px solid";
-	div0.style.width = 340
+	div0.style.width = 358
 		+ parseInt(taIn.style.width)
 		+ parseInt(caOut.style.width) + "px";
 	div0.style.height = 6
@@ -345,6 +365,9 @@ function buttonClick() {
 			+ "on collidable spherical grains\n"
 			+ "Sparisoma Viridi | "
 			+ "https://github.com/dudung/butiran"
+			+ "\n"
+			+ "Aufa Nu'man Fadhilah Rudiawan | "
+			+ "aufa.rudiawan@gmail.com"
 			+ "\n\n"
 		);
 	}
@@ -401,7 +424,7 @@ function loadParameters() {
 	lines += "GACC 9.807\n";    // Gravitation      m/s2
 	lines += "RHOF 1000\n";     // Fluid density    kg/m3
 	lines += "ETAF 8.90E-4\n";  // Fluid vicosity   Pa.s
-	lines += "VELF 10\n";       // Fluid velocity   m/s
+	lines += "VELF 100\n";      // Fluid velocity   m/s
 	lines += "KCOL 100\n";      // Normal constant  N/m
 	lines += "GCOL 0.2\n";      // Normal constant  N/m
 	
@@ -409,8 +432,8 @@ function loadParameters() {
 	lines += "# Simulation\n";
 	lines += "TSTEP 0.001\n";   // Time step        s
 	lines += "TBEG 0\n";        // Initial time     s
-	lines += "TEND 10\n";        // Final time       s
-	lines += "TDATA 0.01\n";     // Data period      s
+	lines += "TEND 100\n";      // Final time       s
+	lines += "TDATA 0.01\n";    // Data period      s
 	lines += "TPROC 1\n";       // Event period     ms
 	
 	lines += "\n";
@@ -570,6 +593,19 @@ function vect3Average() {
 	}
 	c = Vect3.div(c, N);
 	return c;
+}
+
+// Get max of a component of some Vect3s
+function vect3MaxZ() {
+	var r = arguments[0];
+	var N = r.length;
+	var zmax = r[0].z;
+	for(var i = 1; i < N; i++) {
+		if(r[i].z > zmax) {
+			zmax = r[i].z;
+		}
+	}
+	return zmax;
 }
 
 // Display text in an output textarea
