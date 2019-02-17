@@ -33,7 +33,7 @@ var wall, Nw, kw;
 var gacc, rhof, etaf, velf, kcol;
 
 // Define global variables for simulation
-var tstep, tbeg, tend, tdata, tproc, proc;
+var tstep, tbeg, tend, tdata, tproc, proc, t, Ndata, idata;
 
 // Define global variables for coordinates
 var xmin, ymin, xmax, ymax, XMIN, YMIN, XMAX, YMAX;
@@ -59,6 +59,20 @@ function main() {
 	
 	// Initialize physical parameters
 	initParams();
+}
+
+// Perform simulation
+function simulate() {
+	// Verbose result each tdata period
+	if(idata == Ndata) {
+		var digit = -Math.floor(Math.log10(tdata));
+		var tt = t.toFixed(digit);
+		tout(taOut0, tt + "\n");
+		idata = 0;
+	}
+	
+	idata++;
+	t += tstep;
 }
 
 // Set layout of all elements
@@ -221,13 +235,13 @@ function buttonClick() {
 		btRead.disabled = true;
 		taIn.disabled = true;
 		tout(taOut1, "Simulation starts\n\n");
-		//proc = setInterval(simulate, tproc);
+		proc = setInterval(simulate, tproc);
 	} else if(cap == "Stop") {
 		target.innerHTML = "Start";
 		btRead.disabled = false;
 		taIn.disabled = false;
 		tout(taOut1, "Simulation stops\n\n");
-		//clearInterval(proc);
+		clearInterval(proc);
 	} else if(cap == "Info") {
 		tout(taOut1, "fdraglam.js -- 20190217\n"
 			+ "Laminar flow drag force "
@@ -437,6 +451,11 @@ function initParams() {
 			}
 		}
 	}
+	
+	// Initialize simulation parameters
+	t = tbeg;
+	Ndata = Math.floor(tdata / tstep);
+	idata = Ndata;
 }
 
 // Average some Vect3s
