@@ -98,11 +98,12 @@ function simulate() {
 	// Calculate force due to viscosity
 	for(var i = 0; i < numg; i++) {
 		var Rg = 0.5 * diag;
-		var vf = new Vect3(0, 0, velf * 0.01 * inIn.value);
+		var yR = r[i].y / (0.5 * boxw);
+		var vzy = velf * 0.01 * inIn.value * (1 - yR * yR); 
+		var vf = new Vect3(0, 0, vzy);
 		var vrel = Vect3.sub(vf, v[i]);
 		var Ff = Vect3.mul(6 * Math.PI * etaf * Rg, vrel);
 		F[i] = Vect3.add(F[i], Ff);
-		console.log(vrel.strval());
 	}
 	
 	// Calculate acceleration, velocity, and position
@@ -218,7 +219,7 @@ function setElementsLayout() {
 	inIn.style.transform = "rotate(270deg)";
 	inIn.style.width = "65px";
 	inIn.style.height = "100px";
-	inIn.value = 33;
+	inIn.value = 50;
 	inIn.addEventListener("input", changeFluidVelocity);
 	
 	// Set layout of visual components
@@ -483,8 +484,9 @@ function initParams() {
 			for(var j = 0; j < Nperlayer; j++) {
 				var x = 0;
 				var rndy = 0.1 * dx * Math.random();
+				var rndz = 0.1 * dx * Math.random();
 				var y = -0.5 * boxw + (j + 0.5) * dx + rndy;
-				var z = (i + 0.5) * dx;
+				var z = (i + 0.5) * dx + rndz;
 				r.push(new Vect3(x, y, z));
 				k++;
 				if(k >= numg) {
