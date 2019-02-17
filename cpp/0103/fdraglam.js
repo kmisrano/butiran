@@ -15,6 +15,11 @@
 	2005 Start again zuhause.
 	20190217
 	0717 Con zuhause.
+	0917 Con @Neutron
+	
+	References
+	1. Input range event
+	url https://stackoverflow.com/a/19067260/9475509
 */
 
 // Define global variables for walls
@@ -138,7 +143,7 @@ function setElementsLayout() {
 	var div2 = document.createElement("div");
 	div2.style.width = "70px";
 	div2.style.height = "130px";
-	div2.style.border = "#faa 1px solid";
+	div2.style.border = "#aaa 1px solid";
 	div2.style.textAlign = "center";
 	
 	// Create label and input range
@@ -174,6 +179,7 @@ function setElementsLayout() {
 function changeFluidVelocity() {
 	var val = event.target.value;
 	var v = val;
+	tout(taOut1, "Flow\n");
 	tout(taOut1, "velocity is changed to " + v + " %\n\n");
 }
 
@@ -186,7 +192,7 @@ function buttonClick() {
 	
 	// Perform according to the clicked button
 	if(cap == "Load") {
-		//loadParameters(taIn);
+		loadParameters(taIn);
 		btRead.disabled = false;
 		tout(taOut1, "Parameters are loaded\n\n");
 	} else if(cap == "Clear") {
@@ -213,7 +219,7 @@ function buttonClick() {
 		tout(taOut1, "Simulation stops\n\n");
 		//clearInterval(proc);
 	} else if(cap == "Info") {
-		tout(taOut1, "fdraglam.js\n"
+		tout(taOut1, "fdraglam.js -- 20190217\n"
 			+ "Laminar flow drag force "
 			+ "on collidable spherical grains\n"
 			+ "Sparisoma Viridi | "
@@ -235,40 +241,39 @@ function clearAll() {
 // Load parameters to textarea
 function loadParameters() {
 	var lines = "";
-	lines += "# Grains\n";
-	lines += "DIAG 0.1\n"
-	lines += "RHOG 1000\n";
-	lines += "NUMG 100\n";
-	lines += "\n";
+	lines += "# Environment\n";
+	lines += "GACC 9.807\n";   // Gravitation     m/s2
+	lines += "RHOF 1000\n";    // Fluid density   kg/m3
+	lines += "ETAF 8.90E-4\n"; // Fluid vicosity  Pa.s
+	lines += "VELF 1\n";       // Fluid velocity  m/s
 	
-	lines += "# Constants\n";
-	lines += "KONS0 500\n";
-	lines += "KONS1 100\n";
-	lines += "KONS2 100\n";
-	lines += "GAMP 1\n";
-	lines += "KONP 1\n";
-	lines += "KONV 1\n";
-	lines += "ETAF 1\n";
-	lines += "VELF 1\n";
-	lines += "TEMF 300\n";
-	lines += "KONN 10000\n";
-	lines += "\n";
 	
+	lines += "KNORM 10000\n";  // Normal constant N/m
+	
+	lines += "\n";
 	lines += "# Simulation\n";
 	lines += "TSTEP 0.001\n";
 	lines += "TBEG 0\n";
 	lines += "TEND 4\n";
 	lines += "TDATA 0.1\n";
 	lines += "TPROC 1\n";
+	
+	lines += "\n";
+	lines += "# Coordinates\n";
+	lines += "XMIN -0.075\n";
+	lines += "YMIN 0\n";
+	lines += "XMAX 0.075\n";
+	lines += "YMAX 0.400\n";
+	
+	lines += "\n";
+	lines += "# Grains\n";
+	lines += "DIAG 0.01\n"
+	lines += "RHOG 3000\n";
+	lines += "NUMG 20\n";
+	
 	lines += "\n";
 	
-	lines += "# Coordinates\n";
-	lines += "XMIN -20\n";
-	lines += "YMIN -10\n";
-	lines += "XMAX 20\n";
-	lines += "YMAX 10\n";
-	
-	var ta = document.getElementById(arguments[0]);
+	var ta = arguments[0];
 	ta.value = lines;
 	ta.scrollTop = ta.scrollHeight;
 }
