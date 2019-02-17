@@ -87,6 +87,13 @@ function simulate() {
 		F = Vect3.add(Fg);
 	}
 	
+	// Calculate force due to buoyancy
+	for(var i = 0; i < numg; i++) {
+		var Vg = (Math.PI / 6) * diag * diag * diag;
+		var Fb = new Vect3(0, 0, rhof * gacc * Vg);
+		F = Vect3.add(Fb);
+	}
+	
 	// Calculate acceleration, velocity, and position
 	for(var i = 0; i < numg; i++) {
 		var a = Vect3.div(F, m[i]);
