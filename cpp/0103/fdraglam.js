@@ -36,7 +36,7 @@ var Db, rhob, ball, Nb, kb;
 // Define global variables for visual elements
 var taIn, caOut, taOut0, taOut1;
 var btClear, btLoad, btRead, btStart, btInfo;
-var inIn;
+var teIn, inIn;
 
 //var inIn;
 
@@ -116,7 +116,6 @@ function setElementsLayout() {
 	btInfo.innerHTML = "Info";
 	btInfo.style.width = "70px";
 	btInfo.addEventListener("click", buttonClick);
-	btInfo.id = arguments[8];
 	
 	// Create main division
 	var div0 = document.createElement("div");
@@ -134,20 +133,25 @@ function setElementsLayout() {
 	div1.style.height = (105 + 290) + "px";
 	div1.style.float = "left";
 	div1.style.border = "#aaa 1px solid";
-
+	
+	// Create control division
 	var div2 = document.createElement("div");
 	div2.style.width = "70px";
-	div2.style.height = "100px";
+	div2.style.height = "130px";
 	div2.style.border = "#faa 1px solid";
+	div2.style.textAlign = "center";
 	
+	// Create label and input range
+	teIn = document.createElement("text");
+	teIn.innerHTML = "Flow";
+	teIn.style.fontSize = "10pt";
 	inIn = document.createElement("input");
 	inIn.type = "range";
 	inIn.style.transform = "rotate(270deg)";
 	inIn.style.width = "65px";
 	inIn.style.height = "100px";
-	inIn.addEventListener("input", function() {
-		console.log(event.target.value);
-	});
+	inIn.value = 0;
+	inIn.addEventListener("input", changeFluidVelocity);
 	
 	// Set layout of visual components
 	document.body.append(div0);
@@ -159,10 +163,18 @@ function setElementsLayout() {
 			div1.append(btStart);
 			div1.append(btInfo);
 			div1.append(div2);
+				div2.append(teIn);
 				div2.append(inIn);
 		div0.append(caOut);
 		div0.append(taOut0);
 		div0.append(taOut1);
+}
+
+// Change fluid up velocity
+function changeFluidVelocity() {
+	var val = event.target.value;
+	var v = val;
+	tout(taOut1, "velocity is changed to " + v + " %\n\n");
 }
 
 // Do something when buttons clicked
