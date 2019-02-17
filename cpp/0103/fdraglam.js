@@ -84,19 +84,20 @@ function simulate() {
 	// Calculate force due to earth gravitation
 	for(var i = 0; i < numg; i++) {
 		var Fg = new Vect3(0, 0, m[i] * -gacc);
-		F = Vect3.add(Fg);
+		F[i] = Vect3.add(F[i], Fg);
 	}
 	
 	// Calculate force due to buoyancy
 	for(var i = 0; i < numg; i++) {
-		var Vg = (Math.PI / 6) * diag * diag * diag;
+		var Rg = 0.5 * diag;
+		var Vg = (4 * Math.PI / 3) * Rg * Rg * Rg;
 		var Fb = new Vect3(0, 0, rhof * gacc * Vg);
-		F = Vect3.add(Fb);
+		F[i] = Vect3.add(F[i], Fb);
 	}
 	
 	// Calculate acceleration, velocity, and position
 	for(var i = 0; i < numg; i++) {
-		var a = Vect3.div(F, m[i]);
+		var a = Vect3.div(F[i], m[i]);
 		v[i] = Vect3.add(v[i], Vect3.mul(tstep, a));
 		r[i] = Vect3.add(r[i], Vect3.mul(tstep, v[i]));
 	}
