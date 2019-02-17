@@ -18,6 +18,7 @@
 	0717 Con zuhause.
 	0917 Con @Neutron
 	1531 Con zuhause.
+	1738 Fin program and con to documentation.
 	
 	References
 	1. Input range event
