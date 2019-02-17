@@ -64,11 +64,24 @@ function main() {
 
 // Perform simulation
 function simulate() {
+	// Stop simulation
+	if(t >= tend) {
+		btStart.innerHTML = "Start";
+		btStart.disabled = true;
+		btRead.disabled = false;
+		taIn.disabled = false;
+		tout(taOut1, "Simulation stops, t = end\n\n");
+		clearInterval(proc);
+	}
+	
 	// Verbose result each tdata period
 	if(idata == Ndata) {
 		var digit = -Math.floor(Math.log10(tdata));
 		var tt = t.toFixed(digit);
 		tout(taOut0, tt + "\n");
+		if(t >= tend) {
+			tout(taOut0, "\n");
+		}
 		
 		clearCanvas();
 		drawSystem();
@@ -123,6 +136,21 @@ function simulate() {
 			Fw = Vect3.add(Fw, Vect3.mul(kcol * ksi, nw));
 		}
 		F[i] = Vect3.add(F[i], Fw);
+	}
+	
+	// Calculare force due to collision between grains
+	for(var i = 0; i < numg; i++) {
+		var Fn = new Vect3();
+		for(var j = 0; j < numg; j++) {
+			if(j != i) {
+				var rij = Vect3.sub(r[i], r[j]);
+				var nij = rij.unit();
+				var lij = rij.len();
+				var ksi = Math.max(0, 0.5 * (D[i] + D[j]) - lij);
+				Fn = Vect3.add(Fn, Vect3.mul(kcol * ksi, nij));				
+			}
+		}
+		F[i] = Vect3.add(F[i], Fn);
 	}
 		
 	// Calculate acceleration, velocity, and position
@@ -367,13 +395,13 @@ function loadParameters() {
 	lines += "RHOF 1000\n";     // Fluid density    kg/m3
 	lines += "ETAF 8.90E-4\n";  // Fluid vicosity   Pa.s
 	lines += "VELF 4\n";       // Fluid velocity   m/s
-	lines += "KCOL 1000\n";    // Normal constant  N/m
+	lines += "KCOL 100\n";    // Normal constant  N/m
 	
 	lines += "\n";
 	lines += "# Simulation\n";
 	lines += "TSTEP 0.001\n";   // Time step        s
 	lines += "TBEG 0\n";        // Initial time     s
-	lines += "TEND 4\n";        // Final time       s
+	lines += "TEND 10\n";        // Final time       s
 	lines += "TDATA 0.1\n";     // Data period      s
 	lines += "TPROC 1\n";       // Event period     ms
 	
