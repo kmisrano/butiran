@@ -36,6 +36,7 @@ var Db, rhob, ball, Nb, kb;
 // Define global variables for visual elements
 var taIn, caOut, taOut0, taOut1;
 var btClear, btLoad, btRead, btStart, btInfo;
+var inIn;
 
 //var inIn;
 
@@ -134,6 +135,19 @@ function setElementsLayout() {
 	div1.style.float = "left";
 	div1.style.border = "#aaa 1px solid";
 
+	var div2 = document.createElement("div");
+	div2.style.width = "70px";
+	div2.style.height = "100px";
+	div2.style.border = "#faa 1px solid";
+	
+	inIn = document.createElement("input");
+	inIn.type = "range";
+	inIn.style.transform = "rotate(270deg)";
+	inIn.style.width = "65px";
+	inIn.style.height = "100px";
+	inIn.addEventListener("input", function() {
+		console.log(event.target.value);
+	});
 	
 	// Set layout of visual components
 	document.body.append(div0);
@@ -144,6 +158,8 @@ function setElementsLayout() {
 			div1.append(btRead);
 			div1.append(btStart);
 			div1.append(btInfo);
+			div1.append(div2);
+				div2.append(inIn);
 		div0.append(caOut);
 		div0.append(taOut0);
 		div0.append(taOut1);
@@ -1076,10 +1092,3 @@ function getValue(lines, key) {
 	return value;
 }
 */
-
-	/*
-	inIn = document.createElement("input");
-	inIn.type = "range";
-	inIn.style.transform = "rotate(270deg)";
-	document.body.append(inIn);
-	*/
