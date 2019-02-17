@@ -36,7 +36,7 @@ var gacc, rhof, etaf, velf, kcol;
 var tstep, tbeg, tend, tdata, tproc, proc;
 
 // Define global variables for coordinates
-var xmin, ymin, xmax, ymax;
+var xmin, ymin, xmax, ymax, XMIN, YMIN, XMAX, YMAX;
 
 // Define global variables for box
 var boxh, boxw, boxt;
@@ -82,6 +82,10 @@ function setElementsLayout() {
 	var cx = caOut.getContext("2d");
 	cx.fillStyle = "#fff";
 	cx.fillRect(0, 0, caOut.width, caOut.height);
+	XMIN = 0;
+	YMIN = caOut.height;
+	XMAX = caOut.width;
+	YMAX = 0;
 	
 	// Create ouput textarea 0
 	taOut0 = document.createElement("textarea");
@@ -206,9 +210,12 @@ function buttonClick() {
 	} else if(cap == "Read") {
 		readParameters(taIn);
 		initParams();
+		clearCanvas();
 		drawSystem();
 		btStart.disabled = false;
-		tout(taOut1, "Parameters are read\n\n");
+		tout(taOut1, "Parameters are read\n");
+		tout(taOut1, "Slightly random grains position "
+			+ "are generated\n\n");
 	} else if(cap == "Start") {
 		target.innerHTML = "Stop";
 		btRead.disabled = true;
@@ -234,16 +241,44 @@ function buttonClick() {
 
 // Draw all parts of the system
 function drawSystem() {
+	var cx = caOut.getContext("2d");
+	for(var i = 0; i < numg; i++) {
+		var xx = r[i].y;
+		var yy = r[i].z;
+		var R1 = transform(xx, yy);
+		var R2 = transform(xx + 0.5 * D[i], yy)
+		
+		cx.beginPath();
+		cx.arc(R1.X, R1.Y, (R2.X - R1.X), 0, 2 * Math.PI);
+		cx.fillStyle = "#a8f";
+		cx.closePath();
+		cx.fill();
+		
+		cx.beginPath();
+		cx.arc(R1.X, R1.Y, (R2.X - R1.X), 0, 2 * Math.PI);
+		cx.strokeStyle = "#000";
+		cx.stroke();
+	}
 	
+	// Transform real coordinates to canvas coordinates
+	function transform(xx, yy) {
+		var XX = (xx - xmin) / (xmax - xmin) * (XMAX - XMIN) + XMIN;
+		var YY = (yy - ymin) / (ymax - ymin) * (YMAX - YMIN) + YMIN;
+		return {X: XX, Y: YY};
+	}
 }
 
 // Clear all
 function clearAll() {
 	taIn.value = "";
 	taOut0.value = "";
+	clearCanvas();
+}
+
+function clearCanvas() {
 	var cx = caOut.getContext("2d");
 	cx.fillStyle = "#fff";
-	cx.fillRect(0, 0, caOut.width, caOut.height);
+	cx.fillRect(0, 0, caOut.width, caOut.height);	
 }
 
 // Load parameters to textarea
@@ -281,7 +316,7 @@ function loadParameters() {
 	lines += "# Grains\n";
 	lines += "DIAG 0.01\n"      // Grains diameter  m
 	lines += "RHOG 3000\n";     // Grains density   kg/m3
-	lines += "NUMG 20\n";       // Number of grains -
+	lines += "NUMG 55\n";       // Number of grains -
 	lines += "GENG 0\n";        // Generation type  0 random
 	
 	var ta = arguments[0];
@@ -383,7 +418,7 @@ function initParams() {
 			v.push(new Vect3());
 		}
 		
-		var Nperlayer = parseInt(0.5 * boxw / diag);
+		var Nperlayer = parseInt(0.75 * boxw / diag);
 		var dx = boxw / Nperlayer
 		var Nlayer = Math.ceil(numg / Nperlayer);
 		
@@ -391,7 +426,7 @@ function initParams() {
 		for(var i = 0; i < Nlayer; i++) {
 			for(var j = 0; j < Nperlayer; j++) {
 				var x = 0;
-				var rndy = 0.001 * dx * Math.random();
+				var rndy = 0.1 * dx * Math.random();
 				var y = -0.5 * boxw + (j + 0.5) * dx + rndy;
 				var z = (i + 0.5) * dx;
 				r.push(new Vect3(x, y, z));
