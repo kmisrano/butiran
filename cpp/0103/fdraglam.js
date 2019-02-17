@@ -16,6 +16,7 @@
 	20190217
 	0717 Con zuhause.
 	0917 Con @Neutron
+	1531 Con zuhause.
 	
 	References
 	1. Input range event
@@ -89,7 +90,7 @@ function simulate() {
 	
 	// Calculate force due to buoyancy
 	for(var i = 0; i < numg; i++) {
-		var Rg = 0.5 * diag;
+		var Rg = 0.5 * D[i];
 		var Vg = (4 * Math.PI / 3) * Rg * Rg * Rg;
 		var Fb = new Vect3(0, 0, rhof * gacc * Vg);
 		F[i] = Vect3.add(F[i], Fb);
@@ -97,7 +98,7 @@ function simulate() {
 	
 	// Calculate force due to viscosity
 	for(var i = 0; i < numg; i++) {
-		var Rg = 0.5 * diag;
+		var Rg = 0.5 * D[i];
 		var yR = r[i].y / (0.5 * boxw);
 		var vzy = velf * 0.01 * inIn.value * (1 - yR * yR); 
 		var vf = new Vect3(0, 0, vzy);
@@ -106,6 +107,24 @@ function simulate() {
 		F[i] = Vect3.add(F[i], Ff);
 	}
 	
+	// Calculare force due to collision with the walls
+	for(var i = 0; i < numg; i++) {
+		var Fw = new Vect3();
+		for(var j = 0; j < Nw; j++) {
+			var wj = wall[j];
+			var wc = vect3Average(wj);
+			var Rg = 0.5 * D[i];
+			var nw = Vect3.cross(
+				Vect3.sub(wj[1], wj[0]),
+				Vect3.sub(wj[2], wj[1])
+			).unit();
+			var rij = Vect3.dot(Vect3.sub(r[i], wc), nw);
+			var ksi = Math.max(0, Rg - rij);
+			Fw = Vect3.add(Fw, Vect3.mul(kcol * ksi, nw));
+		}
+		F[i] = Vect3.add(F[i], Fw);
+	}
+		
 	// Calculate acceleration, velocity, and position
 	for(var i = 0; i < numg; i++) {
 		var a = Vect3.div(F[i], m[i]);
@@ -319,8 +338,10 @@ function drawSystem() {
 	
 	// Transform real coordinates to canvas coordinates
 	function transform(xx, yy) {
-		var XX = (xx - xmin) / (xmax - xmin) * (XMAX - XMIN) + XMIN;
-		var YY = (yy - ymin) / (ymax - ymin) * (YMAX - YMIN) + YMIN;
+		var XX = (xx - xmin) / (xmax - xmin) * (XMAX - XMIN)
+			+ XMIN;
+		var YY = (yy - ymin) / (ymax - ymin) * (YMAX - YMIN)
+			+ YMIN;
 		return {X: XX, Y: YY};
 	}
 }
@@ -345,8 +366,8 @@ function loadParameters() {
 	lines += "GACC 9.807\n";    // Gravitation      m/s2
 	lines += "RHOF 1000\n";     // Fluid density    kg/m3
 	lines += "ETAF 8.90E-4\n";  // Fluid vicosity   Pa.s
-	lines += "VELF 10\n";       // Fluid velocity   m/s
-	lines += "KCOL 10000\n";    // Normal constant  N/m
+	lines += "VELF 4\n";       // Fluid velocity   m/s
+	lines += "KCOL 1000\n";    // Normal constant  N/m
 	
 	lines += "\n";
 	lines += "# Simulation\n";
@@ -373,7 +394,7 @@ function loadParameters() {
 	lines += "# Grains\n";
 	lines += "DIAG 0.01\n"      // Grains diameter  m
 	lines += "RHOG 1050\n";     // Grains density   kg/m3
-	lines += "NUMG 11\n";       // Number of grains -
+	lines += "NUMG 22\n";       // Number of grains -
 	lines += "GENG 0\n";        // Generation type  0 random
 	
 	var ta = arguments[0];
