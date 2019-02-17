@@ -33,7 +33,7 @@ var wall, Nw, kw;
 var gacc, rhof, etaf, velf, kcol;
 
 // Define global variables for simulation
-var tstep, tbeg, tend, tdata, tproc;
+var tstep, tbeg, tend, tdata, tproc, proc;
 
 // Define global variables for coordinates
 var xmin, ymin, xmax, ymax;
@@ -206,6 +206,7 @@ function buttonClick() {
 	} else if(cap == "Read") {
 		readParameters(taIn);
 		initParams();
+		drawSystem();
 		btStart.disabled = false;
 		tout(taOut1, "Parameters are read\n\n");
 	} else if(cap == "Start") {
@@ -213,7 +214,7 @@ function buttonClick() {
 		btRead.disabled = true;
 		taIn.disabled = true;
 		tout(taOut1, "Simulation starts\n\n");
-		//proc = setInterval(simulate, Tproc);
+		//proc = setInterval(simulate, tproc);
 	} else if(cap == "Stop") {
 		target.innerHTML = "Start";
 		btRead.disabled = false;
@@ -229,6 +230,11 @@ function buttonClick() {
 			+ "\n\n"
 		);
 	}
+}
+
+// Draw all parts of the system
+function drawSystem() {
+	
 }
 
 // Clear all
@@ -371,9 +377,9 @@ function initParams() {
 	if(geng == 0) {
 		for(var i = 0; i < numg; i++) {
 			D.push(diag);
-			var R = 0.5 * diag;
-			var V = (4 * Math.PI / 3) * R * R * R;
-			m.push(rhog * V);
+			var Rg = 0.5 * diag;
+			var Vg = (4 * Math.PI / 3) * Rg * Rg * Rg;
+			m.push(rhog * Vg);
 			v.push(new Vect3());
 		}
 		
@@ -384,14 +390,17 @@ function initParams() {
 		var k = 0;
 		for(var i = 0; i < Nlayer; i++) {
 			for(var j = 0; j < Nperlayer; j++) {
+				var x = 0;
+				var rndy = 0.001 * dx * Math.random();
+				var y = -0.5 * boxw + (j + 0.5) * dx + rndy;
+				var z = (i + 0.5) * dx;
+				r.push(new Vect3(x, y, z));
 				k++;
 				if(k >= numg) {
 					break;
 				}
 			}
 		}
-		console.log(k, numg);
-		
 	}
 }
 
