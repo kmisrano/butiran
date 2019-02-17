@@ -3,6 +3,7 @@
 	Laminar flow drag force on collidable spherical grains
 	
 	Sparisoma Viridi | https://github.com/dudung/butiran
+	Aufa Nu'man Fadhilah Rudiawan | aufa.rudiawan@gmail.com
 	
 	Include: <script src="fdraglam.js"></script> in a HTML file
 	Execute: Refresh web browser viewing the HTML file
@@ -21,6 +22,8 @@
 	References
 	1. Input range event
 	url https://stackoverflow.com/a/19067260/9475509
+	2. Fill an arc
+	url https://stackoverflow.com/a/8549752/9475509
 */
 
 // Define global variables for walls
@@ -31,7 +34,7 @@ var wL, wR, wT, wB;
 var wall, Nw, kw;
 
 // Define global variables for parameters
-var gacc, rhof, etaf, velf, kcol;
+var gacc, rhof, etaf, velf, kcol, gcol;
 
 // Define global variables for simulation
 var tstep, tbeg, tend, tdata, tproc, proc, t, Ndata, idata;
@@ -147,7 +150,11 @@ function simulate() {
 				var nij = rij.unit();
 				var lij = rij.len();
 				var ksi = Math.max(0, 0.5 * (D[i] + D[j]) - lij);
-				Fn = Vect3.add(Fn, Vect3.mul(kcol * ksi, nij));				
+				var vij = Vect3.sub(v[i], v[j]);
+				var uij = vij.len() * Math.sign(ksi);
+				var ksidot = uij * Math.sign(ksi);
+				var fn = kcol * ksi + gcol * ksidot;
+				Fn = Vect3.add(Fn, Vect3.mul(fn, nij));				
 			}
 		}
 		F[i] = Vect3.add(F[i], Fn);
@@ -266,7 +273,7 @@ function setElementsLayout() {
 	inIn.style.transform = "rotate(270deg)";
 	inIn.style.width = "65px";
 	inIn.style.height = "100px";
-	inIn.value = 50;
+	inIn.value = 0;
 	inIn.addEventListener("input", changeFluidVelocity);
 	
 	// Set layout of visual components
@@ -394,15 +401,16 @@ function loadParameters() {
 	lines += "GACC 9.807\n";    // Gravitation      m/s2
 	lines += "RHOF 1000\n";     // Fluid density    kg/m3
 	lines += "ETAF 8.90E-4\n";  // Fluid vicosity   Pa.s
-	lines += "VELF 4\n";       // Fluid velocity   m/s
-	lines += "KCOL 100\n";    // Normal constant  N/m
+	lines += "VELF 10\n";       // Fluid velocity   m/s
+	lines += "KCOL 100\n";      // Normal constant  N/m
+	lines += "GCOL 0.2\n";      // Normal constant  N/m
 	
 	lines += "\n";
 	lines += "# Simulation\n";
 	lines += "TSTEP 0.001\n";   // Time step        s
 	lines += "TBEG 0\n";        // Initial time     s
 	lines += "TEND 10\n";        // Final time       s
-	lines += "TDATA 0.1\n";     // Data period      s
+	lines += "TDATA 0.01\n";     // Data period      s
 	lines += "TPROC 1\n";       // Event period     ms
 	
 	lines += "\n";
@@ -421,8 +429,8 @@ function loadParameters() {
 	lines += "\n";
 	lines += "# Grains\n";
 	lines += "DIAG 0.01\n"      // Grains diameter  m
-	lines += "RHOG 1050\n";     // Grains density   kg/m3
-	lines += "NUMG 22\n";       // Number of grains -
+	lines += "RHOG 2000\n";     // Grains density   kg/m3
+	lines += "NUMG 110\n";      // Number of grains -
 	lines += "GENG 0\n";        // Generation type  0 random
 	
 	var ta = arguments[0];
@@ -440,6 +448,7 @@ function readParameters() {
 	etaf = getValue(lines, "ETAF");
 	velf = getValue(lines, "VELF");
 	kcol = getValue(lines, "KCOL");
+	gcol = getValue(lines, "GCOL");
 
 	// Get simulation information
 	tstep = getValue(lines, "TSTEP");
