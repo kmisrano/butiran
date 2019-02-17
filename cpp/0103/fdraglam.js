@@ -42,7 +42,7 @@ var xmin, ymin, xmax, ymax;
 var boxh, boxw, boxt;
 
 // Define global variables for grains
-var diag, rhog, numg, geng;
+var diag, rhog, numg, geng, r, v, m, D;
 
 // Define global variables for visual elements
 var taIn, caOut, taOut0, taOut1;
@@ -364,16 +364,21 @@ function initParams() {
 	wB = vect3Average(WB);
 	
 	// Define grains properties
-	Db = [0.01, 0.02, 0.03, 0.04];   // m
-	rhob = [2000, 2000, 2000, 2000]; // kg.m^-3
-	ball = [
-		new Vect3(0, 0.02, Db[0]),     // m
-		new Vect3(0, 0.04, Db[1]),     // m
-		new Vect3(0, 0.06, Db[2]),     // m
-		new Vect3(0, 0.08, Db[3])      // m
-	];
-	Nb = ball.length;
-	kb = 1E4; // N.m^-1
+	r = [];
+	v = [];
+	m = [];
+	D = [];
+	if(geng == 0) {
+		for(var i = 0; i < numg; i++) {
+			D.push(diag);
+			var R = 0.5 * diag;
+			var V = (4 * Math.PI / 3) * R * R * R;
+			m.push(rhog * V);
+			v.push(new Vect3());
+			
+			
+		}
+	}
 }
 
 // Average some Vect3s
