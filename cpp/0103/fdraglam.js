@@ -375,9 +375,23 @@ function initParams() {
 			var V = (4 * Math.PI / 3) * R * R * R;
 			m.push(rhog * V);
 			v.push(new Vect3());
-			
-			
 		}
+		
+		var Nperlayer = parseInt(0.5 * boxw / diag);
+		var dx = boxw / Nperlayer
+		var Nlayer = Math.ceil(numg / Nperlayer);
+		
+		var k = 0;
+		for(var i = 0; i < Nlayer; i++) {
+			for(var j = 0; j < Nperlayer; j++) {
+				k++;
+				if(k >= numg) {
+					break;
+				}
+			}
+		}
+		console.log(k, numg);
+		
 	}
 }
 
