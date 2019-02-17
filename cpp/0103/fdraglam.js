@@ -95,6 +95,16 @@ function simulate() {
 		F[i] = Vect3.add(F[i], Fb);
 	}
 	
+	// Calculate force due to viscosity
+	for(var i = 0; i < numg; i++) {
+		var Rg = 0.5 * diag;
+		var vf = new Vect3(0, 0, velf * 0.01 * inIn.value);
+		var vrel = Vect3.sub(vf, v[i]);
+		var Ff = Vect3.mul(6 * Math.PI * etaf * Rg, vrel);
+		F[i] = Vect3.add(F[i], Ff);
+		console.log(vrel.strval());
+	}
+	
 	// Calculate acceleration, velocity, and position
 	for(var i = 0; i < numg; i++) {
 		var a = Vect3.div(F[i], m[i]);
@@ -208,7 +218,7 @@ function setElementsLayout() {
 	inIn.style.transform = "rotate(270deg)";
 	inIn.style.width = "65px";
 	inIn.style.height = "100px";
-	inIn.value = 0;
+	inIn.value = 33;
 	inIn.addEventListener("input", changeFluidVelocity);
 	
 	// Set layout of visual components
@@ -334,7 +344,7 @@ function loadParameters() {
 	lines += "GACC 9.807\n";    // Gravitation      m/s2
 	lines += "RHOF 1000\n";     // Fluid density    kg/m3
 	lines += "ETAF 8.90E-4\n";  // Fluid vicosity   Pa.s
-	lines += "VELF 1\n";        // Fluid velocity   m/s
+	lines += "VELF 10\n";       // Fluid velocity   m/s
 	lines += "KCOL 10000\n";    // Normal constant  N/m
 	
 	lines += "\n";
@@ -361,8 +371,8 @@ function loadParameters() {
 	lines += "\n";
 	lines += "# Grains\n";
 	lines += "DIAG 0.01\n"      // Grains diameter  m
-	lines += "RHOG 3000\n";     // Grains density   kg/m3
-	lines += "NUMG 55\n";       // Number of grains -
+	lines += "RHOG 1050\n";     // Grains density   kg/m3
+	lines += "NUMG 11\n";       // Number of grains -
 	lines += "GENG 0\n";        // Generation type  0 random
 	
 	var ta = arguments[0];
